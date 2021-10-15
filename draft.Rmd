@@ -1,0 +1,20 @@
+---
+title: "Extended early adulthoods"
+author: "Kevin Kiley & Nicolas Restrepo"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+The last few decades have seen dramatic changes in the expectations surrounding the transition from adolescence to adulthood. The trajectories between these two stages have become more varied, blurring the institutional boundaries that used to demarcate them. Individuals are more likely to return to higher education after graduating, and they tend to switch professional tracks more often, instead of being locked-in in a trade. The period between leaving the parental nest and "settling down" has extended. The primary example here is the increasing median age at first marriage, especially for women. This "age of independence" - characterized by exploration and a degree of detachment from social institutions - appears to be becoming longer and more diverse. 
+
+This stage of the life-course has gained increasing attention from sociologists because work - from varied sub-fields - highlights the pivotal role that it might play in processes of social change. Young adults nowadays are more likely to be away from familial supervision, which can make them prone to break with social mores. Their relative distance from certain social institutions - like home ownership - means that they can risk more and, therefore, they tend to inhabit the front lines of social movements. Additionally, recent work on attitudinal change suggests people above 25 rarely change their minds. Young adulthood then might also represent the tail-end of our formative windows, where we are still open to revisiting our habits and beliefs. 
+
+This paper seeks to examine this latter relationship. The expanding duration of young adulthood provides an important opportunity to study how belief-updating unfolds across an individual's lifetime. The finding that a period of exploration during one's early years is followed by relative stability is recurrent in many fields. A question that is interesting for sociologists is whether the length of these formative windows varies across socio-historical contexts. The evidence that the life-course and its stages are socially patterned would make that conclusion intuitive but there has been little empirical work that tries to adjudicate this question. However, if formative windows are dependent on social contexts - and not entirely maturational - then expanded periods of young adulthood should also result in higher rates of belief updating among people in that age group in more recent cohorts. In this paper, we test exactly this proposition. 
+
+Finding traces of a relationship between extended periods of young adulthood and higher rates of updating would provide important insights for understanding change, within an agent's lifetime and at the aggregate level. It would, for instance, constitute novel evidence that individuals' likelihood to update their beliefs is not just ontogenetic but rather depends on the social contexts in which they are situated. If this is the case, then sociologists are well-positioned to contribute to ongoing interdisciplinary work about formative windows and learning schedules. Furthermore, if longer young adulthoods result in extended periods of exploration, then there is another mechanism through which this "age of independence" affects social change: by letting individuals remain open to novel information for longer. 
+
