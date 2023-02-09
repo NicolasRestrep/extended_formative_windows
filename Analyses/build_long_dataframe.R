@@ -587,5 +587,635 @@ a5_private_l <- clean_anes5 %>%
          two_points_l) %>%
   mutate(variable = "private")
 
-# PARTID - ANES74
+# PARTYID - ANES74 ----
 
+# This variable seems to be messed up here because we have a *vast* majority of NAs / DKs
+
+# Strict
+a7_pid_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("party")) %>%
+  filter(
+    partyid7_1 != 7,
+    partyid7_1 != 8,
+    partyid7_1 != 9,
+    partyid7_2 != 7,
+    partyid7_2 != 8,
+    partyid7_2 != 9,
+    partyid7_3 != 7,
+    partyid7_3 != 8,
+    partyid7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(partyid7_2 - partyid7_1),
+    change_w3 = abs(partyid7_3 - partyid7_2),
+    total_change_s = change_w2 + change_w3, 
+    any_change_s = if_else(total_change_s >= 1, 1, 0), 
+    crossed_midpoint_s = case_when(
+      partyid7_1 < 3 & partyid7_2 > 3 ~ 1,
+      partyid7_1 > 3 & partyid7_2 < 3 ~ 1,
+      partyid7_2 < 3 & partyid7_3 > 3 ~ 1,
+      partyid7_2 > 3 & partyid7_3 < 3 ~ 1,
+      partyid7_1 < 3 & partyid7_3 > 3 ~ 1,
+      partyid7_1 > 3 & partyid7_3 < 3 ~ 1,
+      TRUE ~ 0
+    ), 
+    two_points_s = if_else(
+      abs(partyid7_3-partyid7_1) >= 2, 1,0
+    )
+  ) %>% 
+  select(id, age_1, total_change_s, any_change_s, crossed_midpoint_s, two_points_s) %>% 
+  mutate(variable = "partyid")
+
+# Recodes 7s and 8s into 3s to be less strict 
+a7_pid_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("party")) %>%
+  filter(
+    partyid7_1 != 9,
+    partyid7_2 != 9,
+    partyid7_3 != 9
+  ) %>%
+  mutate(
+    across(contains("party"), 
+           ~ case_when(
+             . == 0 ~ 0,
+             . == 1 ~ 1, 
+             . == 2 ~ 2, 
+             . == 3 ~ 3, 
+             . == 4 ~ 4, 
+             . == 5 ~ 5, 
+             . == 6 ~ 6, 
+             . == 7 ~ 3,
+             . == 8 ~ 3, 
+           )), 
+    change_w2 = abs(partyid7_2 - partyid7_1),
+    change_w3 = abs(partyid7_3 - partyid7_2),
+    total_change_l = change_w2 + change_w3, 
+    any_change_l = if_else(total_change_l >= 1, 1, 0), 
+    crossed_midpoint_l = case_when(
+      partyid7_1 < 3 & partyid7_2 > 3 ~ 1,
+      partyid7_1 > 3 & partyid7_2 < 3 ~ 1,
+      partyid7_2 < 3 & partyid7_3 > 3 ~ 1,
+      partyid7_2 > 3 & partyid7_3 < 3 ~ 1,
+      partyid7_1 < 3 & partyid7_3 > 3 ~ 1,
+      partyid7_1 > 3 & partyid7_3 < 3 ~ 1,
+      TRUE ~ 0
+    ), 
+    two_points_l = if_else(
+      abs(partyid7_3-partyid7_1) >= 2, 1,0
+    )
+  ) %>% 
+  select(id, age_1, total_change_l, any_change_l, crossed_midpoint_l, two_points_l) %>% 
+  mutate(variable = "partyid")
+
+
+
+# HELP BLACK - ANES74 ----
+a7_hlpblk_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("helpblk")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    helpblk7_1 != 0,
+    helpblk7_1 != 8,
+    helpblk7_1 != 9,
+    helpblk7_2 != 0,
+    helpblk7_2 != 8,
+    helpblk7_2 != 9,
+    helpblk7_3 != 0,
+    helpblk7_3 != 8,
+    helpblk7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(helpblk7_2 - helpblk7_1),
+    change_w3 = abs(helpblk7_3 - helpblk7_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      helpblk7_1 < 4 & helpblk7_2 > 4 ~ 1,
+      helpblk7_1 > 4 & helpblk7_2 < 4 ~ 1,
+      helpblk7_2 < 4 & helpblk7_3 > 4 ~ 1,
+      helpblk7_2 > 4 & helpblk7_3 < 4 ~ 1,
+      helpblk7_1 < 4 & helpblk7_3 > 4 ~ 1,
+      helpblk7_1 > 4 & helpblk7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(helpblk7_3 - helpblk7_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "helpblk")
+
+a7_hlpblk_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("helpblk")) %>%
+  filter(
+    helpblk7_1 != 9,
+    helpblk7_2 != 9,
+    helpblk7_3 != 9,
+    helpblk7_1 != 0,
+    helpblk7_2 != 0,
+    helpblk7_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("help"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(helpblk7_2 - helpblk7_1),
+    change_w3 = abs(helpblk7_3 - helpblk7_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      helpblk7_1 < 4 & helpblk7_2 > 4 ~ 1,
+      helpblk7_1 > 4 & helpblk7_2 < 4 ~ 1,
+      helpblk7_2 < 4 & helpblk7_3 > 4 ~ 1,
+      helpblk7_2 > 4 & helpblk7_3 < 4 ~ 1,
+      helpblk7_1 < 4 & helpblk7_3 > 4 ~ 1,
+      helpblk7_1 > 4 & helpblk7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(helpblk7_3 - helpblk7_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "helpblk")
+
+# BUSING - ANES74 ----
+
+# 0 here is the overwhelming majority but it seems to me that it cannot be treated as a midpoint
+# Seems to me to be standing for more than just "I haven't thought about it"
+
+a7_busing_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("busing")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    busing7_1 != 0,
+    busing7_1 != 8,
+    busing7_1 != 9,
+    busing7_2 != 0,
+    busing7_2 != 8,
+    busing7_2 != 9,
+    busing7_3 != 0,
+    busing7_3 != 8,
+    busing7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(busing7_2 - busing7_1),
+    change_w3 = abs(busing7_3 - busing7_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      busing7_1 < 4 & busing7_2 > 4 ~ 1,
+      busing7_1 > 4 & busing7_2 < 4 ~ 1,
+      busing7_2 < 4 & busing7_3 > 4 ~ 1,
+      busing7_2 > 4 & busing7_3 < 4 ~ 1,
+      busing7_1 < 4 & busing7_3 > 4 ~ 1,
+      busing7_1 > 4 & busing7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(busing7_3 - busing7_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "busing")
+
+a7_busing_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("busing")) %>%
+  filter(
+    busing7_1 != 9,
+    busing7_2 != 9,
+    busing7_3 != 9,
+    busing7_1 != 0,
+    busing7_2 != 0,
+    busing7_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("busing"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(busing7_2 - busing7_1),
+    change_w3 = abs(busing7_3 - busing7_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      busing7_1 < 4 & busing7_2 > 4 ~ 1,
+      busing7_1 > 4 & busing7_2 < 4 ~ 1,
+      busing7_2 < 4 & busing7_3 > 4 ~ 1,
+      busing7_2 > 4 & busing7_3 < 4 ~ 1,
+      busing7_1 < 4 & busing7_3 > 4 ~ 1,
+      busing7_1 > 4 & busing7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(busing7_3 - busing7_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "busing")
+
+
+# JOBGUAR - ANES74 ----
+
+# 0 here is the overwhelming majority but it seems to me that it cannot be treated as a midpoint
+# Seems to me to be standing for more than just "I haven't thought about it"
+
+a7_jobguar_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("jobguar")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    jobguar7_1 != 0,
+    jobguar7_1 != 8,
+    jobguar7_1 != 9,
+    jobguar7_2 != 0,
+    jobguar7_2 != 8,
+    jobguar7_2 != 9,
+    jobguar7_3 != 0,
+    jobguar7_3 != 8,
+    jobguar7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(jobguar7_2 - jobguar7_1),
+    change_w3 = abs(jobguar7_3 - jobguar7_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      jobguar7_1 < 4 & jobguar7_2 > 4 ~ 1,
+      jobguar7_1 > 4 & jobguar7_2 < 4 ~ 1,
+      jobguar7_2 < 4 & jobguar7_3 > 4 ~ 1,
+      jobguar7_2 > 4 & jobguar7_3 < 4 ~ 1,
+      jobguar7_1 < 4 & jobguar7_3 > 4 ~ 1,
+      jobguar7_1 > 4 & jobguar7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(jobguar7_3 - jobguar7_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "jobguar")
+
+a7_jobguar_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("jobguar")) %>%
+  filter(
+    jobguar7_1 != 9,
+    jobguar7_2 != 9,
+    jobguar7_3 != 9,
+    jobguar7_1 != 0,
+    jobguar7_2 != 0,
+    jobguar7_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("jobguar"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(jobguar7_2 - jobguar7_1),
+    change_w3 = abs(jobguar7_3 - jobguar7_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      jobguar7_1 < 4 & jobguar7_2 > 4 ~ 1,
+      jobguar7_1 > 4 & jobguar7_2 < 4 ~ 1,
+      jobguar7_2 < 4 & jobguar7_3 > 4 ~ 1,
+      jobguar7_2 > 4 & jobguar7_3 < 4 ~ 1,
+      jobguar7_1 < 4 & jobguar7_3 > 4 ~ 1,
+      jobguar7_1 > 4 & jobguar7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(jobguar7_3 - jobguar7_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "jobguar")
+
+# UNREST - ANES74 ----
+
+# 0 here is the overwhelming majority but it seems to me that it cannot be treated as a midpoint
+# Seems to me to be standing for more than just "I haven't thought about it"
+
+a7_unrest_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("urbunrest")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    urbunrest7_1 != 0,
+    urbunrest7_1 != 8,
+    urbunrest7_1 != 9,
+    urbunrest7_2 != 0,
+    urbunrest7_2 != 8,
+    urbunrest7_2 != 9,
+    urbunrest7_3 != 0,
+    urbunrest7_3 != 8,
+    urbunrest7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(urbunrest7_2 - urbunrest7_1),
+    change_w3 = abs(urbunrest7_3 - urbunrest7_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      urbunrest7_1 < 4 & urbunrest7_2 > 4 ~ 1,
+      urbunrest7_1 > 4 & urbunrest7_2 < 4 ~ 1,
+      urbunrest7_2 < 4 & urbunrest7_3 > 4 ~ 1,
+      urbunrest7_2 > 4 & urbunrest7_3 < 4 ~ 1,
+      urbunrest7_1 < 4 & urbunrest7_3 > 4 ~ 1,
+      urbunrest7_1 > 4 & urbunrest7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(urbunrest7_3 - urbunrest7_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "unrest")
+
+a7_unrest_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("urbunrest")) %>%
+  filter(
+    urbunrest7_1 != 9,
+    urbunrest7_2 != 9,
+    urbunrest7_3 != 9,
+    urbunrest7_1 != 0,
+    urbunrest7_2 != 0,
+    urbunrest7_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("urbunrest"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(urbunrest7_2 - urbunrest7_1),
+    change_w3 = abs(urbunrest7_3 - urbunrest7_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      urbunrest7_1 < 4 & urbunrest7_2 > 4 ~ 1,
+      urbunrest7_1 > 4 & urbunrest7_2 < 4 ~ 1,
+      urbunrest7_2 < 4 & urbunrest7_3 > 4 ~ 1,
+      urbunrest7_2 > 4 & urbunrest7_3 < 4 ~ 1,
+      urbunrest7_1 < 4 & urbunrest7_3 > 4 ~ 1,
+      urbunrest7_1 > 4 & urbunrest7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(urbunrest7_3 - urbunrest7_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "urbunrest")
+
+# LIBCON - ANES74 ----
+
+# 0 here is the overwhelming majority. This, for me, is extremely sobering in terms of talking about opinions.
+
+
+a7_libcon_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("libcon")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    libcon7_1 != 0,
+    libcon7_1 != 8,
+    libcon7_1 != 9,
+    libcon7_2 != 0,
+    libcon7_2 != 8,
+    libcon7_2 != 9,
+    libcon7_3 != 0,
+    libcon7_3 != 8,
+    libcon7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(libcon7_2 - libcon7_1),
+    change_w3 = abs(libcon7_3 - libcon7_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      libcon7_1 < 4 & libcon7_2 > 4 ~ 1,
+      libcon7_1 > 4 & libcon7_2 < 4 ~ 1,
+      libcon7_2 < 4 & libcon7_3 > 4 ~ 1,
+      libcon7_2 > 4 & libcon7_3 < 4 ~ 1,
+      libcon7_1 < 4 & libcon7_3 > 4 ~ 1,
+      libcon7_1 > 4 & libcon7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(libcon7_3 - libcon7_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "libcon")
+
+a7_libcon_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("libcon")) %>%
+  filter(
+    libcon7_1 != 9,
+    libcon7_2 != 9,
+    libcon7_3 != 9,
+    libcon7_1 != 0,
+    libcon7_2 != 0,
+    libcon7_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("libcon"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(libcon7_2 - libcon7_1),
+    change_w3 = abs(libcon7_3 - libcon7_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      libcon7_1 < 4 & libcon7_2 > 4 ~ 1,
+      libcon7_1 > 4 & libcon7_2 < 4 ~ 1,
+      libcon7_2 < 4 & libcon7_3 > 4 ~ 1,
+      libcon7_2 > 4 & libcon7_3 < 4 ~ 1,
+      libcon7_1 < 4 & libcon7_3 > 4 ~ 1,
+      libcon7_1 > 4 & libcon7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(libcon7_3 - libcon7_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "libcon")
+
+# ACCUSED - ANES74 ----
+
+# 0 here is the overwhelming majority but it seems to me that it cannot be treated as a midpoint
+# Seems to me to be standing for more than just "I haven't thought about it"
+
+a7_accused_s <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("accused")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    accused7_1 != 0,
+    accused7_1 != 8,
+    accused7_1 != 9,
+    accused7_2 != 0,
+    accused7_2 != 8,
+    accused7_2 != 9,
+    accused7_3 != 0,
+    accused7_3 != 8,
+    accused7_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(accused7_2 - accused7_1),
+    change_w3 = abs(accused7_3 - accused7_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      accused7_1 < 4 & accused7_2 > 4 ~ 1,
+      accused7_1 > 4 & accused7_2 < 4 ~ 1,
+      accused7_2 < 4 & accused7_3 > 4 ~ 1,
+      accused7_2 > 4 & accused7_3 < 4 ~ 1,
+      accused7_1 < 4 & accused7_3 > 4 ~ 1,
+      accused7_1 > 4 & accused7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(accused7_3 - accused7_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "accused")
+
+a7_accused_l <- clean_anes7 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("accused")) %>%
+  filter(
+    accused7_1 != 9,
+    accused7_2 != 9,
+    accused7_3 != 9,
+    accused7_1 != 0,
+    accused7_2 != 0,
+    accused7_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("accused"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(accused7_2 - accused7_1),
+    change_w3 = abs(accused7_3 - accused7_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      accused7_1 < 4 & accused7_2 > 4 ~ 1,
+      accused7_1 > 4 & accused7_2 < 4 ~ 1,
+      accused7_2 < 4 & accused7_3 > 4 ~ 1,
+      accused7_2 > 4 & accused7_3 < 4 ~ 1,
+      accused7_1 < 4 & accused7_3 > 4 ~ 1,
+      accused7_1 > 4 & accused7_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(accused7_3 - accused7_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "accused")
