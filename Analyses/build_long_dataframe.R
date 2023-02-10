@@ -1219,3 +1219,532 @@ a7_accused_l <- clean_anes7 %>%
          crossed_midpoint_l, 
          two_points_l) %>% 
   mutate(variable = "accused")
+
+# PARTYID - ANES94 -----
+# This variable seems to be messed up here because we have a *vast* majority of NAs / DKs
+
+# Strict
+a9_pid_s <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("party")) %>%
+  filter(
+    partyid9_1 != 7,
+    partyid9_1 != 8,
+    partyid9_1 != 9,
+    partyid9_2 != 7,
+    partyid9_2 != 8,
+    partyid9_2 != 9,
+    partyid9_3 != 7,
+    partyid9_3 != 8,
+    partyid9_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(partyid9_2 - partyid9_1),
+    change_w3 = abs(partyid9_3 - partyid9_2),
+    total_change_s = change_w2 + change_w3, 
+    any_change_s = if_else(total_change_s >= 1, 1, 0), 
+    crossed_midpoint_s = case_when(
+      partyid9_1 < 3 & partyid9_2 > 3 ~ 1,
+      partyid9_1 > 3 & partyid9_2 < 3 ~ 1,
+      partyid9_2 < 3 & partyid9_3 > 3 ~ 1,
+      partyid9_2 > 3 & partyid9_3 < 3 ~ 1,
+      partyid9_1 < 3 & partyid9_3 > 3 ~ 1,
+      partyid9_1 > 3 & partyid9_3 < 3 ~ 1,
+      TRUE ~ 0
+    ), 
+    two_points_s = if_else(
+      abs(partyid9_3-partyid9_1) >= 2, 1,0
+    )
+  ) %>% 
+  select(id, age_1, total_change_s, any_change_s, crossed_midpoint_s, two_points_s) %>% 
+  mutate(variable = "partyid")
+
+# Recodes 7s and 8s into 3s to be less strict 
+a9_pid_l <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("party")) %>%
+  filter(
+    partyid9_1 != 9,
+    partyid9_2 != 9,
+    partyid9_3 != 9
+  ) %>%
+  mutate(
+    across(contains("party"), 
+           ~ case_when(
+             . == 0 ~ 0,
+             . == 1 ~ 1, 
+             . == 2 ~ 2, 
+             . == 3 ~ 3, 
+             . == 4 ~ 4, 
+             . == 5 ~ 5, 
+             . == 6 ~ 6, 
+             . == 7 ~ 3,
+             . == 8 ~ 3, 
+           )), 
+    change_w2 = abs(partyid9_2 - partyid9_1),
+    change_w3 = abs(partyid9_3 - partyid9_2),
+    total_change_l = change_w2 + change_w3, 
+    any_change_l = if_else(total_change_l >= 1, 1, 0), 
+    crossed_midpoint_l = case_when(
+      partyid9_1 < 3 & partyid9_2 > 3 ~ 1,
+      partyid9_1 > 3 & partyid9_2 < 3 ~ 1,
+      partyid9_2 < 3 & partyid9_3 > 3 ~ 1,
+      partyid9_2 > 3 & partyid9_3 < 3 ~ 1,
+      partyid9_1 < 3 & partyid9_3 > 3 ~ 1,
+      partyid9_1 > 3 & partyid9_3 < 3 ~ 1,
+      TRUE ~ 0
+    ), 
+    two_points_l = if_else(
+      abs(partyid9_3-partyid9_1) >= 2, 1,0
+    )
+  ) %>% 
+  select(id, age_1, total_change_l, any_change_l, crossed_midpoint_l, two_points_l) %>% 
+  mutate(variable = "partyid")
+
+
+
+# HELP BLACK - ANES94 ----
+
+a9_hlpblk_s <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("govblks")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    govblks9_1 != 0,
+    govblks9_1 != 8,
+    govblks9_1 != 9,
+    govblks9_2 != 0,
+    govblks9_2 != 8,
+    govblks9_2 != 9,
+    govblks9_3 != 0,
+    govblks9_3 != 8,
+    govblks9_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(govblks9_2 - govblks9_1),
+    change_w3 = abs(govblks9_3 - govblks9_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      govblks9_1 < 4 & govblks9_2 > 4 ~ 1,
+      govblks9_1 > 4 & govblks9_2 < 4 ~ 1,
+      govblks9_2 < 4 & govblks9_3 > 4 ~ 1,
+      govblks9_2 > 4 & govblks9_3 < 4 ~ 1,
+      govblks9_1 < 4 & govblks9_3 > 4 ~ 1,
+      govblks9_1 > 4 & govblks9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(govblks9_3 - govblks9_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "helpblk")
+
+a9_hlpblk_l <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("govblks")) %>%
+  filter(
+    govblks9_1 != 9,
+    govblks9_2 != 9,
+    govblks9_3 != 9,
+    govblks9_1 != 0,
+    govblks9_2 != 0,
+    govblks9_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("govblks"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(govblks9_2 - govblks9_1),
+    change_w3 = abs(govblks9_3 - govblks9_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      govblks9_1 < 4 & govblks9_2 > 4 ~ 1,
+      govblks9_1 > 4 & govblks9_2 < 4 ~ 1,
+      govblks9_2 < 4 & govblks9_3 > 4 ~ 1,
+      govblks9_2 > 4 & govblks9_3 < 4 ~ 1,
+      govblks9_1 < 4 & govblks9_3 > 4 ~ 1,
+      govblks9_1 > 4 & govblks9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(govblks9_3 - govblks9_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "helpblk")
+
+# GOVERNMENT HEALTH - ANES94 ----
+
+a9_govins_s <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("govins")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    govins9_1 != 0,
+    govins9_1 != 8,
+    govins9_1 != 9,
+    govins9_2 != 0,
+    govins9_2 != 8,
+    govins9_2 != 9,
+    govins9_3 != 0,
+    govins9_3 != 8,
+    govins9_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(govins9_2 - govins9_1),
+    change_w3 = abs(govins9_3 - govins9_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      govins9_1 < 4 & govins9_2 > 4 ~ 1,
+      govins9_1 > 4 & govins9_2 < 4 ~ 1,
+      govins9_2 < 4 & govins9_3 > 4 ~ 1,
+      govins9_2 > 4 & govins9_3 < 4 ~ 1,
+      govins9_1 < 4 & govins9_3 > 4 ~ 1,
+      govins9_1 > 4 & govins9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(govins9_3 - govins9_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "govins")
+
+a9_govins_l <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("govins")) %>%
+  filter(
+    govins9_1 != 9,
+    govins9_2 != 9,
+    govins9_3 != 9,
+    govins9_1 != 0,
+    govins9_2 != 0,
+    govins9_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("govins"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(govins9_2 - govins9_1),
+    change_w3 = abs(govins9_3 - govins9_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      govins9_1 < 4 & govins9_2 > 4 ~ 1,
+      govins9_1 > 4 & govins9_2 < 4 ~ 1,
+      govins9_2 < 4 & govins9_3 > 4 ~ 1,
+      govins9_2 > 4 & govins9_3 < 4 ~ 1,
+      govins9_1 < 4 & govins9_3 > 4 ~ 1,
+      govins9_1 > 4 & govins9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(govins9_3 - govins9_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "govins")
+
+#
+# JOBGUAR - ANES94 ----
+
+a9_jobguar_s <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("jobguar")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    jobguar9_1 != 0,
+    jobguar9_1 != 8,
+    jobguar9_1 != 9,
+    jobguar9_2 != 0,
+    jobguar9_2 != 8,
+    jobguar9_2 != 9,
+    jobguar9_3 != 0,
+    jobguar9_3 != 8,
+    jobguar9_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(jobguar9_2 - jobguar9_1),
+    change_w3 = abs(jobguar9_3 - jobguar9_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      jobguar9_1 < 4 & jobguar9_2 > 4 ~ 1,
+      jobguar9_1 > 4 & jobguar9_2 < 4 ~ 1,
+      jobguar9_2 < 4 & jobguar9_3 > 4 ~ 1,
+      jobguar9_2 > 4 & jobguar9_3 < 4 ~ 1,
+      jobguar9_1 < 4 & jobguar9_3 > 4 ~ 1,
+      jobguar9_1 > 4 & jobguar9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(jobguar9_3 - jobguar9_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "jobguar")
+
+a9_jobguar_l <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("jobguar")) %>%
+  filter(
+    jobguar9_1 != 9,
+    jobguar9_2 != 9,
+    jobguar9_3 != 9,
+    jobguar9_1 != 0,
+    jobguar9_2 != 0,
+    jobguar9_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("jobguar"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(jobguar9_2 - jobguar9_1),
+    change_w3 = abs(jobguar9_3 - jobguar9_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      jobguar9_1 < 4 & jobguar9_2 > 4 ~ 1,
+      jobguar9_1 > 4 & jobguar9_2 < 4 ~ 1,
+      jobguar9_2 < 4 & jobguar9_3 > 4 ~ 1,
+      jobguar9_2 > 4 & jobguar9_3 < 4 ~ 1,
+      jobguar9_1 < 4 & jobguar9_3 > 4 ~ 1,
+      jobguar9_1 > 4 & jobguar9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(jobguar9_3 - jobguar9_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "jobguar")
+
+# SPENDSERVICES - ANES94 ----
+
+a9_spendserv_s <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("spendserv")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    spendserv9_1 != 0,
+    spendserv9_1 != 8,
+    spendserv9_1 != 9,
+    spendserv9_2 != 0,
+    spendserv9_2 != 8,
+    spendserv9_2 != 9,
+    spendserv9_3 != 0,
+    spendserv9_3 != 8,
+    spendserv9_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(spendserv9_2 - spendserv9_1),
+    change_w3 = abs(spendserv9_3 - spendserv9_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      spendserv9_1 < 4 & spendserv9_2 > 4 ~ 1,
+      spendserv9_1 > 4 & spendserv9_2 < 4 ~ 1,
+      spendserv9_2 < 4 & spendserv9_3 > 4 ~ 1,
+      spendserv9_2 > 4 & spendserv9_3 < 4 ~ 1,
+      spendserv9_1 < 4 & spendserv9_3 > 4 ~ 1,
+      spendserv9_1 > 4 & spendserv9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(spendserv9_3 - spendserv9_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "spendserv")
+
+a9_spendserv_l <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("spendserv9")) %>%
+  filter(
+    spendserv9_1 != 9,
+    spendserv9_2 != 9,
+    spendserv9_3 != 9,
+    spendserv9_1 != 0,
+    spendserv9_2 != 0,
+    spendserv9_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("spendserv9"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(spendserv9_2 - spendserv9_1),
+    change_w3 = abs(spendserv9_3 - spendserv9_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      spendserv9_1 < 4 & spendserv9_2 > 4 ~ 1,
+      spendserv9_1 > 4 & spendserv9_2 < 4 ~ 1,
+      spendserv9_2 < 4 & spendserv9_3 > 4 ~ 1,
+      spendserv9_2 > 4 & spendserv9_3 < 4 ~ 1,
+      spendserv9_1 < 4 & spendserv9_3 > 4 ~ 1,
+      spendserv9_1 > 4 & spendserv9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(spendserv9_3 - spendserv9_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "spendserv")
+
+# LIBCON - ANES94 ----
+
+a9_libcon_s <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("libcon")) %>%
+  filter(
+    # Strict filtering gets rid of more than half the sample
+    libcon9_1 != 0,
+    libcon9_1 != 8,
+    libcon9_1 != 9,
+    libcon9_2 != 0,
+    libcon9_2 != 8,
+    libcon9_2 != 9,
+    libcon9_3 != 0,
+    libcon9_3 != 8,
+    libcon9_3 != 9
+  ) %>%
+  mutate(
+    change_w2 = abs(libcon9_2 - libcon9_1),
+    change_w3 = abs(libcon9_3 - libcon9_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      libcon9_1 < 4 & libcon9_2 > 4 ~ 1,
+      libcon9_1 > 4 & libcon9_2 < 4 ~ 1,
+      libcon9_2 < 4 & libcon9_3 > 4 ~ 1,
+      libcon9_2 > 4 & libcon9_3 < 4 ~ 1,
+      libcon9_1 < 4 & libcon9_3 > 4 ~ 1,
+      libcon9_1 > 4 & libcon9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(libcon9_3 - libcon9_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "libcon")
+
+a9_libcon_l <- clean_anes9 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("libcon")) %>%
+  filter(
+    libcon9_1 != 9,
+    libcon9_2 != 9,
+    libcon9_3 != 9,
+    libcon9_1 != 0,
+    libcon9_2 != 0,
+    libcon9_3 != 0,
+  ) %>% 
+  mutate( 
+    across(
+      contains("libcon"), 
+      ~ case_when(
+        . == 1 ~ 1, 
+        . == 2 ~ 2, 
+        . == 3 ~ 3, 
+        . == 4 ~ 4, 
+        . == 5 ~ 5,
+        . == 6 ~ 6,
+        . == 7 ~ 7,
+        . == 8 ~ 4
+      )
+    ), 
+    change_w2 = abs(libcon9_2 - libcon9_1),
+    change_w3 = abs(libcon9_3 - libcon9_2),
+    total_change_l = change_w2 + change_w3,
+    any_change_l = if_else(total_change_l >= 1, 1, 0),
+    crossed_midpoint_l = case_when(
+      libcon9_1 < 4 & libcon9_2 > 4 ~ 1,
+      libcon9_1 > 4 & libcon9_2 < 4 ~ 1,
+      libcon9_2 < 4 & libcon9_3 > 4 ~ 1,
+      libcon9_2 > 4 & libcon9_3 < 4 ~ 1,
+      libcon9_1 < 4 & libcon9_3 > 4 ~ 1,
+      libcon9_1 > 4 & libcon9_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_l = if_else(abs(libcon9_3 - libcon9_1) >= 2, 1, 0)
+  ) %>% 
+  select(id, 
+         age_1, 
+         total_change_l, 
+         any_change_l, 
+         crossed_midpoint_l, 
+         two_points_l) %>% 
+  mutate(variable = "libcon")
