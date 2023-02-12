@@ -1748,3 +1748,302 @@ a9_libcon_l <- clean_anes9 %>%
          crossed_midpoint_l, 
          two_points_l) %>% 
   mutate(variable = "libcon")
+
+# HELPPOOR - GSS6 ----
+
+g6_helppoor_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("helppoor")) %>%
+  filter(
+    !is.na(helppoor_1), 
+    !is.na(helppoor_2),
+    !is.na(helppoor_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(helppoor_2 - helppoor_1),
+    change_w3 = abs(helppoor_3 - helppoor_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      helppoor_1 < 3 & helppoor_2 > 3 ~ 1,
+      helppoor_1 > 3 & helppoor_2 < 3 ~ 1,
+      helppoor_2 < 3 & helppoor_3 > 3 ~ 1,
+      helppoor_2 > 3 & helppoor_3 < 3 ~ 1,
+      helppoor_1 < 3 & helppoor_3 > 3 ~ 1,
+      helppoor_1 > 3 & helppoor_3 < 3 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(helppoor_3 - helppoor_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "helppoor")
+
+
+# HELPNOT - GSS6 ----
+
+g6_helpnot_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("helpnot")) %>%
+  filter(
+    !is.na(helpnot_1), 
+    !is.na(helpnot_2),
+    !is.na(helpnot_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(helpnot_2 - helpnot_1),
+    change_w3 = abs(helpnot_3 - helpnot_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      helpnot_1 < 3 & helpnot_2 > 3 ~ 1,
+      helpnot_1 > 3 & helpnot_2 < 3 ~ 1,
+      helpnot_2 < 3 & helpnot_3 > 3 ~ 1,
+      helpnot_2 > 3 & helpnot_3 < 3 ~ 1,
+      helpnot_1 < 3 & helpnot_3 > 3 ~ 1,
+      helpnot_1 > 3 & helpnot_3 < 3 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(helpnot_3 - helpnot_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "helpnot")
+
+# HELPSICK - GSS6 ----
+
+g6_helpsick_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("helpsick")) %>%
+  filter(
+    !is.na(helpsick_1), 
+    !is.na(helpsick_2),
+    !is.na(helpsick_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(helpsick_2 - helpsick_1),
+    change_w3 = abs(helpsick_3 - helpsick_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      helpsick_1 < 3 & helpsick_2 > 3 ~ 1,
+      helpsick_1 > 3 & helpsick_2 < 3 ~ 1,
+      helpsick_2 < 3 & helpsick_3 > 3 ~ 1,
+      helpsick_2 > 3 & helpsick_3 < 3 ~ 1,
+      helpsick_1 < 3 & helpsick_3 > 3 ~ 1,
+      helpsick_1 > 3 & helpsick_3 < 3 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(helpsick_3 - helpsick_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "helpsick")
+
+# HELPBLACK - GSS6 ----
+
+g6_hlpblk_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("helpblk")) %>%
+  filter(
+    !is.na(helpblk_1), 
+    !is.na(helpblk_2),
+    !is.na(helpblk_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(helpblk_2 - helpblk_1),
+    change_w3 = abs(helpblk_3 - helpblk_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      helpblk_1 < 3 & helpblk_2 > 3 ~ 1,
+      helpblk_1 > 3 & helpblk_2 < 3 ~ 1,
+      helpblk_2 < 3 & helpblk_3 > 3 ~ 1,
+      helpblk_2 > 3 & helpblk_3 < 3 ~ 1,
+      helpblk_1 < 3 & helpblk_3 > 3 ~ 1,
+      helpblk_1 > 3 & helpblk_3 < 3 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(helpblk_3 - helpblk_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "helpblk")
+
+# EQWLTH - GSS6 ----
+
+g6_eqwlth_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("eqwlth")) %>%
+  filter(
+    !is.na(eqwlth_1), 
+    !is.na(eqwlth_2),
+    !is.na(eqwlth_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(eqwlth_2 - eqwlth_1),
+    change_w3 = abs(eqwlth_3 - eqwlth_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      eqwlth_1 < 4 & eqwlth_2 > 4 ~ 1,
+      eqwlth_1 > 4 & eqwlth_2 < 4 ~ 1,
+      eqwlth_2 < 4 & eqwlth_3 > 4 ~ 1,
+      eqwlth_2 > 4 & eqwlth_3 < 4 ~ 1,
+      eqwlth_1 < 4 & eqwlth_3 > 4 ~ 1,
+      eqwlth_1 > 4 & eqwlth_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(eqwlth_3 - eqwlth_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "eqwlth")
+
+# POLVIEWS - GSS6 ----
+
+g6_polviews_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("polviews")) %>%
+  filter(
+    !is.na(polviews_1), 
+    !is.na(polviews_2),
+    !is.na(polviews_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(polviews_2 - polviews_1),
+    change_w3 = abs(polviews_3 - polviews_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      polviews_1 < 4 & polviews_2 > 4 ~ 1,
+      polviews_1 > 4 & polviews_2 < 4 ~ 1,
+      polviews_2 < 4 & polviews_3 > 4 ~ 1,
+      polviews_2 > 4 & polviews_3 < 4 ~ 1,
+      polviews_1 < 4 & polviews_3 > 4 ~ 1,
+      polviews_1 > 4 & polviews_3 < 4 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(polviews_3 - polviews_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "polviews")
+
+# PARTYID - GSS6 ----
+
+g6_partyid_s <- clean_g6 %>%
+  mutate(id = 1:nrow(.)) %>%
+  select(id, age_1, contains("partyid")) %>%
+  filter(
+    !is.na(partyid_1), 
+    !is.na(partyid_2),
+    !is.na(partyid_3)
+  ) %>%
+  mutate(
+    change_w2 = abs(partyid_2 - partyid_1),
+    change_w3 = abs(partyid_3 - partyid_2),
+    total_change_s = change_w2 + change_w3,
+    any_change_s = if_else(total_change_s >= 1, 1, 0),
+    crossed_midpoint_s = case_when(
+      partyid_1 < 3 & partyid_2 > 3 ~ 1,
+      partyid_1 > 3 & partyid_2 < 3 ~ 1,
+      partyid_2 < 3 & partyid_3 > 3 ~ 1,
+      partyid_2 > 3 & partyid_3 < 3 ~ 1,
+      partyid_1 < 3 & partyid_3 > 3 ~ 1,
+      partyid_1 > 3 & partyid_3 < 3 ~ 1,
+      TRUE ~ 0
+    ),
+    two_points_s = if_else(abs(partyid_3 - partyid_1) >= 2, 1, 0)
+  ) %>%
+  select(id,
+         age_1,
+         total_change_s,
+         any_change_s,
+         crossed_midpoint_s,
+         two_points_s) %>%
+  mutate(variable = "partyid")
+
+
+# Build ANES56 datasets ----
+
+a5_complete_strict <- rbind(a5_bldschool_s, 
+                            a5_govjobs_s, 
+                            a5_hlpblk_s, 
+                            a5_integrate_s, 
+                            a5_pid_s, 
+                            a5_private_s)
+
+a5_complete_loose <- rbind(a5_bldschool_l, 
+                            a5_govjobs_l, 
+                            a5_hlpblk_l, 
+                            a5_integrate_l, 
+                            a5_pid_l, 
+                            a5_private_l)
+
+# Build ANES74 datasets ----
+
+a7_complete_strict <- rbind(a7_accused_s, 
+                            a7_busing_s, 
+                            a7_hlpblk_s, 
+                            a7_jobguar_s, 
+                            a7_libcon_s, 
+                            a7_pid_s, 
+                            a7_unrest_s)
+
+a7_complete_loose <- rbind(a7_accused_l, 
+                            a7_busing_l, 
+                            a7_hlpblk_l, 
+                            a7_jobguar_l, 
+                            a7_libcon_l, 
+                            a7_pid_l, 
+                            a7_unrest_l)
+
+# Build ANES94 datasets ----
+
+a9_complete_strict <- rbind(a9_govins_s, 
+                            a9_hlpblk_s, 
+                            a9_jobguar_s, 
+                            a9_libcon_s, 
+                            a9_pid_s, 
+                            a9_spendserv_s)
+
+a9_complete_loose <- rbind(a9_govins_l, 
+                            a9_hlpblk_l, 
+                            a9_jobguar_l, 
+                            a9_libcon_l, 
+                            a9_pid_l, 
+                            a9_spendserv_l)
+
+# Build GSS dataset ----
+
+g6_complete <- rbind(g6_helpnot_s, 
+                     g6_helppoor_s, 
+                     g6_helpsick_s, 
+                     g6_hlpblk_s, 
+                     g6_partyid_s, 
+                     g6_polviews_s)
