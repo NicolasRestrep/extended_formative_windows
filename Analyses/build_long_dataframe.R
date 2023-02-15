@@ -1,6 +1,8 @@
 # Packages ----
 library(tidyverse)
 library(patchwork)
+library(brms)
+parallel::detectCores()
 
 # Load Data ----
 load("~/Documents/extended_formative_windows/Data/clean_anes5.Rdata")
@@ -1996,14 +1998,16 @@ a5_complete_strict <- rbind(a5_bldschool_s,
                             a5_hlpblk_s, 
                             a5_integrate_s, 
                             a5_pid_s, 
-                            a5_private_s)
+                            a5_private_s) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
 
 a5_complete_loose <- rbind(a5_bldschool_l, 
                             a5_govjobs_l, 
                             a5_hlpblk_l, 
                             a5_integrate_l, 
                             a5_pid_l, 
-                            a5_private_l)
+                            a5_private_l) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
 
 # Build ANES74 datasets ----
 
@@ -2013,7 +2017,8 @@ a7_complete_strict <- rbind(a7_accused_s,
                             a7_jobguar_s, 
                             a7_libcon_s, 
                             a7_pid_s, 
-                            a7_unrest_s)
+                            a7_unrest_s) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
 
 a7_complete_loose <- rbind(a7_accused_l, 
                             a7_busing_l, 
@@ -2021,7 +2026,8 @@ a7_complete_loose <- rbind(a7_accused_l,
                             a7_jobguar_l, 
                             a7_libcon_l, 
                             a7_pid_l, 
-                            a7_unrest_l)
+                            a7_unrest_l) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
 
 # Build ANES94 datasets ----
 
@@ -2030,14 +2036,16 @@ a9_complete_strict <- rbind(a9_govins_s,
                             a9_jobguar_s, 
                             a9_libcon_s, 
                             a9_pid_s, 
-                            a9_spendserv_s)
+                            a9_spendserv_s) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
 
 a9_complete_loose <- rbind(a9_govins_l, 
                             a9_hlpblk_l, 
                             a9_jobguar_l, 
                             a9_libcon_l, 
                             a9_pid_l, 
-                            a9_spendserv_l)
+                            a9_spendserv_l) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
 
 # Build GSS dataset ----
 
@@ -2046,4 +2054,207 @@ g6_complete <- rbind(g6_helpnot_s,
                      g6_helpsick_s, 
                      g6_hlpblk_s, 
                      g6_partyid_s, 
-                     g6_polviews_s)
+                     g6_polviews_s) %>% 
+  mutate(young = if_else(age_1 <= 30, 1, 0))
+# Models ANES56 ----
+
+a5s_total_m <- brm(total_change_s ~ (1 | id) + (young | variable) + young, 
+                   data = a5_complete_strict,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a5s_total_m, "Models/a5s_total_m.rds")
+
+a5s_any_m <- brm(any_change_s ~ (1 | id) + (young | variable) + young, 
+                   data = a5_complete_strict,
+                   family = "bernoulli", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a5s_any_m, "Models/a5s_any_m.rds")
+
+a5s_crossed_m <- brm(crossed_midpoint_s ~ (1 | id) + (young | variable) + young, 
+                 data = a5_complete_strict,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(a5s_crossed_m, "Models/a5s_crossed_m.rds")
+
+a5s_twopoints_m <- brm(two_points_s ~ (1 | id) + (young | variable) + young, 
+                     data = a5_complete_strict,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(a5s_twopoints_m, "Models/a5s_twopoints_m.rds")
+
+a5l_total_m <- brm(total_change_l ~ (1 | id) + (young | variable) + young, 
+                   data = a5_complete_loose,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a5l_total_m, "Models/a5l_total_m.rds")
+
+a5l_any_m <- brm(any_change_l ~ (1 | id) + (young | variable) + young, 
+                 data = a5_complete_loose,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(a5l_any_m, "Models/a5l_any_m.rds")
+
+a5l_crossed_m <- brm(crossed_midpoint_l ~ (1 | id) + (young | variable) + young, 
+                     data = a5_complete_loose,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(a5l_crossed_m, "Models/a5l_crossed_m.rds")
+
+a5l_twopoints_m <- brm(two_points_l ~ (1 | id) + (young | variable) + young, 
+                       data = a5_complete_loose,
+                       family = "bernoulli", 
+                       backend = "cmdstanr", 
+                       cores = 6)
+saveRDS(a5l_twopoints_m, "Models/a5l_twopoints_m.rds")
+
+# Modesl ANES74 ----
+
+a7s_total_m <- brm(total_change_s ~ (1 | id) + (young | variable) + young, 
+                   data = a7_complete_strict,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a7s_total_m, "Models/a7s_total_m.rds")
+
+a7s_any_m <- brm(any_change_s ~ (1 | id) + (young | variable) + young, 
+                 data = a7_complete_strict,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(a7s_any_m, "Models/a7s_any_m.rds")
+
+a7s_crossed_m <- brm(crossed_midpoint_s ~ (1 | id) + (young | variable) + young, 
+                     data = a7_complete_strict,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(a7s_crossed_m, "Models/a7s_crossed_m.rds")
+
+a7s_twopoints_m <- brm(two_points_s ~ (1 | id) + (young | variable) + young, 
+                       data = a7_complete_strict,
+                       family = "bernoulli", 
+                       backend = "cmdstanr", 
+                       cores = 6)
+saveRDS(a7s_twopoints_m, "Models/a7s_twopoints_m.rds")
+
+a7l_total_m <- brm(total_change_l ~ (1 | id) + (young | variable) + young, 
+                   data = a7_complete_loose,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a7l_total_m, "Models/a7l_total_m.rds")
+
+a7l_any_m <- brm(any_change_l ~ (1 | id) + (young | variable) + young, 
+                 data = a7_complete_loose,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(a7l_any_m, "Models/a7l_any_m.rds")
+
+a7l_crossed_m <- brm(crossed_midpoint_l ~ (1 | id) + (young | variable) + young, 
+                     data = a7_complete_loose,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(a7l_crossed_m, "Models/a7l_crossed_m.rds")
+
+a7l_twopoints_m <- brm(two_points_l ~ (1 | id) + (young | variable) + young, 
+                       data = a7_complete_loose,
+                       family = "bernoulli", 
+                       backend = "cmdstanr", 
+                       cores = 6)
+saveRDS(a7l_twopoints_m, "Models/a7l_twopoints_m.rds")
+
+# Models ANES94 ----
+
+a9s_total_m <- brm(total_change_s ~ (1 | id) + (young | variable) + young, 
+                   data = a9_complete_strict,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a9s_total_m, "Models/a9s_total_m.rds")
+
+a9s_any_m <- brm(any_change_s ~ (1 | id) + (young | variable) + young, 
+                 data = a9_complete_strict,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(a9s_any_m, "Models/a9s_any_m.rds")
+
+a9s_crossed_m <- brm(crossed_midpoint_s ~ (1 | id) + (young | variable) + young, 
+                     data = a9_complete_strict,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(a9s_crossed_m, "Models/a9s_crossed_m.rds")
+
+a9s_twopoints_m <- brm(two_points_s ~ (1 | id) + (young | variable) + young, 
+                       data = a9_complete_strict,
+                       family = "bernoulli", 
+                       backend = "cmdstanr", 
+                       cores = 6)
+saveRDS(a9s_twopoints_m, "Models/a9s_twopoints_m.rds")
+
+a9l_total_m <- brm(total_change_l ~ (1 | id) + (young | variable) + young, 
+                   data = a9_complete_loose,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(a9l_total_m, "Models/a9l_total_m.rds")
+
+a9l_any_m <- brm(any_change_l ~ (1 | id) + (young | variable) + young, 
+                 data = a9_complete_loose,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(a9l_any_m, "Models/a9l_any_m.rds")
+
+a9l_crossed_m <- brm(crossed_midpoint_l ~ (1 | id) + (young | variable) + young, 
+                     data = a9_complete_loose,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(a9l_crossed_m, "Models/a9l_crossed_m.rds")
+
+a9l_twopoints_m <- brm(two_points_l ~ (1 | id) + (young | variable) + young, 
+                       data = a9_complete_loose,
+                       family = "bernoulli", 
+                       backend = "cmdstanr", 
+                       cores = 6)
+saveRDS(a9l_twopoints_m, "Models/a9l_twopoints_m.rds")
+
+# Models GSS ----
+g_total_m <- brm(total_change_s ~ (1 | id) + (young | variable) + young, 
+                   data = g6_complete,
+                   family = "gaussian", 
+                   backend = "cmdstanr", 
+                   cores = 6)
+saveRDS(g_total_m, "Models/gss_total_m.rds")
+
+g_any_m <- brm(any_change_s ~ (1 | id) + (young | variable) + young, 
+                 data = g6_complete,
+                 family = "bernoulli", 
+                 backend = "cmdstanr", 
+                 cores = 6)
+saveRDS(g_any_m, "Models/gss_any_m.rds")
+
+g_crossed_m <- brm(crossed_midpoint_s ~ (1 | id) + (young | variable) + young, 
+                     data = g6_complete,
+                     family = "bernoulli", 
+                     backend = "cmdstanr", 
+                     cores = 6)
+saveRDS(g_crossed_m, "Models/gss_crossed_m.rds")
+
+g_twopoints_m <- brm(two_points_s ~ (1 | id) + (young | variable) + young, 
+                       data = g6_complete,
+                       family = "bernoulli", 
+                       backend = "cmdstanr", 
+                       cores = 6)
+saveRDS(g_twopoints_m, "Models/gss_twopoints_m.rds")
