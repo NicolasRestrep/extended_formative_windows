@@ -1,0 +1,163 @@
+{
+    "sources": [
+        {
+            "DOI": "10.1111/jomf.12090",
+            "URL": "https://onlinelibrary.wiley.com/doi/10.1111/jomf.12090",
+            "author": [
+                {
+                    "family": "Manning",
+                    "given": "Wendy D."
+                },
+                {
+                    "family": "Brown",
+                    "given": "Susan L."
+                },
+                {
+                    "family": "Payne",
+                    "given": "Krista K."
+                }
+            ],
+            "container-title": "Journal of Marriage and Family",
+            "id": "manning2014",
+            "issue": "2",
+            "issued": {
+                "date-parts": [
+                    [
+                        2014,
+                        4
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "247-260",
+            "title": "Two Decades of Stability and Change in Age at First Union Formation: Stability and Change in Age at First Union",
+            "title-short": "Two Decades of Stability and Change in Age at First Union Formation",
+            "type": "article-journal",
+            "volume": "76"
+        },
+        {
+            "DOI": "10.1111/ajps.12713",
+            "URL": "https://onlinelibrary.wiley.com/doi/10.1111/ajps.12713",
+            "author": [
+                {
+                    "family": "Ghitza",
+                    "given": "Yair"
+                },
+                {
+                    "family": "Gelman",
+                    "given": "Andrew"
+                },
+                {
+                    "family": "Auerbach",
+                    "given": "Jonathan"
+                }
+            ],
+            "container-title": "American Journal of Political Science",
+            "id": "ghitza2022",
+            "issued": {
+                "date-parts": [
+                    [
+                        2022,
+                        9
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "ajps.12713",
+            "title": "The Great Society, Reagan’s Revolution, and Generations of Presidential Voting",
+            "type": "article-journal"
+        },
+        {
+            "DOI": "10.1017/S0003055408080210",
+            "URL": "https://www.cambridge.org/core/product/identifier/S0003055408080210/type/journal_article",
+            "author": [
+                {
+                    "family": "Ansolabehere",
+                    "given": "Stephen"
+                },
+                {
+                    "family": "Rodden",
+                    "given": "Jonathan"
+                },
+                {
+                    "family": "Snyder",
+                    "given": "James M."
+                }
+            ],
+            "container-title": "American Political Science Review",
+            "id": "ansolabehere2008",
+            "issue": "2",
+            "issued": {
+                "date-parts": [
+                    [
+                        2008,
+                        5
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "215-232",
+            "title": "The Strength of Issues: Using Multiple Measures to Gauge Preference Stability, Ideological Constraint, and Issue Voting",
+            "title-short": "The Strength of Issues",
+            "type": "article-journal",
+            "volume": "102"
+        },
+        {
+            "DOI": "10.1177/0049124199028002003",
+            "URL": "https://doi.org/10.1177/0049124199028002003",
+            "author": [
+                {
+                    "family": "Allison",
+                    "given": "Paul D."
+                }
+            ],
+            "container-title": "Sociological Methods & Research",
+            "id": "allison1999",
+            "issue": "2",
+            "issued": {
+                "date-parts": [
+                    [
+                        1999,
+                        11,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "Publisher: SAGE Publications Inc",
+            "page": "186-208",
+            "title": "Comparing Logit and Probit Coefficients Across Groups",
+            "type": "article-journal",
+            "volume": "28"
+        },
+        {
+            "URL": "https://www.jstor.org/stable/2781642",
+            "author": [
+                {
+                    "family": "Alwin",
+                    "given": "Duane F."
+                },
+                {
+                    "family": "Krosnick",
+                    "given": "Jon A."
+                }
+            ],
+            "container-title": "American Journal of Sociology",
+            "id": "alwin1991",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        1991
+                    ]
+                ]
+            },
+            "note": "Publisher: University of Chicago Press",
+            "page": "169-195",
+            "title": "Aging, cohorts, and the stability of sociopolitical orientations over the life span",
+            "type": "article-journal",
+            "volume": "97"
+        }
+    ],
+    "project_biblios": []
+}
