@@ -1,0 +1,32 @@
+{
+    "id": "DD1E7931",
+    "path": "~/Dropbox/extended_formative_windows/draft.Rmd",
+    "project_path": "draft.Rmd",
+    "type": "r_markdown",
+    "hash": "2755574153",
+    "contents": "",
+    "dirty": false,
+    "created": 1676571011698.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "363,85",
+        "scrollLine": "354",
+        "last_setup_crc32": "a4e1e86461d568a4",
+        "rmdVisualMode": "true",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "47537:12077",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1676593104,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1676593104101,
+    "read_only": false,
+    "read_only_alternatives": []
+}
