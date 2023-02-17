@@ -41,12 +41,11 @@ Explanations in social sciences, in contrast, tend to highlight the unique socia
 While both mechanisms likely play a role in facilitating opinion change in this life stage, the relative contributions of each are unclear.
 
 Clarifying the mechanism that drives the frequency of opinion change during this formative period is important for understanding the broader process of social change and cultural evolution.
-If openness to change in early adulthood is principally a function of the social structure of life in that time period, changes in the timing and ubiquity of life course events like marriage and childbearing can have significant impacts on the broader process of social and cultural change [].
-Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2020; @robbins2022] that decrease distinctions between life course stages might make older people more open to change in more recent eras than in previous eras, diminishing the importance of "cohorts" for social change.
+If openness to change in early adulthood is principally a function of the social structure of life in that time period, changes in the timing and ubiquity of life course events like marriage and childbearing can have significant impacts on the broader process of social and cultural change. Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2021; @brückner2005] that decrease distinctions between life course stages might make older people more open to change in more recent eras than in previous eras, diminishing the importance of "cohorts" for social change.
 If the mechanisms are principally cognitive and biological, rather than social, then these changes are unlikely to affect rates of social and cultural change in the same way.
 
-Over the course of the 20th century, the timing of life-course transitions such as completing schooling, entering the workforce, getting married, leaving one's parents' home, and having children, have changed dramatically, with most of these event occurring later in the life course in more recent cohorts [@buchmann1989; @bruckner2005].
-Similarly, this stage of life has become more detached from family and other role obligations, giving people more freedom to explore new ideas and lifestyle choices [@rosenfeld2007].
+Over the course of the 20th century, the timing of life-course transitions such as completing schooling, entering the workforce, getting married, leaving one's parents' home, and having children, have changed dramatically, with most of these event occurring later in the life course in more recent cohorts [@buchmann1989; @brückner2005].
+Similarly, this stage of life has become more detached from family and other role obligations, giving people more freedom to explore new ideas and lifestyle choices [@rosenfeld2005].
 This suggests both a lengthening and a intensification of this stage of the life course in ways that should increase the rates at which people make changes of opinion.
 In this paper, we attempt to clarify the relative contributions of these different mechanisms by exploring how these changes have affected rates of change in political attitudes over time, especially differences in rates of opinion change between young adults and the rest of the population.
 We compare rates of opinion change in comparable general political attitudes across four eras -- 1956-1960; 1972-1976; 1992-1996; and 2006-2010 -- and between young people and old people in these eras to evaluate a range of competing hypotheses about what accounts for the divergence in attitude behaviors over the life course.
@@ -58,7 +57,7 @@ They either suggest that there is something relatively timeless -- potentially b
 
 ## Impressionable Years / Opinion Change and Stability
 
-The idea that the early stages of the life course are especially influential in the process of attitudinal formation is dominant across contemporary accounts of socialization [@dinas2014; @guhin2021].
+The idea that the early stages of the life course are especially influential in the process of attitudinal formation is dominant across contemporary accounts of socialization [@dinas2014; @guhin2020].
 The argument -- at times implicit -- is that the circumstances in which people are brought up leave an enduring and traceable mark on their worldviews (Gerber and Green 1998).
 In the study of political socialization, this perspective enjoys a longstanding history.
 "Generational effects" are used to explain the development of political preferences, longitudinal shifts in attitudes, and differences across age-groups [@mannheim1952; @bartels2014].
@@ -68,7 +67,7 @@ Peoples' early years will leave a mark that will be predictive of their life out
 Thus, the notion of a formative period -- at the early stages of the life-course -- underpins diverse and longstanding lines of research.
 
 The "impressionable years" hypothesis -- that people demonstrate more opinion change early in life followed by a period of relative stability, especially in middle age -- has often been tested against other theories of opinion change over the life course.
-The most common are an aging stability or increasing persistence hypothesis that argues that openness to change gradually declines over time and a life stages hypothesis, in which people are open to attitude change both early in life and later in life, with stability principally happening in middle ages [@visser2004a].
+The most common are an aging stability or increasing persistence hypothesis that argues that openness to change gradually declines over time and a life stages hypothesis, in which people are open to attitude change both early in life and later in life, with stability principally happening in middle ages [@visser2004].
 While different attitudes occasionally follow slightly different patterns, the impressionable years hypothesis or aging stability hypothesis has generally been shown to be true for broad political ideology, partisan identification, and specific policy preferences [@krosnick1989; @alwin1991; @sears1999]; social attitudes [@danigelis2007]; and interest in politics [@prior2010]; as well as things like personality [@wagner2019].
 More generally, recent research has found that, with a couple notable exceptions of high-salience events such as national shifts around gay rights, durable change of social opinion is quite rare among U.S. adults [@kiley2020], and Vaisey and Lizardo [-@vaisey2016] find that cohort explains much more variance than period for most items in the General Social Survey, suggesting a strong impressionable years pattern.
 
@@ -130,7 +129,7 @@ These contexts, especially education, are explicity designed to expose people to
 For example, there is some evidence that college attendance leads to changes in opinions about civil liberties, gender egalitarianism, and racial inequality [@campbell2016; @wodtke2018].
 Social networks also differ in this time period.
 Previous work has found that young peoples' networks tend to be larger and include more friends than kin, for example [@marsden1987].
-It could be the case that larger "weak tie" networks expose younger people to more new information that drives opinion change [@granovetter1975; @burt2005].
+It could be the case that larger "weak tie" networks expose younger people to more new information that drives opinion change [@granovetter1973; @burt2005].
 
 Third, these are periods in which exploration and self-discovery are expected and encouraged; something that should not be taken for granted given social variation in norms around when maturity is reached [@cunningham2012; @elder1994].
 One reason young people might be exposed to new information at higher rates is that they are implicitly asked to do it by the broader culture, while older people are implicitly asked not to.
@@ -144,8 +143,8 @@ As people move into roles with more authority in mid-life, both in family and oc
 This potentially explains another phenomenon with some evidence behind it: that people appear to open up to changing their minds again as they enter post-retirement [@danigelis2007].
 At this point, peoples' authority diminishes, potentially opening them up to change later in life.
 
-Similarly, mid-life is associated with more homogeneous networks [@marsden1985; @diprete2011], which experimental research suggests reduces the propensity to adopt new beliefs [@vissermirible].
-If young people exist in less dense, more heterogeneous social networks, they might it easier to update their networks to reflect new beliefs rather than constrain their beliefs to their social networks [], or close off parts of their lives to people who might not be supportive of new attitudes.
+Similarly, mid-life is associated with more homogeneous networks [@marsden1987; @diprete2011], which experimental research suggests reduces the propensity to adopt new beliefs [@visser2004].
+If young people exist in less dense, more heterogeneous social networks, they might it easier to update their networks to reflect new beliefs rather than constrain their beliefs to their social networks or close off parts of their lives to people who might not be supportive of new attitudes.
 
 Given the distinct social conditions of the early-adult phase of life, there are significant reasons to believe that the "impressionable years" are principally an effect of how we have chosen to structure the life course, or the interaction between these life course stages and biological mechanisms, rather than simply a function of how the human brain works.
 
@@ -275,7 +274,7 @@ Even in more recent panels, the proportion of respondents enrolled in education 
 ## Analytic Strategy
 
 The broadest challenge for our analysis is that it is not obvious what it means for a person to demonstrate opinion change in a survey.
-Debates about how much "change" we see in opinions often focus on differences in the approach to measurement [@converse1965; @achen1975; @ansolabehere2008].
+Debates about how much "change" we see in opinions often focus on differences in the approach to measurement [@converse1964; @achen1975; @ansolabehere2008].
 The kinds of questions we seek to examine, general political dispositions, tend to be asked on five- or seven-point ordinal scales, either from strongly agree to strongly disagree, or from one policy position ("government should help minority groups") to another ("minority groups should help themselves").
 These kinds of scales support a wide range of different measures of opinion change and stability.
 Rather than adopt a single approach to quantify the rates of change across questions, we use a variety of approaches with different assumptions about what "change" entails and attempt to identify patterns that are robust across a range of assumptions.
@@ -466,3 +465,5 @@ It could be the case that the overall pattern we observe -- high rates of instab
 Despite significant shifts in the timing of life course events and the broad social structure of early adulthood from the mid-1950s to today, there is little change in the rates at which people between the ages of 18 and 30 undergo major changes of political opinions.
 The patterns observed in this analysis broadly suggest that there is something timeless -- such as how the human brain develops over time -- that explains broad patterns in attitude instability early in the life course.
 It could also suggest that the features that explain stability are still social in nature, but are rooted in factors that have not undergone significant changes since the 1950s, though it is unclear what those might be.
+
+## References
