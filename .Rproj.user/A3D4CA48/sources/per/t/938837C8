@@ -1,0 +1,26 @@
+{
+    "id": "938837C8",
+    "path": "~/Dropbox/extended_formative_windows/clean_datasets.R",
+    "project_path": "clean_datasets.R",
+    "type": "r_source",
+    "hash": "1298761709",
+    "contents": "",
+    "dirty": false,
+    "created": 1676580468427.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "517,25",
+        "scrollLine": "498"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1676580504,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1676580504822,
+    "read_only": false,
+    "read_only_alternatives": []
+}
