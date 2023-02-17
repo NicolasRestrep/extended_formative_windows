@@ -157,6 +157,902 @@
             "title": "Aging, cohorts, and the stability of sociopolitical orientations over the life span",
             "type": "article-journal",
             "volume": "97"
+        },
+        {
+            "DOI": "10.1177/2378023116669726",
+            "URL": "https://doi.org/10.1177/2378023116669726",
+            "author": [
+                {
+                    "family": "Vaisey",
+                    "given": "Stephen"
+                },
+                {
+                    "family": "Lizardo",
+                    "given": "Omar"
+                }
+            ],
+            "container-title": "Socius",
+            "id": "vaisey2016",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016,
+                        1,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "Publisher: SAGE Publications",
+            "page": "2378023116669726",
+            "title": "Cultural Fragmentation or Acquired Dispositions? A New Approach to Accounting for Patterns of Cultural Change",
+            "type": "article-journal",
+            "volume": "2"
+        },
+        {
+            "author": [
+                {
+                    "family": "Mannheim",
+                    "given": "Karl"
+                }
+            ],
+            "id": "mannheim1952",
+            "issued": {
+                "date-parts": [
+                    [
+                        1952
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "276-322",
+            "publisher": "Oxford University Press",
+            "publisher-place": "New York",
+            "title": "The Problem of Generations",
+            "type": "chapter"
+        },
+        {
+            "DOI": "10.2307/2090964",
+            "URL": "https://www.jstor.org/stable/2090964",
+            "author": [
+                {
+                    "family": "Ryder",
+                    "given": "Norman B."
+                }
+            ],
+            "container-title": "American Sociological Review",
+            "id": "ryder1965",
+            "issue": "6",
+            "issued": {
+                "date-parts": [
+                    [
+                        1965
+                    ]
+                ]
+            },
+            "note": "Publisher: [American Sociological Association, Sage Publications, Inc.]",
+            "page": "843-861",
+            "title": "The cohort as a concept in the study of social change",
+            "type": "article-journal",
+            "volume": "30"
+        },
+        {
+            "DOI": "10.1111/j.0022-2445.2004.00058.x",
+            "URL": "https://onlinelibrary.wiley.com/doi/10.1111/j.0022-2445.2004.00058.x",
+            "author": [
+                {
+                    "family": "Cherlin",
+                    "given": "Andrew J."
+                }
+            ],
+            "container-title": "Journal of Marriage and Family",
+            "id": "cherlin2004",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        2004,
+                        11
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "848-861",
+            "title": "The deinstitutionalization of American marriage",
+            "type": "article-journal",
+            "volume": "66"
+        },
+        {
+            "DOI": "10.1073/pnas.2109016118",
+            "URL": "https://pnas.org/doi/full/10.1073/pnas.2109016118",
+            "author": [
+                {
+                    "family": "Cherlin",
+                    "given": "Andrew J."
+                }
+            ],
+            "container-title": "Proceedings of the National Academy of Sciences",
+            "id": "cherlin2021",
+            "issue": "37",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021,
+                        9,
+                        14
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "e2109016118",
+            "title": "Rising nonmarital first childbearing among college-educated women: Evidence from three national studies",
+            "title-short": "Rising nonmarital first childbearing among college-educated women",
+            "type": "article-journal",
+            "volume": "118"
+        },
+        {
+            "DOI": "10.1016/S1040-2608(04)09002-1",
+            "URL": "https://linkinghub.elsevier.com/retrieve/pii/S1040260804090021",
+            "author": [
+                {
+                    "family": "Brückner",
+                    "given": "Hannah"
+                },
+                {
+                    "family": "Mayer",
+                    "given": "Karl Ulrich"
+                }
+            ],
+            "container-title": "Advances in Life Course Research",
+            "id": "brückner2005",
+            "issued": {
+                "date-parts": [
+                    [
+                        2005,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "27-53",
+            "title": "De-Standardization of the Life Course: What it Might Mean? And if it Means Anything, Whether it Actually Took Place?",
+            "title-short": "De-Standardization of the Life Course",
+            "type": "article-journal",
+            "volume": "9"
+        },
+        {
+            "author": [
+                {
+                    "family": "Buchmann",
+                    "given": "Marlis"
+                }
+            ],
+            "id": "buchmann1989",
+            "issued": {
+                "date-parts": [
+                    [
+                        1989
+                    ]
+                ]
+            },
+            "publisher": "University of Chicago Press",
+            "publisher-place": "Chicago",
+            "title": "The script of life in modern society: Entry into adulthood in a changing world",
+            "title-short": "The script of life in modern society",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1177/000312240507000401",
+            "URL": "http://journals.sagepub.com/doi/10.1177/000312240507000401",
+            "author": [
+                {
+                    "family": "Rosenfeld",
+                    "given": "Michael J."
+                },
+                {
+                    "family": "Kim",
+                    "given": "Byung-Soo"
+                }
+            ],
+            "container-title": "American Sociological Review",
+            "id": "rosenfeld2005",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        2005,
+                        8
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "541-562",
+            "title": "The Independence of Young Adults and the Rise of Interracial and Same-Sex Unions",
+            "type": "article-journal",
+            "volume": "70"
+        },
+        {
+            "DOI": "10.31235/osf.io/zp2wy",
+            "URL": "https://osf.io/zp2wy",
+            "author": [
+                {
+                    "family": "Guhin",
+                    "given": "Jeffrey"
+                },
+                {
+                    "family": "Calarco",
+                    "given": "Jessica McCrory"
+                },
+                {
+                    "family": "Miller-Idriss",
+                    "given": "Cynthia"
+                }
+            ],
+            "id": "guhin2020",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020,
+                        8,
+                        29
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "DOI: 10.31235/osf.io/zp2wy",
+            "title": "Whatever Happened to Socialization?",
+            "type": "report"
+        },
+        {
+            "DOI": "10.1016/j.electstud.2013.06.004",
+            "URL": "http://www.sciencedirect.com/science/article/pii/S026137941300084X",
+            "author": [
+                {
+                    "family": "Bartels",
+                    "given": "Larry M."
+                },
+                {
+                    "family": "Jackman",
+                    "given": "Simon"
+                }
+            ],
+            "container-title": "Electoral Studies",
+            "id": "bartels2014",
+            "issued": {
+                "date-parts": [
+                    [
+                        2014,
+                        3,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "7-18",
+            "title": "A generational model of political learning",
+            "type": "article-journal",
+            "volume": "33"
+        },
+        {
+            "author": [
+                {
+                    "family": "Visser",
+                    "given": "Penny S"
+                },
+                {
+                    "family": "Krosnick",
+                    "given": "Jon A"
+                }
+            ],
+            "container-title": "Journal of Personality and Social Psychology",
+            "id": "visser2004",
+            "issue": "6",
+            "issued": {
+                "date-parts": [
+                    [
+                        2004
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "779-95",
+            "title": "Development of Attitude Strength Over the Life Cycle: Surge and Decline",
+            "title-short": "Development of Attitude Strength Over the Life Cycle",
+            "type": "article-journal",
+            "volume": "87"
+        },
+        {
+            "DOI": "10.1037//0022-3514.57.3.416",
+            "author": [
+                {
+                    "family": "Krosnick",
+                    "given": "Jon"
+                },
+                {
+                    "family": "Alwin",
+                    "given": "Duane"
+                }
+            ],
+            "container-title": "Journal of personality and social psychology",
+            "id": "krosnick1989",
+            "issued": {
+                "date-parts": [
+                    [
+                        1989,
+                        10,
+                        1
+                    ]
+                ]
+            },
+            "page": "416-25",
+            "title": "Aging and susceptibility to attitude change",
+            "type": "article-journal",
+            "volume": "57"
+        },
+        {
+            "DOI": "10.2307/2647773",
+            "URL": "https://www.journals.uchicago.edu/doi/10.2307/2647773",
+            "author": [
+                {
+                    "family": "Sears",
+                    "given": "David O."
+                },
+                {
+                    "family": "Funk",
+                    "given": "Carolyn L."
+                }
+            ],
+            "container-title": "The Journal of Politics",
+            "id": "sears1999",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        1999,
+                        2
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "1-28",
+            "title": "Evidence of the Long-Term Persistence of Adults’ Political Predispositions",
+            "type": "article-journal",
+            "volume": "61"
+        },
+        {
+            "DOI": "10.1177/000312240707200508",
+            "URL": "https://doi.org/10.1177/000312240707200508",
+            "author": [
+                {
+                    "family": "Danigelis",
+                    "given": "Nicholas L."
+                },
+                {
+                    "family": "Hardy",
+                    "given": "Melissa"
+                },
+                {
+                    "family": "Cutler",
+                    "given": "Stephen J."
+                }
+            ],
+            "container-title": "American Sociological Review",
+            "id": "danigelis2007",
+            "issue": "5",
+            "issued": {
+                "date-parts": [
+                    [
+                        2007,
+                        10,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "Publisher: SAGE Publications Inc",
+            "page": "812-830",
+            "title": "Population Aging, Intracohort Aging, and Sociopolitical Attitudes",
+            "type": "article-journal",
+            "volume": "72"
+        },
+        {
+            "DOI": "10.1017/s0022381610000149",
+            "URL": "https://www.jstor.org/stable/10.1017/s0022381610000149",
+            "author": [
+                {
+                    "family": "Prior",
+                    "given": "Markus"
+                }
+            ],
+            "container-title": "The Journal of Politics",
+            "id": "prior2010",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2010
+                    ]
+                ]
+            },
+            "note": "Publisher: [The University of Chicago Press, Southern Political Science Association]",
+            "page": "747-766",
+            "title": "You’ve either got it or you don’t? The stability of political interest over the life cycle",
+            "type": "article-journal",
+            "volume": "72"
+        },
+        {
+            "DOI": "10.1037/pspp0000203",
+            "author": [
+                {
+                    "family": "Wagner",
+                    "given": "Jenny"
+                },
+                {
+                    "family": "Lüdtke",
+                    "given": "Oliver"
+                },
+                {
+                    "family": "Robitzsch",
+                    "given": "Alexander"
+                }
+            ],
+            "container-title": "Journal of Personality and Social Psychology",
+            "id": "wagner2019",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "note": "Place: US Publisher: American Psychological Association",
+            "page": "666-680",
+            "title": "Does personality become more stable with age? Disentangling state and trait effects for the big five across the life span using local structural equation modeling",
+            "type": "article-journal",
+            "volume": "116"
+        },
+        {
+            "DOI": "10.1177/0003122420921538",
+            "URL": "https://doi.org/10.1177/0003122420921538",
+            "author": [
+                {
+                    "family": "Kiley",
+                    "given": "Kevin"
+                },
+                {
+                    "family": "Vaisey",
+                    "given": "Stephen"
+                }
+            ],
+            "container-title": "American Sociological Review",
+            "id": "kiley2020",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020,
+                        6,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "Publisher: SAGE Publications Inc",
+            "page": "477-506",
+            "title": "Measuring Stability and Change in Personal Culture Using Panel Data",
+            "type": "article-journal",
+            "volume": "85"
+        },
+        {
+            "DOI": "10.1002/psp.508",
+            "URL": "https://onlinelibrary.wiley.com/doi/10.1002/psp.508",
+            "author": [
+                {
+                    "family": "Geist",
+                    "given": "Claudia"
+                },
+                {
+                    "family": "McManus",
+                    "given": "Patricia A."
+                }
+            ],
+            "container-title": "Population, Space and Place",
+            "id": "geist2008",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        2008,
+                        7
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "283-303",
+            "title": "Geographical mobility over the life course: motivations and implications",
+            "title-short": "Geographical mobility over the life course",
+            "type": "article-journal",
+            "volume": "14"
+        },
+        {
+            "DOI": "10.1177/0038040715617224",
+            "URL": "http://journals.sagepub.com/doi/10.1177/0038040715617224",
+            "author": [
+                {
+                    "family": "Campbell",
+                    "given": "Colin"
+                },
+                {
+                    "family": "Horowitz",
+                    "given": "Jonathan"
+                }
+            ],
+            "container-title": "Sociology of Education",
+            "id": "campbell2016",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "40-58",
+            "title": "Does College Influence Sociopolitical Attitudes?",
+            "type": "article-journal",
+            "volume": "89"
+        },
+        {
+            "DOI": "10.1177/0190272518804145",
+            "URL": "http://journals.sagepub.com/doi/10.1177/0190272518804145",
+            "author": [
+                {
+                    "family": "Wodtke",
+                    "given": "Geoffrey T."
+                }
+            ],
+            "container-title": "Social Psychology Quarterly",
+            "id": "wodtke2018",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018,
+                        12
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "273-294",
+            "title": "The Effects of Education on Beliefs about Racial Inequality",
+            "type": "article-journal",
+            "volume": "81"
+        },
+        {
+            "URL": "http://www.jstor.org/stable/2776392",
+            "author": [
+                {
+                    "family": "Granovetter",
+                    "given": "Mark S."
+                }
+            ],
+            "container-title": "American Journal of Sociology",
+            "id": "granovetter1973",
+            "issue": "6",
+            "issued": {
+                "date-parts": [
+                    [
+                        1973
+                    ]
+                ]
+            },
+            "note": "Publisher: University of Chicago Press",
+            "page": "1360-1380",
+            "title": "The strength of weak ties",
+            "type": "article-journal",
+            "volume": "78"
+        },
+        {
+            "author": [
+                {
+                    "family": "Burt",
+                    "given": "Ronald S."
+                }
+            ],
+            "id": "burt2005",
+            "issued": {
+                "date-parts": [
+                    [
+                        2005,
+                        8,
+                        11
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "Google-Books-ID: zEgVDAAAQBAJ",
+            "publisher": "OUP Oxford",
+            "title": "Brokerage and Closure: An Introduction to Social Capital",
+            "title-short": "Brokerage and Closure",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1177/0146167209349114",
+            "URL": "http://journals.sagepub.com/doi/10.1177/0146167209349114",
+            "author": [
+                {
+                    "family": "Eaton",
+                    "given": "Asia A."
+                },
+                {
+                    "family": "Visser",
+                    "given": "Penny S."
+                },
+                {
+                    "family": "Krosnick",
+                    "given": "Jon A."
+                },
+                {
+                    "family": "Anand",
+                    "given": "Sowmya"
+                }
+            ],
+            "container-title": "Personality and Social Psychology Bulletin",
+            "id": "eaton2009",
+            "issue": "12",
+            "issued": {
+                "date-parts": [
+                    [
+                        2009,
+                        12
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "1646-1660",
+            "title": "Social Power and Attitude Strength Over the Life Course",
+            "type": "article-journal",
+            "volume": "35"
+        },
+        {
+            "DOI": "10.2307/2095397",
+            "URL": "https://www.jstor.org/stable/2095397",
+            "author": [
+                {
+                    "family": "Marsden",
+                    "given": "Peter V."
+                }
+            ],
+            "container-title": "American Sociological Review",
+            "id": "marsden1987",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        1987
+                    ]
+                ]
+            },
+            "note": "Publisher: [American Sociological Association, Sage Publications, Inc.]",
+            "page": "122-131",
+            "title": "Core discussion networks of americans",
+            "type": "article-journal",
+            "volume": "52"
+        },
+        {
+            "DOI": "10.1086/659100",
+            "URL": "https://www.journals.uchicago.edu/doi/10.1086/659100",
+            "author": [
+                {
+                    "family": "DiPrete",
+                    "given": "Thomas A."
+                },
+                {
+                    "family": "Gelman",
+                    "given": "Andrew"
+                },
+                {
+                    "family": "McCormick",
+                    "given": "Tyler"
+                },
+                {
+                    "family": "Teitler",
+                    "given": "Julien"
+                },
+                {
+                    "family": "Zheng",
+                    "given": "Tian"
+                }
+            ],
+            "container-title": "American Journal of Sociology",
+            "id": "diprete2011",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011,
+                        1
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "1234-83",
+            "title": "Segregation in Social Networks Based on Acquaintanceship and Trust",
+            "type": "article-journal",
+            "volume": "116"
+        },
+        {
+            "DOI": "10.25035/ncfmr/fp-17-22",
+            "URL": "https://www.bgsu.edu/ncfmr/resources/data/family-profiles/eickmeyer-payne-brown-manning-crossover-age-first-marriage-birth-fp-17-22.html",
+            "author": [
+                {
+                    "family": "Eickmeyer",
+                    "given": "Kasey"
+                },
+                {
+                    "family": "Payne",
+                    "given": "Krista"
+                },
+                {
+                    "family": "Brown",
+                    "given": "Susan"
+                },
+                {
+                    "family": "Manning",
+                    "given": "Wendy"
+                }
+            ],
+            "id": "eickmeyer2017",
+            "issued": {
+                "date-parts": [
+                    [
+                        2017,
+                        9
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "DOI: 10.25035/ncfmr/fp-17-22",
+            "title": "Crossover in the Median Age at First Marriage and First Birth: Thirty-Five Years of Change",
+            "title-short": "Crossover in the Median Age at First Marriage and First Birth",
+            "type": "report"
+        },
+        {
+            "author": [
+                {
+                    "family": "Converse",
+                    "given": "Philip E."
+                }
+            ],
+            "editor": [
+                {
+                    "family": "Apter",
+                    "given": "D. E."
+                }
+            ],
+            "id": "converse1964",
+            "issued": {
+                "date-parts": [
+                    [
+                        1964
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "206-261",
+            "publisher": "Free Press",
+            "publisher-place": "New York",
+            "title": "The nature of belief systems in mass publics (1964)",
+            "type": "chapter",
+            "volume": "18"
+        },
+        {
+            "DOI": "10.2307/1955282",
+            "URL": "https://www.jstor.org/stable/1955282",
+            "author": [
+                {
+                    "family": "Achen",
+                    "given": "Christopher H."
+                }
+            ],
+            "container-title": "The American Political Science Review",
+            "id": "achen1975",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        1975
+                    ]
+                ]
+            },
+            "note": "Publisher: [American Political Science Association, Cambridge University Press]",
+            "page": "1218-1231",
+            "title": "Mass political attitudes and the survey response",
+            "type": "article-journal",
+            "volume": "69"
+        },
+        {
+            "author": [
+                {
+                    "family": "Kinder",
+                    "given": "Donald R."
+                },
+                {
+                    "family": "Kalmoe",
+                    "given": "Nathan P."
+                }
+            ],
+            "id": "kinder2017",
+            "issued": {
+                "date-parts": [
+                    [
+                        2017
+                    ]
+                ]
+            },
+            "publisher": "University of Chicago Press",
+            "publisher-place": "Chicago",
+            "title": "Neither liberal nor conservative: Ideological innocence in the american public",
+            "title-short": "Neither liberal nor conservative",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1017/CBO9780511818691",
+            "URL": "https://www.cambridge.org/core/books/nature-and-origins-of-mass-opinion/70B1485D3A9CFF55ADCCDD42FC7E926A",
+            "author": [
+                {
+                    "family": "Zaller",
+                    "given": "John"
+                }
+            ],
+            "collection-title": "Cambridge studies in public opinion and political psychology",
+            "id": "zaller1992",
+            "issued": {
+                "date-parts": [
+                    [
+                        1992
+                    ]
+                ]
+            },
+            "note": "DOI: 10.1017/CBO9780511818691",
+            "publisher": "Cambridge University Press",
+            "publisher-place": "Cambridge",
+            "title": "The nature and origins of mass opinion",
+            "type": "book"
+        },
+        {
+            "DOI": "10.15195/v3.a43",
+            "URL": "https://sociologicalscience.com/articles-v3-43-971/",
+            "author": [
+                {
+                    "family": "Hout",
+                    "given": "Michael"
+                },
+                {
+                    "family": "Hastings",
+                    "given": "Orestes P."
+                }
+            ],
+            "container-title": "Sociological Science",
+            "id": "hout2016",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016,
+                        11,
+                        14
+                    ]
+                ]
+            },
+            "language": "en-US",
+            "page": "971-1002",
+            "title": "Reliability of the core items in the general social survey: Estimates from the three-wave panels, 20062014",
+            "title-short": "Reliability of the core items in the general social survey",
+            "type": "article-journal",
+            "volume": "3"
         }
     ],
     "project_biblios": []
