@@ -12,6 +12,9 @@ load("~/Dropbox/formative_period/clean_anes9.Rdata")
 load("~/Dropbox/formative_period/clean_g6.Rdata")
 
 
+
+
+
 new_data <- data.frame(young = c(0,1))
 
 

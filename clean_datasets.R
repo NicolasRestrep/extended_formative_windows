@@ -112,24 +112,24 @@ clean_anes5 <- anes5 %>%
                          age_1), 
          age_1 = ifelse(age_1 %in% c(98,99) & age_3 < 98, age_3-4,
                          age_1)) %>%
-  mutate(helpblk5_1 = V560044, helpblk5_2 = V580329,
-         helpblk5_3 = V600628,
-         integrate5_1 = V560074, integrate5_2 = V580333,
-         integrate5_3 = V600636,
-         govjob5_1 = V560032, govjob5_2 = V580321,
-         govjob5_3 = V600620,
-         fgnaid5_1 = V560041, fgnaid5_2 = V580327,
-         fgnaid5_3 = V600626,
-         bldschls5_1 = V560053, bldschls5_2 = V580325,
-         bldschls5_3 = V600624,
-         fghtcomm5_1 = V560056, fghtcomm5_2 = V580331,
-         fghtcomm5_3 = V600630,
-         stayhome5_1 = V560035, stayhome5_2 = V580323,
-         stayhome5_3 = V600622,
-         prvtpwr5_1 = V560059, prvtpwr5_2 = V580319,
-         prvtpwr5_3 = V600618,
-         partyid5_1 = V560088, partyid5_2 = V580360,
-         partyid5_3 = V600835) %>%
+  mutate(helpblk_1 = V560044, helpblk_2 = V580329,
+         helpblk_3 = V600628,
+         integrate_1 = V560074, integrate_2 = V580333,
+         integrate_3 = V600636,
+         govjob_1 = V560032, govjob_2 = V580321,
+         govjob_3 = V600620,
+         fgnaid_1 = V560041, fgnaid_2 = V580327,
+         fgnaid_3 = V600626,
+         bldschls_1 = V560053, bldschls_2 = V580325,
+         bldschls_3 = V600624,
+         fghtcomm_1 = V560056, fghtcomm_2 = V580331,
+         fghtcomm_3 = V600630,
+         stayhome_1 = V560035, stayhome_2 = V580323,
+         stayhome_3 = V600622,
+         prvtpwr_1 = V560059, prvtpwr_2 = V580319,
+         prvtpwr_3 = V600618,
+         partyid_1 = V560088, partyid_2 = V580360,
+         partyid_3 = V600835) %>%
   select(-c(V560044,V580329,V600628,
             V560074,V580333,V600636,
             V560032,V580321,V600620,
@@ -217,111 +217,154 @@ anes7$oldestkid_3 <- pmax(anes7$V763373,anes7$V763374,anes7$V763375,
 clean_anes7 <- anes7 %>% 
   #Select members of the panel...
   filter(V764002 == 1) %>%
-  select(#id number
-    V720002,
+  mutate(#id number
+    id=V720002,
+    across(c(V742410:V742417,V763373:V763378), ~ifelse(.x %in% c(0,98,99), NA, .x)),
+    oldestkid_2 = pmax(V742410,V742411,V742412,
+                       V742413,V742414,V742415,
+                       V742416,V742417, na.rm = TRUE),
+    oldestkid_3 = pmax(V763373,V763374,V763375,
+                       V763376,V763377,V763378, na.rm = TRUE),
     #age
-    V720294, V742406, V763369,
+    age_1 = V720294, age_2 = V742406, 
+    age_3 = V763369,
+    #toofast
+    toofast_1 = V720112, toofast_2 = V742264, 
+    toofast_3 = V763213,
+    #thermscoop
+    thermscoop_1 = V720259, thermscoop_2 = V742348,
+    thermscoop_3 = V763303,
+    #thermwallace
+    thermwallace_1 = V720253,thermwallace_2 = V742338,
+    thermwallace_3 = V763297,
+    #thermnixon
+    thermnixon_1 = V720255,thermnixon_2 = V742354,thermnixon_3 = V763307,
+    #thermted
+    thermted_1 = V720258,thermted_2 = V742347,thermted_3 = V763302,
+    #thermhump
+    thermhump_1 = V720264,thermhump_2 = V742352,thermhump_3 = V763300,
+    #nosay
+    nosay_1 = V720269,nosay_2 = V742222,nosay_3 = V763815,
+    #votesay
+    votesay_1=V720270,votesay_2=V742223,votesay_3=V763816,
+    #toocomplicated
+    toocomplicated_1 = V720271,toocomplicated_2=V742224,
+    toocomplicated_3=V763817,
+    #dontcare
+    dontcare_1 = V720272,dontcare_2=V742225,dontcare_3=V763818,
+    #losetouch
+    losetouch_1 =V720273,losetouch_2=V742226,losetouch_3=V763819,
+    #onlyvotes
+    onlyvotes_1=V720274,onlyvotes_2=V742227,onlyvotes_3=V763820,
+    #wastemoney
+    wastemoney_1=V720570,wastemoney_2=V742229,wastemoney_3=V763162,
+    #govdoright
+    govdoright_1=V720571,govdoright_2=V742230,govdoright_3=V763163,
+    #runforfew
+    runforfew_1=V720572,runforfew_2=V742231,runforfew_3=V763164,
+    #govcapable
+    govcapable_1=V720573,govcapable_2=V742232,govcapable_3=V763165,
+    #govcrooked
+    govcrooked_1=V720574,govcrooked_2=V742233,govcrooked_3=V763166,
+    #partyattend
+    partyattend_1=V720576,partyattend_2=V742235,partyattend_3=V763742,
+    #repattend
+    repattend_1=V720578,repattend_2=V742237,repattend_3=V763744,
+    #thermbiz
+    thembiz_1=V720707,thembiz_2=V742356,thembiz_3=V763821,
+    #thermlibs
+    themlibs_1=V720709,themlibs_2=V742358,themlibs_3=V763823,
+    #thermcops
+    themcops_1=V720714,thermcops_2=V742360,thermcops_3=V763828,
+    #thermmil
+    thermmil_1=V720717,thermmil_2=V742362,thermmil_3=V763831,
+    #thermwhite
+    thermwhite_1=V720718,thermwhite_2=V742363,thermwhite_3=V763846,
+    #thermdems
+    thermdems_1=V720719,thermdems_2=V742364,thermdems_3=V763833,
+    #thermblacks
+    thermblacks_1=V720720,thermblacks_2=V742365,thermblacks_3=V763832,
+    #thermreps
+    thermreps_1=V720721,thermreps_2=V742366,thermreps_3=V763835,
+    #thermunion
+    thermunion_1=V720722,thermunion_2=V742367,thermunion_3=V763836,
+    #thermcons
+    thermcons_1=V720724,thermcons_2=V742369,thermcons_3=V763838,
+    #influnion
+    influnion_1=V720737,influnion_2=V742379,influnion_3=V763566,
+    #inflbiz
+    inflbiz_1=V720744,inflbiz_2=V742383,inflbiz_3=V763573,
+    #inflblacks
+    inflblacks_1=V720745,inflblacks_2=V742384,inflblacks_3=V763570,
+    #inflyoung
+    inflyoung_1=V720749,inflyoung_2=V742388,inflyoung_3=V763578,
+    #inflreps
+    inflreps_1=V720752,inflreps_2=V742390,inflreps_3=V763581,
+    #inflwelf
+    inflwelf_1=V720753,inflwelf_2=V742391,inflwelf_3=V763582,
+    #inflold
+    inflold_1=V720755,inflold_2=V742393,inflold_3=V763584,
+    #infldems
+    infldems_1=V720756,infldems_2=V742394,infldems_3=V763585,
     #help minorities scale
-    V720629,V742296,V763264,
+    helpblks_1=V720629,helpblks_2=V742296,helpblks_3=V763264,
     #school busing
-    V720202,V742288,V763257,
+    busing_1=V720202,busing_2=V742288,busing_3=V763257,
     #job guarantee
-    V721067,V742265,V763758,
+    jobguar_1=V721067,jobguar_2=V742265,jobguar_3=V763758,
     #urban unrest scale
-    V720670,V742273,V763767,
+    unrest_1=V720670,unrest_2=V742273,unrest_3=V763767,
     #rights of accused
-    V720621,V742281,V763248,
+    accused_1=V720621,accused_2=V742281,accused_3=V763248,
     #partyid
-    V720140,V742204,V763174,
+    partyid_1=V720140,partyid_2=V742204,partyid_3=V763174,
     #lib-con scale
-    V720652,V742305,V763286,
+    polviews_1=V720652,polviews_2=V742305,polviews_3=V763286,
     #equal role for women
-    V720232,V742302,V763787,
+    eqrole_1=V720232,eqrole_2=V742302,eqrole_3=V763787,
     #resp's education
-    V720300,V742423,V763389,
+    ed_1 = ifelse(V720300 %in% c(98,99), NA, V720300),
+    ed_1 = ifelse(V720300 %in% c(11,12,13,14,15,16,17,18,21,22,31,32,33,
+                                 41,42,43), "less than", ed_1),
+    ed_1 = ifelse(V720300 %in% c(51,61,71,50), "hs", ed_1),
+    ed_1 = ifelse(V720300 %in% c(81,82,83,84,85,86), "ba", ed_1),
+    ed_2 = ifelse(V742423 %in% c(98,99), NA, V742423),
+    ed_2 = ifelse(V742423 %in% c(0,1,2,3,4), "less than", ed_2),
+    ed_2 = ifelse(V742423 %in% c(5,6,7,8), "hs", ed_2),
+    ed_2 = ifelse(V742423 %in% c(9,10), "ba", ed_2),
+    ed_3 = ifelse(V763389 %in% c(98, 99), NA, V763389),
+    ed_3 = ifelse(V763389 %in% c(0,1,2,3,4), "less than", ed_3),
+    ed_3 = ifelse(V763389 %in% c(5,6,7,8), "hs", ed_3),
+    ed_3 = ifelse(V763389 %in% c(9,10), "ba", ed_3),
     #marital status
-    V720295, V742407, V763370,
+    marital_1 = ifelse(V720295 == 9, NA, V720295),
+    marital_1 = ifelse(V720295 %in% c(2), "single/nm", marital_1),
+    marital_1 = ifelse(V720295 %in% c(1,7), "married", marital_1),
+    marital_1 = ifelse(V720295 %in% c(3,4,5), "other", marital_1),
+    marital_2 = ifelse(V742407 == 9, NA, V742407),
+    marital_2 = ifelse(V742407 %in% c(2), "single/nm", marital_2),
+    marital_2 = ifelse(V742407 %in% c(1,7), "married", marital_2),
+    marital_2 = ifelse(V742407 %in% c(3,4,5), "other", marital_2),
+    marital_3 = ifelse(V763370 == 9, NA, V763370),
+    marital_3 = ifelse(V763370 %in% c(2), "single/nm", marital_3),
+    marital_3 = ifelse(V763370 %in% c(1,7), "married", marital_3),
+    marital_3 = ifelse(V763370 %in% c(3,4,5), "other", marital_3),
     #children
-    V742408, V763371,
-    #oldest kid stuff
-    V742410:V742417,V763373:V763378) %>%
-  mutate(age_1 = V720294,
-         age_2 = V742406,
-         age_3 = V763369) %>%
-  mutate(across(c(V742410:V742417,V763373:V763378), ~ifelse(.x %in% c(0,98,99), NA, .x)),
-         oldestkid_2 = pmax(V742410,V742411,V742412,
-                            V742413,V742414,V742415,
-                            V742416,V742417, na.rm = TRUE),
-         oldestkid_3 = pmax(V763373,V763374,V763375,
-                            V763376,V763377,V763378, na.rm = TRUE)) %>%
-  mutate(ed_1 = ifelse(V720300 %in% c(98,99), NA, V720300),
-         ed_1 = ifelse(V720300 %in% c(11,12,13,14,15,16,17,18,21,22,31,32,33,
-                                      41,42,43), "less than", ed_1),
-         ed_1 = ifelse(V720300 %in% c(51,61,71,50), "hs", ed_1),
-         ed_1 = ifelse(V720300 %in% c(81,82,83,84,85,86), "ba", ed_1),
-         ed_2 = ifelse(V742423 %in% c(98,99), NA, V742423),
-         ed_2 = ifelse(V742423 %in% c(0,1,2,3,4), "less than", ed_2),
-         ed_2 = ifelse(V742423 %in% c(5,6,7,8), "hs", ed_2),
-         ed_2 = ifelse(V742423 %in% c(9,10), "ba", ed_2),
-         ed_3 = ifelse(V763389 %in% c(98, 99), NA, V763389),
-         ed_3 = ifelse(V763389 %in% c(0,1,2,3,4), "less than", ed_3),
-         ed_3 = ifelse(V763389 %in% c(5,6,7,8), "hs", ed_3),
-         ed_3 = ifelse(V763389 %in% c(9,10), "ba", ed_3),
-         marital_1 = ifelse(V720295 == 9, NA, V720295),
-         marital_1 = ifelse(V720295 %in% c(2), "single/nm", marital_1),
-         marital_1 = ifelse(V720295 %in% c(1,7), "married", marital_1),
-         marital_1 = ifelse(V720295 %in% c(3,4,5), "other", marital_1),
-         marital_2 = ifelse(V742407 == 9, NA, V742407),
-         marital_2 = ifelse(V742407 %in% c(2), "single/nm", marital_2),
-         marital_2 = ifelse(V742407 %in% c(1,7), "married", marital_2),
-         marital_2 = ifelse(V742407 %in% c(3,4,5), "other", marital_2),
-         marital_3 = ifelse(V763370 == 9, NA, V763370),
-         marital_3 = ifelse(V763370 %in% c(2), "single/nm", marital_3),
-         marital_3 = ifelse(V763370 %in% c(1,7), "married", marital_3),
-         marital_3 = ifelse(V763370 %in% c(3,4,5), "other", marital_3),
-         child_2 = ifelse(V742408 %in% c(0, 9), NA, V742408),
-         child_2 = ifelse(V742408 == 1, 1, child_2),
-         child_2 = ifelse(V742408 == 5, 0, child_2),
-         child_3 = ifelse(V763371 %in% c(0, 9), NA, V763371),
-         child_3 = ifelse(V763371 == 1, 1, child_3),
-         child_3 = ifelse(V763371 == 5, 0, child_3),
-         child_1 = ifelse(child_2 == 0 | oldestkid_2 < 2, 0, 1),
-         child_1a = ifelse(child_3 == 0 | oldestkid_3 < 4, 0, 1),
-         child_1 = ifelse(is.na(child_1), child_1a, child_1)) %>%
-  #select(age_1, age_2, age_3) %>%
+    child_2 = ifelse(V742408 %in% c(0, 9), NA, V742408),
+    child_2 = ifelse(V742408 == 1, 1, child_2),
+    child_2 = ifelse(V742408 == 5, 0, child_2),
+    child_3 = ifelse(V763371 %in% c(0, 9), NA, V763371),
+    child_3 = ifelse(V763371 == 1, 1, child_3),
+    child_3 = ifelse(V763371 == 5, 0, child_3),
+    child_1 = ifelse(child_2 == 0 | oldestkid_2 < 2, 0, 1),
+    child_1a = ifelse(child_3 == 0 | oldestkid_3 < 4, 0, 1),
+    child_1 = ifelse(is.na(child_1), child_1a, child_1)) %>%
+  select(id:child_1,   
+         V742410:V742417,V763373:V763378) %>%
   mutate(age_1 = ifelse(age_1 == 0 & age_2 != 0, age_2-2, age_1),
          age_1 = ifelse(age_1 == 0 & age_3 != 0, age_3-4, age_1)) %>%
   mutate(age_1 = ifelse(age_1 == 0, NA, age_1))%>%
-  mutate(helpblk7_1 = V720629, helpblk7_2 = V742296,
-         helpblk7_3 = V763264,
-         busing7_1 = V720202, busing7_2 = V742288,
-         busing7_3 = V763257,
-         jobguar7_1 = V721067, jobguar7_2 = V742265,
-         jobguar7_3 = V763758,
-         urbunrest7_1 = V720670, urbunrest7_2 = V742273,
-         urbunrest7_3 = V763767,
-         eqrole7_1 = V720232,eqrole7_2 = V742302,
-         eqrole7_3 = V763787,
-         accused7_1 = V720621, accused7_2 = V742281,
-         accused7_3 = V763248,
-         partyid7_1 = V720140, partyid7_2 = V742204,
-         partyid7_3 = V763174,
-         libcon7_1 = V720652, libcon7_2 = V742305,
-         libcon7_3 = V763286) %>%
-    select(-c(V720294, V742406, V763369,
-              V720002, V720629,V742296,V763264,
-              V720002, V720202,V742288,V763257,
-              V721067,V742265,V763758,
-              V720670,V742273,V763767,
-              V720621,V742281,V763248,
-              V720140,V742204,V763174,
-              V720652,V742305,V763286,
-              V720232,V742302,V763787,
-              V720300,V742423,V763389,
-              V720295, V742407, V763370,
-              V742408, V763371,
-              V742410:V742417,V763373:V763378,
-              oldestkid_2, oldestkid_3, child_1a))
+    select(-c(oldestkid_2, oldestkid_3,V742410:V763378))
 
 #opinions (helpblk, busing, jobguar, urban, eqrole, accused): wave 1
 # 0 = haven't thought; 8 = don't know; 9 = NA
@@ -381,18 +424,21 @@ clean_anes9 <- anes9 %>%
   mutate(weight = V960004) %>%
   select(weight,
     V923903, V941203, V960605,
-         V923716,V940950,V960479,
+    V923716,V940950,V960479,
          V923718,V940930,V960483,
          V923701,V940940,V960450,
          V923724,V940936,V960487,
          V923634,V940655,V960420,
          V923509,V940839,V961269,
+    V923545,V940829,V960397,
+    V923546,V940832,V960398,
+    V923548,V940833,V960399,
     #equal opportunity
     V926024,V940914,V961229,
     #equal role
     V923801, V940928,V960543,
-         #education
-         V923908,V941209,V960610,
+    #education
+    V923908,V941209,V960610,
     #marital status
     V923904,V941204,V960606,
     #children
@@ -441,7 +487,6 @@ clean_anes9 <- anes9 %>%
     ed_3 = ifelse(V960610 %in% c(1,2), "less than", ed_3),
     ed_3 = ifelse(V960610 %in% c(3,4,5), "hs", ed_3),
     ed_3 = ifelse(V960610 %in% c(6,7), "ba", ed_3) 
-    
   ) %>%
   mutate(govins9_1 = V923716, govins9_2 = V940950,
          govins9_3 = V960479,
@@ -460,7 +505,16 @@ clean_anes9 <- anes9 %>%
          partyid9_1 = V923634, partyid9_2 = V940655,
          partyid9_3 = V960420,
          libcon9_1 = V923509, libcon9_2 = V940839,
-         libcon9_3 = V961269) %>%
+         libcon9_3 = V961269,
+         betterecon_1 = V923545, 
+         betterecon_2 = V940829,
+         betterecon_3 = V960397,
+         betterforeign_1 = V923546,
+         betterforeign_2 = V940832,
+         betterforeign_3 = V960398,
+         betterhealth_1 = V923548,
+         betterhealth_2 = V940833,
+         betterhealth_3 = V960399) %>%
   select(-c(V923903, V941203, V960605,
             V923716,V940950,V960479,
             V923718,V940930,V960483,
@@ -473,7 +527,10 @@ clean_anes9 <- anes9 %>%
             V926024,V940914,V961229,
             V923801, V940928,V960543,
             V923908,V941209,V960610,
-            V923904,V941204,V960606))
+            V923904,V941204,V960606,
+            V923545,V940829,V960397,
+            V923546,V940832,V960398,
+            V923548,V940833,V960399))
 
 #marital status
 # Thsi is a mess... 
@@ -563,8 +620,80 @@ clean_g6 <- g6 %>%
 save(clean_g6, file = "~/Dropbox/formative_period/clean_g6.Rdata")
 
 
-  
+g8 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel08.dta")
+#This messes up the missing data codes (don't knows getting coded as missing)
+clean_g8 <- g8 %>%
+  zap_labels() %>%
+  select(wtpannr123,
+         age_1, age_2, age_3, 
+         marital_1, marital_2, marital_3,
+         childs_1, childs_2, childs_3,
+         degree_1, degree_2, degree_3,
+         helppoor_1, helppoor_2, helppoor_3,
+         helpnot_1, helpnot_2, helpnot_3,
+         helpsick_1, helpsick_2, helpsick_3,
+         helpblk_1, helpblk_2, helpblk_3,
+         eqwlth_1, eqwlth_2, eqwlth_3,
+         polviews_1, polviews_2, polviews_3,
+         partyid_1, partyid_2, partyid_3) %>%
+  mutate(age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
+         age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3 - 4, age_1)) %>%
+  mutate(marital_1 = recode(marital_1, "1"="married", "2"="other", "3"="other", "4"="other",
+                            "5"="single/nm"),
+         marital_2 = recode(marital_2, "1"="married", "2"="other", "3"="other", "4"="other",
+                            "5"="single/nm"),
+         marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
+                            "5"="single/nm"),
+         childs_1 = ifelse(childs_1 > 0, 1, 0),
+         childs_2 = ifelse(childs_2 > 0, 1, 0),
+         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
+                       "3"="ba", "4"="ba"),
+         ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
+                       "3"="ba", "4"="ba"),
+         ed_3 = recode(degree_3, "0"="less than", "1"="hs", "2"="hs",
+                       "3"="ba", "4"="ba"))
 
+
+save(clean_g8, file = "~/Dropbox/formative_period/clean_g8.Rdata")
+
+
+g10 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel10.dta")
+#This messes up the missing data codes (don't knows getting coded as missing)
+clean_g10 <- g10 %>%
+  zap_labels() %>%
+  select(WTPANNR123,
+         age_1, age_2, age_3, 
+         marital_1, marital_2, marital_3,
+         childs_1, childs_2, childs_3,
+         degree_1, degree_2, degree_3,
+         helppoor_1, helppoor_2, helppoor_3,
+         helpnot_1, helpnot_2, helpnot_3,
+         helpsick_1, helpsick_2, helpsick_3,
+         helpblk_1, helpblk_2, helpblk_3,
+         eqwlth_1, eqwlth_2, eqwlth_3,
+         polviews_1, polviews_2, polviews_3,
+         partyid_1, partyid_2, partyid_3) %>%
+  mutate(age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
+         age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3 - 4, age_1)) %>%
+  mutate(marital_1 = recode(marital_1, "1"="married", "2"="other", "3"="other", "4"="other",
+                            "5"="single/nm"),
+         marital_2 = recode(marital_2, "1"="married", "2"="other", "3"="other", "4"="other",
+                            "5"="single/nm"),
+         marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
+                            "5"="single/nm"),
+         childs_1 = ifelse(childs_1 > 0, 1, 0),
+         childs_2 = ifelse(childs_2 > 0, 1, 0),
+         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
+                       "3"="ba", "4"="ba"),
+         ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
+                       "3"="ba", "4"="ba"),
+         ed_3 = recode(degree_3, "0"="less than", "1"="hs", "2"="hs",
+                       "3"="ba", "4"="ba"))
+
+
+save(clean_g10, file = "~/Dropbox/formative_period/clean_g10.Rdata")
 
 
 
