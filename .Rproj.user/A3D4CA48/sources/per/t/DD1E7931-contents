@@ -12,7 +12,7 @@ header-includes:
   - \linenumbers
   - \def\linenumberfont{\normalfont\tiny\sffamily}
 bibliography: efw_bib.bib
-abstract: "Young adulthood is consistently identified as a “formative period” in the life course when people have heightened probability of attitude change. This probability has often been attributed to cognitive factors like brain plasticity as well as the social conditions of adolescence. Over the past 70 years, changes in the timing of major life course events such as marriage have transformed and extended this life stage. We leverage these changes to explore whether these life course changes, as well as broader social changes, have affected how likely people are to make durable changes of attitudes. We find strikingly little difference in the opinion behaviors among young people in different eras. People under 30 are similarly different from people over 30 in all eras, with slightly less stable attitudes. The overall pattern suggests either that social conditions are not strongly related to attitude stability or that different social shifts have had counter-vailing effects that produce aggregate stability in rates." 
+abstract: "Young adulthood is consistently identified as a “formative period” in the life course when people have heightened probability of attitude change. This probability has often been attributed to cognitive factors like brain plasticity as well as the social conditions of adolescence. Over the past 70 years, changes in the timing of major life course events such as marriage have transformed and extended this life stage. We take advantage of these changes to explore whether they -- as well as broader social changes -- have affected how likely people are to make durable changes of attitudes. We find strikingly little difference in the opinion behaviors among young people in different eras. People under 30 are similarly different from people over 30 in all eras, with slightly less stable attitudes. The overall pattern suggests either that social conditions are not strongly related to attitude stability or that different social shifts have had counter-vailing effects that produce aggregate stability in rates." 
 editor_options: 
   markdown: 
     wrap: sentence
@@ -31,8 +31,8 @@ theme_set(theme_bw())
 
 ## Introduction
 
-Adolescence and young adulthood are typically identified in social science literature as "impressionable years" -- a stage of the life course in which people are more susceptible to broad social currents, when their opinions are more malleable, and when peoples' core ideas and attitudes are formed [].
-Research regularly finds that people are more likely to change their attitudes and opinions in these life stages than other life stages, with opinions becoming more stable once these life stages have passed [].
+Adolescence and young adulthood are typically identified in the social science literature as "impressionable years" -- a stage of the life course in which people are more susceptible to broad social currents, when their opinions are more malleable, and when peoples' core ideas and attitudes are formed [].
+Research regularly finds that people are more likely to change their attitudes and opinions in these life stages than other periods, with opinions becoming more stable once these stages have passed [].
 This pattern, in which young people are open to attitude change and become resistant over time, underpins dynamics around cohortization that are frequently invoked in larger models of social change [@ryder1965; @mannheim1952; @vaisey2016].
 
 However, why people in these life stages appear to show more frequent opinion change relative to older people is unclear.
@@ -41,7 +41,8 @@ Explanations in social sciences, in contrast, tend to highlight the unique socia
 While both mechanisms likely play a role in facilitating opinion change in this life stage, the relative contributions of each are unclear.
 
 Clarifying the mechanism that drives the frequency of opinion change during this formative period is important for understanding the broader process of social change and cultural evolution.
-If openness to change in early adulthood is principally a function of the social structure of life in that time period, changes in the timing and ubiquity of life course events like marriage and childbearing can have significant impacts on the broader process of social and cultural change. Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2021; @brückner2005] that decrease distinctions between life course stages might make older people more open to change in more recent eras than in previous eras, diminishing the importance of "cohorts" for social change.
+If openness to change in early adulthood is principally a function of the social structure of life in that time period, changes in the timing and ubiquity of life course events like marriage and childbearing can have significant impacts on the broader process of social and cultural change.
+Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2021; @brückner2005] that decrease distinctions between life course stages might make older people more open to change in more recent eras than in previous eras, diminishing the importance of "cohorts" for social change.
 If the mechanisms are principally cognitive and biological, rather than social, then these changes are unlikely to affect rates of social and cultural change in the same way.
 
 Over the course of the 20th century, the timing of life-course transitions such as completing schooling, entering the workforce, getting married, leaving one's parents' home, and having children, have changed dramatically, with most of these event occurring later in the life course in more recent cohorts [@buchmann1989; @brückner2005].
@@ -69,7 +70,8 @@ Thus, the notion of a formative period -- at the early stages of the life-course
 The "impressionable years" hypothesis -- that people demonstrate more opinion change early in life followed by a period of relative stability, especially in middle age -- has often been tested against other theories of opinion change over the life course.
 The most common are an aging stability or increasing persistence hypothesis that argues that openness to change gradually declines over time and a life stages hypothesis, in which people are open to attitude change both early in life and later in life, with stability principally happening in middle ages [@visser2004].
 While different attitudes occasionally follow slightly different patterns, the impressionable years hypothesis or aging stability hypothesis has generally been shown to be true for broad political ideology, partisan identification, and specific policy preferences [@krosnick1989; @alwin1991; @sears1999]; social attitudes [@danigelis2007]; and interest in politics [@prior2010]; as well as things like personality [@wagner2019].
-More generally, recent research has found that, with a couple notable exceptions of high-salience events such as national shifts around gay rights, durable change of social opinion is quite rare among U.S. adults [@kiley2020], and Vaisey and Lizardo [-@vaisey2016] find that cohort explains much more variance than period for most items in the General Social Survey, suggesting a strong impressionable years pattern.
+More generally, recent research has found that, with a couple notable exceptions of high-salience events such as national shifts around gay rights, durable change of social opinion is quite rare among U.S. adults.
+[@kiley2020], and Vaisey and Lizardo [-@vaisey2016] find that cohort explains much more variance than period for most items in the General Social Survey, suggesting a strong impressionable years pattern.
 
 In recent years, researchers have used new approaches to quantify "openness" to social influence across the life course, especially around politics [@bartels2014; @ghitza2022].
 This work has produced remarkably similar patterns, with openness peaking from a person's mid-teens through age 25 and declining quickly after that, lending more credence to the "impressionable years" hypothesis.
@@ -125,7 +127,7 @@ Assuming that new social contexts shape exposure to new information, and that ex
 
 Second, people in the "impressionable years" window spend their time in different social contexts than people in middle age.
 Data from the American Time Use Study shows that people under age 25 spend a larger portion of the day on leisure time and educational activities and a smaller part of the day doing work and work-related activities than people between the ages of 25 and 55.
-These contexts, especially education, are explicity designed to expose people to new information in ways that can lead to updated opinions.
+These contexts, especially education, are explicitly designed to expose people to new information in ways that can lead to updated opinions.
 For example, there is some evidence that college attendance leads to changes in opinions about civil liberties, gender egalitarianism, and racial inequality [@campbell2016; @wodtke2018].
 Social networks also differ in this time period.
 Previous work has found that young peoples' networks tend to be larger and include more friends than kin, for example [@marsden1987].
@@ -205,7 +207,7 @@ Both the extension of early adulthood and the intensification of early adulthood
 
 H2: The rate at which young people make attitude changes, relative to older people, will have increased since the 1950s.
 
-Third, we can distinguish between the "elongation of young adulthood" and the "intensification of young adulthood" arguments by exploring the associaiton of life-course transitions and opinion change across cohorts.
+Third, we can distinguish between the "elongation of young adulthood" and the "intensification of young adulthood" arguments by exploring the association of life-course transitions and opinion change across cohorts.
 The elongation of young adulthood argument principally suggests that delaying the life course transitions is what would explain heightened rates of attitudinal updating in young people in recent cohorts.
 In contrast, the "intensification of young adulthood" argument suggests that attitudinal updating may be occurring at heightened rates in recent cohorts net of these life course transitions.
 
@@ -265,7 +267,8 @@ The 1956-60 panel of the ANES asked respondents how many children under 18 years
 We coded individuals as having children in the first wave of the panel if they answered at least one to this question.
 The 1970s panel of the ANES asked respondents in the first wave if they had any school-aged children.
 In the second wave, they asked respondents if they ever had children, how many, and the ages of all children in the household.
-We code respondents as "having children in the first wave of the panel if they reported having at least one child older than one in the second wave of the panel. Because some of these questions focus on ever having children while others focus on children in the household, we caution readers from making any significant judgments about these coefficients.
+We code respondents as "having children" in the first wave of the panel if they reported having at least one child older than one in the second wave of the panel.
+Because some of these questions focus on ever having children while others focus on children in the household, we caution readers from making any significant judgments about these coefficients.
 
 Finally, we include a measure of educational attainment.
 Rather than focus on whether a person was currently enrolled in an educational program, we code respondents by their highest level of education completed, either less than a high school degree, a high school degree, or at least a bachelor's degree.
