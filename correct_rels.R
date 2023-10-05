@@ -2,7 +2,7 @@ library(tidyverse)
 library(lavaan)
 library(haven)
 
-source("~/Dropbox/extended_formative_windows/clean_panels.R")
+source("~/Dropbox/formative_period/clean_panels.R")
 
 
 
@@ -104,21 +104,30 @@ simplex_reliabilities <- bind_rows(canes5 %>% mutate(df = "anes5"),
 
 
 simplex_full <- bind_rows(canes5 %>% mutate(df = "anes5"),
-                          canes7 %>% mutate(df = "anes7"),
-                          canes9 %>% mutate(df = "anes9"),
-                          canes90 %>% mutate(df = "anes90"),
-                          cg6 %>% mutate(df = "gss6"),
-                          canes8 %>% mutate(df = "anes8"),
-                          canes0 %>% mutate(df = "anes0"),
-                          cg8 %>% mutate(df = "gss8"),
-                          cg10 %>% mutate(df = "gss10")) %>% 
+                                   canes7 %>% mutate(df = "anes7"),
+                                   canes9 %>% mutate(df = "anes9"),
+                                   cg6 %>% mutate(df = "gss6"),
+                                   canes8 %>% mutate(df = "anes8"),
+                                   cg8 %>% mutate(df = "gss8"),
+                                   cg10 %>% mutate(df = "gss10")) %>% 
   filter(age_1 < 83) %>%
   filter(!is.na(y1), !is.na(y2), !is.na(y3)) %>%
   group_by(var, df) %>%
-  mutate(n_vals = (max(y1, na.rm = TRUE)-min(y1, na.rm = TRUE))+1) %>%
   nest() %>%
   mutate(measure = map(data, heise_rel_fun)) %>%
   unnest(measure)
+
+
+nix <- canes9 %>% 
+  filter(var == "abort") %>% 
+  filter(!is.na(y1), !is.na(y2), !is.na(y3)) %>%
+  mutate(group = ifelse(age_1 < 26, "18-25",
+                        ifelse(age_1 >= 26 & age_1 < 34, "26-33",
+                               ifelse(age_1 >= 34 & age_1 < 42, "34-41",
+                                      ifelse(age_1 >= 42 & age_1 < 50, "42-49",
+                                             ifelse(age_1 >= 50 & age_1 < 58, "50-57",
+                                                    ifelse(age_1 >= 58 & age_1 < 66, "58-65",
+                                                           "66-83")))))))
 
 simplex_reliabilities %>% filter(label == "rel") %>%
   group_by(df, var) %>%
@@ -136,12 +145,11 @@ simplex_reliabilities %>% filter(label == "rel") %>%
   theme_bw() + 
   labs(x = "Year", y = "Average Reliability", shape = "Age Group",
        color = "Age Group",
-       title = "Average reliability estimate by age group")
+       title = "Average reliability estimate by age group",
+       subtitle = "1980 reliabilities adjusted to be comparable with other panels")
 
 simplex_reliabilities %>% filter(label %in% c("stab12", "stab23")) %>% 
   group_by(df, var) %>%
-  #These are quasi-arbitrary cutoffs to remove
-  #items that are not estimated properly
   filter(max(estimate) < 1.4,
          min(estimate) > 0) %>%
   group_by(df, group) %>% summarise(mean = mean(estimate)) %>%
@@ -151,12 +159,13 @@ simplex_reliabilities %>% filter(label %in% c("stab12", "stab23")) %>%
                        "gss6"=2006, "gss8"=2008, "gss10"=2010)) %>%
   #filter(group != "66-83") %>%
   ggplot(aes(x = year, y = mean, fill = group)) + 
-  #geom_smooth(aes(color = group), method = 'lm', se = FALSE, alpha = .6) + 
+  geom_smooth(aes(color = group), method = 'lm', se = FALSE, alpha = .6) + 
   geom_point(shape = 21) + 
   theme_bw() + 
   labs(x = "Year", y="Average Stability",
        title = "Average stability estimate by age group",
-       fill = "Group")
+       fill = "Group",
+       subtitle = "1980 stability adjusted to be comparable with other panels")
 
 
 stabilities <- simplex_reliabilities %>% filter(label %in% c("stab12", "stab23")) %>% 
