@@ -5,11 +5,16 @@
 library(tidyverse)
 library(haven)
 library(broom)
+library(lavaan)
 
 load("~/Dropbox/formative_period/clean_anes5.Rdata")
 load("~/Dropbox/formative_period/clean_anes7.Rdata")
 load("~/Dropbox/formative_period/clean_anes9.Rdata")
 load("~/Dropbox/formative_period/clean_g6.Rdata")
+
+
+clean_g6 %>%
+  filter(age_1 < 30)
 
 
 new_data <- data.frame(young = c(0,1))
@@ -48,15 +53,15 @@ canes5 <- clean_anes5 %>%
                   govjob5_1, govjob5_3, fgnaid5_1, fgnaid5_3, 
                   bldschls5_1, bldschls5_3, fghtcomm5_1, fghtcomm5_3,
                   stayhome5_1, stayhome5_3, prvtpwr5_1, prvtpwr5_3), 
-                ~recode(.x, "0"=3, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "8"=3,
+                ~recode(.x, "0"=3, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "8"=NA_real_,
                                        "9"=NA_real_)),
          across(c(helpblk5_2, integrate5_2, govjob5_2, fgnaid5_2,
                   bldschls5_2, fghtcomm5_2, stayhome5_2, prvtpwr5_2), 
-                ~recode(.x, "7"=3, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "8"=3,
+                ~recode(.x, "7"=3, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "8"=NA_real_,
                         "9"=NA_real_)),
          across(c(partyid5_1, partyid5_2, partyid5_3), 
                 ~recode(.x, "0"=1, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6, 
-                        "6"=7, "7"=4, "8"=4, "9"=NA_real_))) %>%
+                        "6"=7, "7"=NA_real_, "8"=NA_real_, "9"=NA_real_))) %>%
   pivot_longer(helpblk5_1:partyid5_3) %>%
   separate(name, into = c("var", "wave")) %>%
   mutate(wave = paste0("y", wave)) %>%
@@ -180,11 +185,11 @@ canes7 <- clean_anes7 %>%
                   accused7_1, accused7_2, accused7_3,
                   eqrole7_1, eqrole7_2, eqrole7_3,
                   libcon7_1, libcon7_2, libcon7_3), 
-                ~recode(.x, "0"=4, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "6"=6,
-                        "7"=7, "8"= 4,"9"=NA_real_)),
+                ~recode(.x, "0"=NA_real_, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "6"=6,
+                        "7"=7, "8"= NA_real_,"9"=NA_real_)),
          across(c(partyid7_1, partyid7_2, partyid7_3), 
                 ~recode(.x, "0"=1, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6, 
-                        "6"=7, "7"=4, "8"=4, "9"=NA_real_))) %>%
+                        "6"=7, "7"=NA_real_, "8"=NA_real_, "9"=NA_real_))) %>%
   pivot_longer(helpblk7_1:libcon7_3) %>%
   separate(name, into = c("var", "wave")) %>%
   mutate(wave = paste0("y", wave)) %>%
@@ -278,14 +283,14 @@ canes9 <- clean_anes9 %>%
                   govblks9_1, govblks9_2, govblks9_3,
                   eqrole9_1, eqrole9_2, eqrole9_3,
                   libcon9_1, libcon9_2, libcon9_3), 
-                ~recode(.x, "0"=4, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "6"=6,
-                        "7"=7, "8"= 4,"9"=NA_real_)),
+                ~recode(.x, "0"=NA_real_, "1"=1, "2"=2, "3"=3, "4"=4, "5"=5, "6"=6,
+                        "7"=7, "8"= NA_real_,"9"=NA_real_)),
          across(c(partyid9_1, partyid9_2, partyid9_3), 
                 ~recode(.x, "0"=1, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6, 
-                        "6"=7, "7"=4, "8"=4, "9"=NA_real_)),
+                        "6"=7, "7"=NA_real_, "8"=NA_real_, "9"=NA_real_)),
          across(c(eqop9_1, eqop9_2, eqop9_3),
-                ~recode(.x, "0"=4, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6, 
-                        "8"= 4,"9"=NA_real_))) %>%
+                ~recode(.x, "0"=NA_real_, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6, 
+                        "8"= NA_real_,"9"=NA_real_))) %>%
   pivot_longer(govins9_1:libcon9_3) %>%
   separate(name, into = c("var", "wave")) %>%
   mutate(wave = paste0("y", wave)) %>%
@@ -379,7 +384,7 @@ canes0 <- clean_g6 %>%
                 ~recode(.x, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6)),
          across(c(partyid_1, partyid_2, partyid_3), 
                 ~recode(.x, "0"=1, "1"=2, "2"=3, "3"=4, "4"=5, "5"=6, 
-                        "6"=7, "7"=4, "8"=4, "9"=NA_real_))) %>%
+                        "6"=7, "7"=NA_real_, "8"=NA_real_, "9"=NA_real_))) %>%
   pivot_longer(helppoor_1:partyid_3) %>%
   separate(name, into = c("var", "wave")) %>%
   mutate(wave = paste0("y", wave)) %>%
