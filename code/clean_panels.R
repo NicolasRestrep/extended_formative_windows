@@ -1312,15 +1312,15 @@ cg10 <- clean_g10 %>%
   mutate(wave = paste0("y", wave)) %>%
   spread(wave, value) 
 
-save(cg10, file = "/Dropbox/extended_formative_windows/clean_data/cg10.Rdata")
-save(cg8, file = "/Dropbox/extended_formative_windows/clean_data/cg8.Rdata")
-save(cg6, file = "/Dropbox/extended_formative_windows/clean_data/cg6.Rdata")
-save(canes5, file = "/Dropbox/extended_formative_windows/clean_data/canes5.Rdata")
-save(canes7, file = "/Dropbox/extended_formative_windows/clean_data/canes7.Rdata")
-save(canes8, file = "/Dropbox/extended_formative_windows/clean_data/canes8.Rdata")
-save(canes90, file = "/Dropbox/extended_formative_windows/clean_data/canes90.Rdata")
-save(canes9, file = "/Dropbox/extended_formative_windows/clean_data/canes9.Rdata")
-save(canes0, file = "/Dropbox/extended_formative_windows/clean_data/canes0.Rdata")
+save(cg10, file = "~/Dropbox/extended_formative_windows/clean_data/cg10.Rdata")
+save(cg8, file = "~/Dropbox/extended_formative_windows/clean_data/cg8.Rdata")
+save(cg6, file = "~/Dropbox/extended_formative_windows/clean_data/cg6.Rdata")
+save(canes5, file = "~/Dropbox/extended_formative_windows/clean_data/canes5.Rdata")
+save(canes7, file = "~/Dropbox/extended_formative_windows/clean_data/canes7.Rdata")
+save(canes8, file = "~/Dropbox/extended_formative_windows/clean_data/canes8.Rdata")
+save(canes90, file = "~/Dropbox/extended_formative_windows/clean_data/canes90.Rdata")
+save(canes9, file = "~/Dropbox/extended_formative_windows/clean_data/canes9.Rdata")
+save(canes0, file = "~/Dropbox/extended_formative_windows/clean_data/canes0.Rdata")
 
 
 
