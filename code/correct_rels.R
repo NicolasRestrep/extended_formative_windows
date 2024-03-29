@@ -149,7 +149,7 @@ simplex_reliabilities %>% filter(label == "rel") %>%
        subtitle = "1980 reliabilities adjusted to be comparable with other panels")
 
 simplex_reliabilities %>% filter(label %in% c("stab12", "stab23")) %>% 
-  group_by(df, var) %>%
+  #group_by(df, var) %>%
   filter(max(estimate) < 1.4,
          min(estimate) > 0) %>%
   group_by(df, group) %>% summarise(mean = mean(estimate)) %>%
