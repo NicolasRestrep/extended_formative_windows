@@ -99,7 +99,7 @@ First, the period between adolescence and "settling down" has been getting longe
 
 If the distinctive nature of "impressionable years" is principally driven by their unique social circumstances, then these shifts have the potential to extend these social circumstances into later ages. This, in turn, could have an effect on how long exploration, and therefore openness to durable change, lasts throughout the life-course. If this is the case, we should expect to see lower levels of attitude stability (and therefore more change) among age groups that, for earlier cohorts, displayed mainly stability. In other words, people who were born in the mid-20th century would have displayed mainly attitudinal stability by the time they reached their mid-twenties while more contemporary counterparts might still show cultural change when they reach that age. Specifically, we expect the attitude behavior of people aged 25-33 to more closely resemble middle-aged respondents in earlier cohorts [@krosnic1991; @alwin1991] but younger respondents in more recent cohorts. This produces our first hypothesis:
 
-**Hypothesis 1: Rates of attitude stability will be lower among respondents aged 25-33 in recent surveys than in earlier surveys.**
+*Hypothesis 1: More recent cohorts will show higher rates of attitude change in the age range of 25 to 33 than cohorts born in earlier years.*
 
 ## Intensifying Impressionable Years
 
@@ -109,15 +109,17 @@ Rosenfeld's work suggests that the social conditions that shape where we spend o
 
 This approach suggests that it is not the timing of life events that is important for rates of change, but the broader social conditions of early adulthood that might make people more malleable in recent cohorts. In other words, unmarried, childless 25-year-old men and women in 1956 might have experienced a set of social constraints that unmarried, childless 25-year-old men and women in 2008 do not experience, leaving the latter much more open to developing new opinions than their predecessors. The "intensification" of impressionable years suggests two hypotheses.
 
-*Hypothesis 2: People ages 18 to 25 will demonstrate lower levels of reliability in more recent years than in earlier years.*
+*Hypothesis 2: More recent cohorts will show higher levels of residual variance in the 18 to 25 age range, net of their over-time trajectories, compared to previous generations in the same age range.*
 
-Reliability reflects not just the degree to which people make errors in their reporting of attitudes over time, but the baseline level of variance around a fixed attitude position that people express. In other words, we might ... if younger people bounce around 
+Residual variance reflects not just the degree to which people make errors in their reporting of attitudes over time, but the baseline level of variance around a fixed attitude position that people express. In other words, we might expect younger people to bounce around their latent trajectory more if they engage in more exploration of attitudes over time, trying on different identities and ideas.
+
+Finally, the intensification of early adulthood hypothesis expects that the rates of durable attitude change will also increase for more recent cohorts. Freedom to explore outside of the watch of family members should result in more respondents making durable changes of opinion over time.
 
 *Hypothesis 3: People aged 18 to 25 will demonstrate lower levels of stability in recent years than they did in earlier years.*
 
 ## Biological and Cognitive Factors
 
-We have framed our hypotheses as expectations derived from the framework suggesting that social conditions play a large role in explaining the uniquely high rates of attitude change among early adults and adolescents. However, to the extent that we do not see evidence that these social changes have not contributed, but that young adults maintain a similar pattern of lower rates of attitude stability that older adults over time, we take this as evidence that social circumstances play a relatively small role in explaining change in favor of biological and cognitive factors.
+We have framed our hypotheses as expectations derived from the framework suggesting that social conditions play a large role in explaining the uniquely high rates of attitude change among early adults and adolescents. However, to the extent that we observe significant changes in the social context of early adulthood but no corresponding changes in rates of attitude change or response stability across cohorts, we take this as evidence that social circumstances play a relatively small role in explaining change in favor of biological and cognitive factors. 
 
 # Analytical Strategy
 
@@ -141,9 +143,7 @@ Weighting schemes are different across panels. When available, I use weights tha
 
 ## Methods of Analysis
 
-There are a broad range of approaches to measure the amount of change a group undergoes. We could compare the average slope of different age groups, but this assumes that , and would miss 
-
-My starting point for our analysis if the Life Course Adaption Model (LCAM) formalized by Lersch [-@lersch2023]. The LCAM is a mixed-effects growth curve model that formalizes several key insights from the literature on attitude change over time. First, it assumes that survey respondents have an underlying disposition shaped by early-life socialization. Second, it assumes that people can, but do not necessarily, change this disposition over time as a result of aging and general life-course experiences. Third, it assumes that people fluctuate around their underlying dispositions over time as a result of random shocks and measurement error. Fourth, it assumes respondents can draw on their prior experiences when adapting to new events.
+There are a range of approaches to measure the amount of change a group undergoes. The starting point for our analysis if the Life Course Adaption Model (LCAM) formalized by Lersch [-@lersch2023]. The LCAM is a mixed-effects growth curve model that formalizes several key insights from the literature on attitude change over time. First, it assumes that survey respondents have an underlying disposition shaped by early-life socialization. Second, it assumes that people can, but do not necessarily, change this disposition over time as a result of aging and general life-course experiences. Third, it assumes that people fluctuate around their underlying dispositions over time as a result of random shocks and measurement error. Fourth, it assumes respondents can draw on their prior experiences when adapting to new events.
 
 The model takes the form of:
 
@@ -151,23 +151,11 @@ $$ c_{i,t}^* = \beta_0 + \beta_ia_{i,t} + u_{0,i} + u_{i,t}a_{i,t} + \epsilon_{i
 
 where $c_{i,t}^*$ is the standardized survey response for respondent $i$ at time $t$, $\beta_0$ is the intercept with random term $u_{0,i}$ capturing early-life experiences. $\beta_1$ with random term $u_{i,t}a_{i,t}$ captures the individual-specific slope for age $a_{i,t}$. $\epsilon_{i,t}$ is random error around this individual-specific slope for person $i$ at time $t$.
 
-Because we are unconcerned with whether respondents change in the same direction or tend to change in different directions (which could indicate either convergence or polarization, depending on where respondents start). The central quantity of interest for our analysis is the absolute change in responses for a year, or $|\beta_ia_{i,t} + u_{i,t}a_{i,t}|$. Averaging this quantity across all respondents in a group produces an average absolute change in responses for a year for members of that group.
+By combining the main effect for time and the individual-level random effects for time, we generate a person-specific slope estimate, or the expected change in that attitude for a one-year change. Because we are unconcerned with whether respondents change in the same direction or tend to change in different directions (which could indicate either convergence or polarization, depending on where respondents start), the central quantity of interest for our analysis is the absolute change in respondents' latent trajectories for a year, or $|\beta_ia_{i,t} + u_{i,t}a_{i,t}|$. Averaging this quantity across all respondents in a group produces an average absolute change in responses for a year for members of that group.
 
-As a second quantity of interest, we calculate the mean square residual for respondents in a particular group. Groups might differ both in their linear (directional) change, as well as whether they are consistent at respodning around that trajectory. High variance around a latent trajectory could indicate that respondents are either more error-prone in making responses or more subject to temporary considerations. To calculate this, we calculate:
+As a second quantity of interest, we calculate the mean square residual for respondents in a particular group. Groups might differ both in their linear (systematic) change, as well as whether they are consistent at responding around that trajectory. High variance around a latent trajectory could indicate that respondents are either more error-prone in making responses or more subject to temporary considerations. To evaluate this, we calculate:
 
 $$\frac{1}{n}\sum{(y_{i,t} - \hat{y_{i,t}})^2} $$
-
-
-Our central question deals with comparisons across age groups at one time and within age groups over time in the amount of change we observe. Because of this, we need a way to extract a single measure of change . 
-
-There are a number of potential ways to measure change, including linear trajectory models, latent growth curve models, and sequence analysis. We follow previous work that seeks to separate true change in attitude response from measurement error in the study of attitude change and stability over the life cycle. To do this, we follow Alwin and Krosnick's approach of using just-identified simplex models that specify two structural equations for a set of three over-time measures of a given variable, $y_i$:
-
-$$ y_{t} = \tau_t + \epsilon_t$$
-
-$$ \tau_t = \beta_{t,t-i} \tau_{t-1} + \zeta_t $$ The first equation represents a set of measurement assumptions indicating that (1) over-time measures are assumed to be $\tau$-equivalent, except for true attitude change, and (2) that measurement error is random. It decomposes the variance in reports into two components, one due to the latent attitude ($tau_t$) and the other due to random measurement error ($\epsilon_t$). The second equation specifies a causal process involving attitude change over time. $\beta_{t,t-i}$ is the stability of the latent attitude during the period from $t-1$ to $t$. $\zeta_t$ represents sources of change over time in the latent attitude. The model assumes that the system of attitudes is in a dynamic equilibrium described by a lag-1 or Markovian process in which the distribution of a "true" attitude at time $t$ is dependent on the distribution at time $t-1$ and not on the distribution of the variable at previous times.
-
-As presented above, the model is unidentified. All strategies for estimating these quantities require the lag-1 assumption regarding the nature of "true" attitude change, as well as an assumption about measurement error. An approach proposed by Heise [@heise1969] assumes equal reliabilities over occasions of measurement. Another approach is to assume constant error variances rather than constant reliabilities [@wiley1970]. We follow the Heise approach and constrain reliabilities to be constant across waves, rather than constraining error variance to be the same. However, extensive work suggests that both models produce similar estimates of the standardized parameters [@alwin2007; @alwin1991].
-
 
 # Results
 
@@ -179,7 +167,103 @@ In the early panel (1956-60), respondents in the lowest age group look very simi
 
 These trends set the stage for what to expect in terms of reliability and stability. To the extent that these measures as proxies for life stages that influence attitude stability and reliability, then we should see the youngest age group look similar to the older age groups in the 1950s, and diverge by the 1970s, continuing to diverge over time. Respondents in the 26-33 age group should remain similar to older respondents for most panels, but begin to diverge by the 1990s and especially by the 2000s.
 
-## Stability and Reliability
+## Systematic Change
+
+We first evaluate the average estimates for absolute mean change for each age group. Figure 1 plots the average asbolute slope for each of the three age groups in each panel across all questions asked in that panel. Again, which questions are asked in each panel varies significantly. 
+
+```{r}
+bind_rows(mean_val5, mean_val8, mean_val9, mean_val7,
+          mean_val2k, mean_val90, mean_val06,
+          mean_val08, mean_val10) %>%
+  mutate(year = recode(df, "anes2k"=2000, "anes5"=1956,
+                       "anes7"=1972, "anes9"=1992,
+                       "anes8"=1980, "anes90"=1990,
+                       "gss06"=2006, "gss08"=2008,
+                       "gss10"=2010)) %>%
+  filter(year != 1980, year != 1990) %>%
+  ggplot(aes(x = year, y = mean, fill = group)) + 
+  geom_point(size = 2, shape = 21, color = "black") + 
+  theme_bw() + 
+  labs(x = "Year", y = "Abs. Slope", fill = "Age Group")
+```
+
+Overall, we see few general patterns across age groups over time. There is little consistency in which age group displays the largest absolute change in each of the panels or the trajectory of rates of change across the panels. The 2006 and 2008 General Social Survey have the highest absolute change over time, but the 2010 panel, the most recent, is highly comparable to the other panels. While people in the 18 to 25 age range display higher rates of change than people in the 26-33 and 34 and older age group in the most two recent panels (the 2008 and 2010 GSS panels), suggesting some evidence of an intensification of early adulthood, they fall below people ages 34 and over in the panel begun only two years prior and overlapping (the 2006 GSS panel).
+
+In aggregating questions, we see no evidence for the "elongation" hypothesis that people in the 26 to 33 age range increasingly look like people in the 18 to 25 age range. People in the 26 to 33 age range are functionally identical to people over 34 in all panels, and they do not show any evidence of becoming more like people in the 18 to 25 age range over time. 
+
+One challenge we noted at the outset is that the composition of questions in each panel changes over time, meaning our understanding of the general trajectories of age groups across cohorts might be biased by changes in question content, questions wording, or survey administration. To control for these potential sources of bias, we explore only questions that have been repeated almost verbatim in multiple panels. These are the seven-point scale of partisan identification (from Strong Democrat to Strong Republican) and the seven-point scale of political ideology (from Extremely Liberal to Extremely Conservative). These results are presented in Figure XXX below.
+
+```{r}
+bind_rows(bind_rows(group_meansc5) %>% mutate(year = 1956), 
+          bind_rows(group_meansc7) %>% mutate(year = 1972),
+          bind_rows(group_meansc9) %>% mutate(year = 1992), 
+          bind_rows(group_meansc2k) %>% mutate(year = 2000),
+          bind_rows(group_meansc06) %>% mutate(year = 2006),
+          bind_rows(group_meansc08) %>% mutate(year = 2008),
+          bind_rows(group_meansc10) %>% mutate(year = 2010)) %>%
+  filter(var %in% c("polviews", "partyid")) %>%
+  mutate(var = recode(var, "polviews"="Ideology",
+                      "partyid"="Identitification")) %>%
+  ggplot(aes(x = year, y = abs_mean_slope, fill = group)) +
+  geom_point(shape = 21, size = 2) + 
+  facet_wrap(~var) + 
+  theme_bw() + 
+  labs(x = "Year", y = "Abs. Mean Slope", 
+       fill = "Age Group")
+
+```
+
+For partisan identification, we see some evidence for the intensification hypothesis, with people in the 18-25 age range showing higher average absolute slopes than people in the other two age ranges.  However, though the population as a whole also makes more linear change in partisan identification as well during these more recent years, complicating the overall picture. There is no evidence that people in the 26-33 age range increase more than the general population in this time frame, suggesting no evidence of the elongation of the formative period.
+
+We see no corresponding pattern for political ideology. Respondents in the 18 to 25 age range look remarkably similar to respondents in other age groups, and there is no obvious trajectory across cohorts. In one panel (the GSS panel beginning in 2006), people in this age range show higher rates of change, but this pattern does not hold even for the other GSS panels that overlap this panel. People in the 26 to 33 age range cannot be distinguished from people over 34 even in the most recent cohorts, suggesting no evidence for the elongation hypothesis.
+
+
+## Non-systematic change
+
+```{r}
+bind_rows(mean_var5, mean_var8, mean_var9, mean_var7,
+          mean_var2k, mean_var90, mean_var06,
+          mean_var08, mean_var10) %>%
+  mutate(year = recode(df, "anes2k"=2000, "anes5"=1956,
+                       "anes7"=1972, "anes9"=1992,
+                       "anes8"=1980, "anes90"=1990,
+                       "gss06"=2006, "gss08"=2008,
+                       "gss10"=2010)) %>%
+  filter(year != 1980, year != 1990) %>%
+  ggplot(aes(x = year, y = mean, fill = group)) + 
+  geom_point(size = 2, shape = 21, color = "black") + 
+  theme_bw() + 
+  labs(x = "Year", y = "Abs. Slope", fill = "Age Group")
+
+```
+
+In the early panels (the 1956 and 1972 ANES panels), there is little evidence that the youngest respodents exhibited more or less consistency over time in their attitude reports than the rest of the sample. In the 1956 panel, they have the lowest residual variance around their latent trajectories, and in the 1972 panel, they fall between the other two groups. However, in more recent cohorts, people in this age group consistently have the most residual variance of the three groups. Whether this is due to lack of knowledge of the political system (and therefore measurement error), or whether these vacillations around their latent trajectories are due to "exploration" across attitudes is not clear from these results.
+
+There is no consistent evidence for "elongation" of early adulthood in these data, as people in the 26-33 age group show no consistent trajectory over time.
+
+Turning again to the 
+
+```{r}
+bind_rows(bind_rows(variancec5) %>% mutate(year = 1956), 
+          bind_rows(variancec7) %>% mutate(year = 1972),
+          bind_rows(variancec9) %>% mutate(year = 1992), 
+          bind_rows(variancec2k) %>% mutate(year = 2000),
+          bind_rows(variancec06) %>% mutate(year = 2006),
+          bind_rows(variancec08) %>% mutate(year = 2008),
+          bind_rows(variancec10) %>% mutate(year = 2010)) %>%
+  filter(var %in% c("polviews", "partyid")) %>%
+  mutate(var = recode(var, "polviews"="Ideology",
+                      "partyid"="Identitification")) %>%
+  ggplot(aes(x = year, y = mse, fill = group)) +
+  geom_point(shape = 21, size = 2) + 
+  facet_wrap(~var) + 
+  theme_bw() + 
+  labs(x = "Year", y = "Abs. Mean Slope", 
+       fill = "Age Group")
+
+```
+
+
 
 We first evaluate the average estimates for reliability and stability for each panel and for each age group to establish a baseline of comparison. Table 1 presents the average reliability and stability for each panel. Across panels, the 1956-58-60 panel shows the lowest average reliability of all the panels.[^badq] The 1980 panel, with the shortest time between waves (about 3 months between each wave), has notably higher reliability than other panels, a fact established in previous work [@krosnick1989]. Having less time between waves increases the reliability of responses. The remaining panels all have comparable average reliabilities, with many within .02 of each other.
 
