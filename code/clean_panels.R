@@ -47,6 +47,8 @@ clean_anes5 <- anes5 %>%
     V560181, V580478, V600694,
     #Children in household
     V560178, V580475, V600691,
+    #Occupational code
+    V560120,
     #sex
     V560171, V580468, V600684,
     #race
@@ -57,6 +59,7 @@ clean_anes5 <- anes5 %>%
          age_1 = V560295,
          age_2 = V580472,
          age_3 = V600688,
+         student_1 = ifelse(V560120 %in% c(92), 1, 0),
          marital_1 = V560177, marital_2 = V580474,
          marital_3 = V600690,
          marital_1 = ifelse(V560177 == 9, NA, V560177),
@@ -180,6 +183,8 @@ clean_anes7 <- anes7 %>%
     #age
     age_1 = V720294, age_2 = V742406, 
     age_3 = V763369,
+    #student status
+    student_1 = ifelse(V720306 == 8, 1, 0),
     #toofast
     toofast_1 = V720112, toofast_2 = V742264, 
     toofast_3 = V763213,
@@ -344,6 +349,12 @@ clean_anes8 <- anes80 %>%
          energypol_1=VMP0177,energypol_2=VMP2196,energypol_3=VMP3314,
          rationgas_1=VMP0179,rationgas_2=VMP2198,rationgas_3=VMP3316,
          nukeplant_1=VMP0184,nukeplant_2=VMP2203,nukeplant_3=VMP3321,
+         baby = ifelse(VMP0589 > 0 & VMP0589 != 9, 1, 0),
+         kid = ifelse(VMP0590 > 0 & VMP0590 != 9, 1, 0),
+         tween = ifelse(VMP0591 > 0 & VMP0591 != 9, 1, 0),
+         teen = ifelse(VMP0592 > 0 & VMP0592 != 9, 1, 0),
+         child_1 = ifelse(baby + kid + tween + teen > 0, 1, 0),
+         student_1 = ifelse(VMP0352 == 8, 1, 0),
          marital_1=recode(VMP0326, "1"="married", "2"="single/nm",
                           "3"="other", "4"="other", "5"="other",
                           "7"="married", "9"=NA_character_),
@@ -355,13 +366,25 @@ clean_anes8 <- anes80 %>%
                           "7"="married", "9"=NA_character_),
          ed_1=ifelse(VMP0327<12, "lessthan",
                      ifelse(VMP0327>=16, "ba", "hs"))) %>%
-  select(id, marital_1:marital_3, ed_1,age_1:nukeplant_3)
+  select(id, child_1:marital_3, ed_1,age_1:nukeplant_3)
 
 
 anes90 <- read_dta("~/Dropbox/data/anes/anes9092/anes_mergedfile_1990to1992.dta")
 clean_anes90 <- anes90 %>%
   mutate(id = V900004,
          age_1 = V900548,
+         baby = ifelse(V900030 > 0 & V900030 != 9, 1, 0),
+         kid = ifelse(V900031 > 0 & V900031 != 9, 1, 0),
+         tween = ifelse(V900032 > 0 & V900032 != 9, 1, 0),
+         teen = ifelse(V900033 > 0 & V900033 != 9, 1, 0),
+         child_1 = ifelse(baby + kid + tween + teen > 0, 1, 0),
+         marital_1 = ifelse(V900553 %in% c(1,7), "married",
+                            ifelse(V900553 %in% c(3,4,5), "other",
+                                   "single/nm")),
+         student_1 = ifelse(V900565 %in% c(80, 81), 1, 0),
+         ed_1 = ifelse(V900557 %in% c(98,99), NA, 
+                       ifelse(V900557%in% c(1, 2), "lessthan",
+                              ifelse(V900557 %in% c(3,4,5), "hs", "ba"))),
          thermbush_1 = V900134, thermbush_2 = V912205,
          thermbush_3 = V923305,
          thermquayle_1 = V900137, thermquayle_2 = V912212,
@@ -559,18 +582,21 @@ clean_anes9 <- anes9 %>%
          marital_3 = ifelse(V960606 %in% c(1,6), "married", marital_3),
          marital_3 = ifelse(V960606 %in% c(5), "single/nm", marital_3),
          marital_3 = ifelse(V960606 %in% c(2,3,4), "other", marital_3),
+         #student status
+         student_1 = ifelse(V923914 %in% c(18, 75, 80, 91), 1, 0),
+         #age
          age_1 = V923903,
          age_2 = V941203,
          age_3 = V960605,
          nkids_1 = ifelse(V923079 == 9, 0, V923079) + ifelse(V923080 == 9, 0, V923080) + 
            ifelse(V923081 == 9, 0, V923081) + ifelse(V923081 == 9, 0, V923081),
-         childs_1 = ifelse(nkids_1 > 0, 1, 0),
+         child_1 = ifelse(nkids_1 > 0, 1, 0),
          #any children?
-         childs_2 = ifelse(V941428 %in% c(8,9), NA, V941428),
-         childs_2 = ifelse(V941428 %in% c(1,2), 1, childs_2),
-         childs_2 = ifelse(V941428 %in% c(5), 0, childs_2)) %>%
+         child_2 = ifelse(V941428 %in% c(8,9), NA, V941428),
+         child_2 = ifelse(V941428 %in% c(1,2), 1, child_2),
+         child_2 = ifelse(V941428 %in% c(5), 0, child_2)) %>%
   select(weight,
-         govins_1:childs_2, 
+         govins_1:child_2, 
          #children
          V923079:V923082,
          V960048:V960051,
@@ -584,6 +610,7 @@ clean_anes9 <- anes9 %>%
 anes2k <- read_dta("~/Dropbox/data/anes/anes0004/anes_mergedfile_2000to2004.dta")
 
 clean_anes2k <- anes2k %>%
+  zap_labels() %>%
   mutate(id=ID,
          stayhome_1=M000514,stayhome_2=M023033,stayhome_3=M045143,
          dontcare_1=M001527,dontcare_2=M025172,dontcare_3=M045147,
@@ -635,9 +662,19 @@ clean_anes2k <- anes2k %>%
          age_1=M000908,age_2=M023126X,age_3=M045193,
          marital_1=M000909,marital_2=M023127A,
          marital_3=M045176,
+         marital_1 = recode(marital_1, "1"="married", "2"="other",
+                            "3"="other", "4"="other", "5"="single/nm",
+                            "6"="married", "8"=NA_character_, 
+                            "9"=NA_character_),
+         student_1 = ifelse(M000919 %in% c(18, 75, 80, 81), 1, 0),
          ed_1=M000913,
-         ed_2=M023131) %>%
-  select(id:ed_2)
+         ed_1 = recode(ed_1, "1"="lessthan", "2"="lessthan",
+                       "3"="hs", "4"="hs", "5"="hs",
+                       "6"="ba", "7"="ba", "8"=NA_character_,
+                       "9"=NA_character_),
+         ed_2=M023131,
+         child_1 = ifelse(M001023 %in% c(1,3), 1, 0)) %>%
+  select(id:child_1)
 
 
 ## GSS Panels
@@ -683,6 +720,7 @@ clean_g6 <- g6 %>%
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
          degree_1, degree_2, degree_3,
+         wrkstat_1,
          natspac_1, natspac_2, natspac_3, natenvir_1, natenvir_2,
          natenvir_3, natheal_1, natheal_2, natheal_3, natcity_1, 
          natcity_2, natcity_3, natcrime_1, natcrime_2, natcrime_3,
@@ -717,9 +755,10 @@ clean_g6 <- g6 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         childs_1 = ifelse(childs_1 > 0, 1, 0),
-         childs_2 = ifelse(childs_2 > 0, 1, 0),
-         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         child_1 = ifelse(childs_1 > 0, 1, 0),
+         child_2 = ifelse(childs_2 > 0, 1, 0),
+         child_3 = ifelse(childs_3 > 0, 1, 0),
+         student_1 = ifelse(wrkstat_1 %in% c(6), 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -769,6 +808,7 @@ clean_g8 <- g8 %>%
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
          degree_1, degree_2, degree_3,
+         wrkstat_1,
          natspac_1, natspac_2, natspac_3, natenvir_1, natenvir_2,
          natenvir_3, natheal_1, natheal_2, natheal_3, natcity_1, 
          natcity_2, natcity_3, natcrime_1, natcrime_2, natcrime_3,
@@ -803,9 +843,10 @@ clean_g8 <- g8 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         childs_1 = ifelse(childs_1 > 0, 1, 0),
-         childs_2 = ifelse(childs_2 > 0, 1, 0),
-         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         child_1 = ifelse(childs_1 > 0, 1, 0),
+         child_2 = ifelse(childs_2 > 0, 1, 0),
+         child_3 = ifelse(childs_3 > 0, 1, 0),
+         student_1 = ifelse(wrkstat_1 %in% c(6), 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -854,6 +895,7 @@ clean_g10 <- g10 %>%
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
          degree_1, degree_2, degree_3,
+         wrkstat_1,
          natspac_1, natspac_2, natspac_3, natenvir_1, natenvir_2,
          natenvir_3, natheal_1, natheal_2, natheal_3, natcity_1, 
          natcity_2, natcity_3, natcrime_1, natcrime_2, natcrime_3,
@@ -888,9 +930,10 @@ clean_g10 <- g10 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         childs_1 = ifelse(childs_1 > 0, 1, 0),
-         childs_2 = ifelse(childs_2 > 0, 1, 0),
-         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         child_1 = ifelse(childs_1 > 0, 1, 0),
+         child_2 = ifelse(childs_2 > 0, 1, 0),
+         child_3 = ifelse(childs_3 > 0, 1, 0),
+         student_1 = ifelse(wrkstat_1 %in% c(6), 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -1168,7 +1211,8 @@ canes9 <- clean_anes9 %>%
   pivot_longer(govins_1:wastetax_3) %>%
   separate(name, into = c("var", "wave")) %>%
   mutate(wave = paste0("y", wave)) %>%
-  spread(wave, value) 
+  spread(wave, value) %>%
+  select(-c(nkids_1, child_2))
 
 canes0 <- clean_anes2k %>%
   zap_labels() %>%
@@ -1239,16 +1283,7 @@ canes0 <- clean_anes2k %>%
                   govcrooked_1,govcrooked_2,govcrooked_3,
                   electattn_1,electattn_2,electattn_3),
                 ~recode(.x, "0"=NA_real_, "1"=1, "3"=2,
-                        "5"=3, "8"=NA_real_, "9"=NA_real_)),
-         across(c(marital_1, marital_2, marital_3),
-                ~recode(.x, "1"="married", "0"=NA_character_, "2"="other",
-                        "3"="other", "4"="other", "5"="single/nm",
-                        "6"="married", "8"=NA_character_, "9"=NA_character_)),
-         ed_1 = ifelse(ed_1 > 7 | ed_1 < 1, NA, ifelse(ed_1 < 3, "less than", 
-                                                       ifelse(ed_1 >= 6, "ba", "high school"))),
-         ed_2 = ifelse(ed_2 > 7 | ed_2 < 1, NA, ifelse(ed_2 < 3, "less than", 
-                                                       ifelse(ed_2 >= 6, "ba", "high school")))
-  ) %>%
+                        "5"=3, "8"=NA_real_, "9"=NA_real_))) %>%
   pivot_longer(stayhome_1:electattn_3) %>%
   select(-c(age_2, age_3, marital_2, marital_3, ed_2)) %>%
   separate(name, into = c("var", "wave")) %>%
@@ -1256,12 +1291,11 @@ canes0 <- clean_anes2k %>%
   spread(wave, value) 
 
 
-
-
-
 cg6 <- clean_g6 %>%
   mutate(id = 1:nrow(clean_g6)) %>%
-  select(-c(ed_2, ed_3, age_2, age_3, marital_2, marital_3)) %>%
+  select(-c(ed_2, ed_3, age_2, age_3, marital_2, marital_3,
+            childs_2, childs_3, degree_1, degree_2, degree_3, wrkstat_1,
+            child_1, child_2)) %>%
   zap_labels() %>%
   mutate(ed_1 = factor(ed_1),
          ed_1 = relevel(ed_1, ref = "hs"),
@@ -1278,7 +1312,9 @@ cg6 <- clean_g6 %>%
 
 cg8 <- clean_g8 %>%
   mutate(id = 1:nrow(clean_g8)) %>%
-  select(-c(ed_2, ed_3, age_2, age_3, marital_2, marital_3)) %>%
+  select(-c(ed_2, ed_3, age_2, age_3, marital_2, marital_3,
+            childs_2, childs_3, degree_1, degree_2, degree_3, wrkstat_1,
+            child_1, child_2)) %>%
   zap_labels() %>%
   mutate(ed_1 = factor(ed_1),
          ed_1 = relevel(ed_1, ref = "hs"),
@@ -1297,7 +1333,9 @@ cg8 <- clean_g8 %>%
 
 cg10 <- clean_g10 %>%
   mutate(id = 1:nrow(clean_g10)) %>%
-  select(-c(ed_2, ed_3, age_2, age_3, marital_2, marital_3)) %>%
+  select(-c(ed_2, ed_3, age_2, age_3, marital_2, marital_3,
+            childs_2, childs_3, degree_1, degree_2, degree_3, wrkstat_1,
+            child_1, child_2)) %>%
   zap_labels() %>%
   mutate(ed_1 = factor(ed_1),
          ed_1 = relevel(ed_1, ref = "hs"),
