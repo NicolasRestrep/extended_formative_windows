@@ -1492,7 +1492,8 @@ gss20_long <- gss20 %>%
 
 anes20_long <- anes20 %>%
   mutate(id = 1:nrow(anes20)) %>%
-  select(id, start, w2start, w3startdt,
+  select(id, profile_age,
+         start, w2start, w3startdt,
          pid7x, w2pid7x, w3pid7x,
          lcself, w2lcself, w3lcself,
          hp_you, w2hp_you,
@@ -1500,6 +1501,10 @@ anes20_long <- anes20 %>%
          ftrep, w2ftrep, w3ftrep,
          w2ftgay, w3ftgay, 
          w2ftpolice, w3ftpolice) %>%
+  mutate(age_1 = profile_age,
+         age_2 = profile_age, 
+         age_3 = profile_age + 2,
+         across(age_1:age_3, ~as.character(.x))) %>%
   mutate(date_1 = paste(substr(start, 1, 4), substr(start, 5, 6),substr(start, 7, 8),
                         sep = "-"),
          date_2 = paste(substr(w2start, 1, 4), substr(w2start, 5, 6),substr(w2start, 7, 8),
@@ -1533,12 +1538,12 @@ anes20_long <- anes20 %>%
          fthomo_3 = as.character(w3ftgay),
          ftcops_2 = as.character(w2ftpolice),
          ftcops_3 = as.character(w3ftpolice)) %>%
-  select(id, date_1:ftcops_3) %>%
-  pivot_longer(date_1:ftcops_3) %>%
+  select(id, age_1:age_3, date_1:ftcops_3) %>%
+  pivot_longer(age_1:ftcops_3) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(ftcops:polviews),
+         across(c(age, ftcops:polviews),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          across(c(polviews, govins),
