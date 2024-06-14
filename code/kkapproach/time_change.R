@@ -17,6 +17,7 @@ gss8 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel08.dta")
 gss10 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel10.dta")
 gss20 <- read_dta("~/Dropbox/data/gss2020panel/gss2020panel.dta")
 
+anes16 <- read_sav("~/Dropbox/data/anes/anes1620.sav")
 anes20 <- read_dta("~/Dropbox/data/anes/anes2022/anes2022")
 
 
@@ -130,12 +131,12 @@ anes5_long <- anes5 %>%
          age = as.numeric(age)) %>%
   pivot_longer(partyid) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         d3_value = date - lag(date, 3),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2)),
-         a3_value = abs(value - lag(value,3))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         d3_value = lead(date,3) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2)),
+         a3_value = abs(value - lead(value,3))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value, d3_value, 
              a1_value, a2_value, a3_value),
@@ -337,10 +338,10 @@ anes7_long <- anes7 %>%
   pivot_longer(c(abortion, crooked, eqrole:wastetax)) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value, 
              a1_value, a2_value),
@@ -440,12 +441,12 @@ anes8_long <- anes8 %>%
   pivot_longer(c(abortion,defscale:spendserv)) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         d3_value = date - lag(date, 3),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2)),
-         a3_value = abs(value - lag(value,3))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         d3_value = lead(date,3) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2)),
+         a3_value = abs(value - lead(value,3))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value, d3_value,
              a1_value, a2_value, a3_value),
@@ -638,10 +639,10 @@ anes90_long <- anes90 %>%
   pivot_longer(c(abortion, crooked, defscale:wastetax)) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value,
              a1_value, a2_value),
@@ -954,18 +955,18 @@ anes9_long <- anes9 %>%
   pivot_longer(c(abortion, crooked, defscale:wastetax)) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         d3_value = date - lag(date, 3),
-         d4_value = date - lag(date, 4),
-         d5_value = date - lag(date, 5),
-         d6_value = date - lag(date, 6),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2)),
-         a3_value = abs(value - lag(value,3)),
-         a4_value = abs(value - lag(value,4)),
-         a5_value = abs(value - lag(value,5)),
-         a6_value = abs(value - lag(value,6))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         d3_value = lead(date,3) - date,
+         d4_value = lead(date,4) - date,
+         d5_value = lead(date,5) - date,
+         d6_value = lead(date,6) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2)),
+         a3_value = abs(value - lead(value,3)),
+         a4_value = abs(value - lead(value,4)),
+         a5_value = abs(value - lead(value,5)),
+         a6_value = abs(value - lead(value,6))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value, d3_value, d4_value, d5_value, d6_value,
              a1_value, a2_value, a3_value, a4_value, a5_value, a6_value),
@@ -1210,13 +1211,15 @@ anes0_long <- anes0 %>%
   pivot_longer(c(abortion,crooked, fair:wastetax)) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         d3_value = lead(date,3) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2)),
+         a3_value = abs(value - lead(value,3))) %>%
   pivot_longer(
-    cols = c(d1_value, d2_value,
-             a1_value, a2_value),
+    cols = c(d1_value, d2_value, d3_value,
+             a1_value, a2_value, a3_value),
     names_to = c(".value", "set"),
     names_pattern = "(.)(.)_value") %>%
   na.omit() %>%
@@ -1275,10 +1278,10 @@ gss6_long <- gss6 %>%
   pivot_longer(fair:trust) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value,
              a1_value, a2_value),
@@ -1341,10 +1344,10 @@ gss8_long <- gss8 %>%
   pivot_longer(fair:trust) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value,
              a1_value, a2_value),
@@ -1405,10 +1408,10 @@ gss10_long <- gss10 %>%
   pivot_longer(fair:trust) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value,
              a1_value, a2_value),
@@ -1477,10 +1480,187 @@ gss20_long <- gss20 %>%
   pivot_longer(fair:trust) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
+  pivot_longer(
+    cols = c(d1_value, d2_value,
+             a1_value, a2_value),
+    names_to = c(".value", "set"),
+    names_pattern = "(.)(.)_value") %>%
+  na.omit() %>%
+  mutate(d = d/365.25)%>%
+  ungroup()
+
+convert_to_date <- function(date_str) {
+  year <- substr(date_str, 1, 4)
+  month <- substr(date_str, 5, 6)
+  day = substr(date_str, 7, 8)
+  formatted <- as.character(paste(year,month,day,sep="-"))
+  return(formatted)
+}
+anes16_long <- anes16 %>%
+  mutate(id = 1:nrow(anes16)) %>%
+  zap_labels() %>%
+  select(id, V161267, V201507x,
+         V164002, V165002, V203053, V203078,
+         V161158x, V201231x,
+         V161126, V162171, V201200,
+         V161153, V201347,
+         V161217, V201235,
+         V161216, V201234,
+         V161189, V201255,
+         V161184, V201252,
+         V161198, V201258,
+         V161232, V201336,
+         V161178, V201246,
+         V161181, V201249,
+         V161212, V201321,
+         V161205, V201300,
+         V161206, V201303,
+         V161209, V201312,
+         V161208, V201309,
+         V161211, V201318,
+         V161095, V201156,
+         V161096, V201157,
+         V162312, V202480,
+         V162314, V202482,
+         V162101, V202164,
+         V162097, V202161,
+         V162100, V202163,
+         V162098, V202162,
+         V162311, V202479,
+         V162103, V202166,
+         V162108, V202170,
+         V162110, V202171) %>%
+  mutate(age_1 = ifelse(V161267 < 0 & V201507x > 0, V201507x, ifelse(V161267 < 0, NA, V161267)),
+         age_2 = age_1,
+         age_3 = ifelse(!is.na(age_1) & V201507x < 0, age_1 + 4, V201507x),
+         age_4 = age_3,
+         across(age_1:age_4, ~as.character(.x))) %>%
+  mutate(date_1 = convert_to_date(V164002),
+         date_2 = convert_to_date(V165002),
+         date_3 = convert_to_date(V203053),
+         date_4 = convert_to_date(V203078),
+         across(c(V161095, V201156,
+                  V161096, V201157,
+                  V162312, V202480,
+                  V162314, V202482,
+                  V162101, V202164,
+                  V162097, V202161,
+                  V162100, V202163,
+                  V162098, V202162,
+                  V162311, V202479,
+                  V162103, V202166,
+                  V162108, V202170,
+                  V162110, V202171),
+                ~ifelse(.x < 0 | .x > 100, NA, .x)),
+         across(c(V161158x, V201231x,
+                  V161126, V162171, V201200,
+                  V161153, V201347,
+                  V161217, V201235,
+                  V161216, V201234, 
+                  V161189, V201255,
+                  V161184, V201252,
+                  V161198, V201258,
+                  V161178, V201246,
+                  V161181, V201249),
+                ~ifelse(.x < 0 | .x > 7, NA, .x)),
+         across(c(V161232, V201336),
+                ~ifelse(.x < 0 | .x > 4, NA, .x)),
+         across(c(V161212, V201321,
+                  V161205, V201300,
+                  V161206, V201303,
+                  V161209, V201312,
+                  V161208, V201309,
+                  V161211, V201318),
+                ~ifelse(.x == 3, 1.5, ifelse(.x < 0, NA, .x))),
+         partyid_1 = as.character(V161158x),
+         partyid_3 = as.character(V201231x),
+         polviews_1 = as.character(V161126),
+         polviews_2 = as.character(V162171),
+         polviews_3 = as.character(V201200),
+         stayhome_1 = as.character(V161153), 
+         stayhome_3 = as.character(V201347),
+         wastetax_1 = as.character(V161217), 
+         wastetax_3 = as.character(V201235),
+         runfew_1 = as.character(V161216), 
+         runfew_3 = as.character(V201234),
+         jobguar_1 = as.character(V161189), 
+         jobguar_3 = as.character(V201255),
+         govins_1 = as.character(V161184), 
+         govins_3 = as.character(V201252),
+         helpblk_1 = as.character(V161198), 
+         helpblk_3 = as.character(V201258),
+         abortion_1 = as.character(V161232), 
+         abortion_3 = as.character(V201336),
+         spendserv_1 = as.character(V161178), 
+         spendserv_3 = as.character(V201246),
+         defscale_1 = as.character(V161181), 
+         defscale_3 = as.character(V201249),
+         natenvir_1 = as.character(V161212), 
+         natenvir_3 = as.character(V201321),
+         natsoc_1 = as.character(V161205), 
+         natsoc_3 = as.character(V201300),
+         natschools_1 = as.character(V161206), 
+         natschools_3 = as.character(V201303),
+         natfare_1 = as.character(V161209), 
+         natfare_3 = as.character(V201312),
+         natcrime_1 = as.character(V161208),
+         natcrime_3 = as.character(V201309),
+         natpoor_1 = as.character(V161211), 
+         natpoor_3 = as.character(V201318),
+         ftdems_1 = as.character(V161095), 
+         ftdems_3 = as.character(V201156),
+         ftreps_1 = as.character(V161096), 
+         ftreps_3 = as.character(V201157),
+         ftblacks_2 = as.character(V162312), 
+         ftblacks_4 = as.character(V202480),
+         ftwhites_2 = as.character(V162314), 
+         ftwhites_4 = as.character(V202482),
+         ftcons_2 = as.character(V162101), 
+         ftcons_4 = as.character(V202164),
+         ftlibs_2 = as.character(V162097), 
+         ftlibs_4 = as.character(V202161),
+         ftbiz_2 = as.character(V162100), 
+         ftbiz_4 = as.character(V202163),
+         ftlabor_2 = as.character(V162098), 
+         ftlabor_4 = as.character(V202162),
+         fthisp_2 = as.character(V162311), 
+         fthisp_4 = as.character(V202479),
+         fthomo_2 = as.character(V162103), 
+         fthomo_4 = as.character(V202166),
+         ftjews_2 = as.character(V162108), 
+         ftjews_4 = as.character(V202170),
+         ftcops_2 = as.character(V162110), 
+         ftcops_4 = as.character(V202171)) %>% 
+  select(id, age_1:age_4, date_1:ftlabor_4) %>%
+  pivot_longer(age_1:ftlabor_4) %>%
+  separate(name, into = c("measure", "wave")) %>%
+  spread(measure, value) %>%
+  mutate(date = as.Date(date),
+         across(c(abortion, age, defscale:wastetax),
+                ~as.numeric(.x)),
+         across(c(partyid, polviews, jobguar,
+                  govins, helpblk, spendserv,
+                  defscale),
+                ~(.x-1)/6*100),
+         across(c(stayhome, runfew),
+                ~(.x-1)*100),
+         across(c(wastetax,
+                  natenvir, natsoc, natschools, natfare,
+                  natcrime, natpoor),
+                ~(.x-1)/2*100),
+         across(c(abortion),
+                ~(.x-1)/3*100)) %>%
+  pivot_longer(c(abortion, defscale:wastetax)) %>%
+  na.omit() %>% arrange(id, date) %>%
+  group_by(id, name) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value,
              a1_value, a2_value),
@@ -1551,10 +1731,10 @@ anes20_long <- anes20 %>%
   pivot_longer(ftcops:polviews) %>%
   na.omit() %>% arrange(id, date) %>%
   group_by(id, name) %>%
-  mutate(d1_value = date - lag(date),
-         d2_value = date - lag(date, 2),
-         a1_value = abs(value - lag(value)),
-         a2_value = abs(value - lag(value,2))) %>%
+  mutate(d1_value = lead(date) - date,
+         d2_value = lead(date,2) - date,
+         a1_value = abs(value - lead(value)),
+         a2_value = abs(value - lead(value,2))) %>%
   pivot_longer(
     cols = c(d1_value, d2_value,
              a1_value, a2_value),
@@ -1577,6 +1757,7 @@ long_data <- bind_rows(anes5_long %>% mutate(df = "1956-60 ANES"),
           gss8_long %>% mutate(df = "2008-12 GSS"),
           gss10_long %>% mutate(df = "2010-14 GSS"),
           gss20_long %>% mutate(df = "2016-20 GSS"),
+          anes16_long %>% mutate(df = "2016-20 ANES"),
           anes20_long %>% mutate(df = "2020-22 ANES")) %>%
   ungroup() %>%
   mutate(dec_diff = (as.numeric(difftime(date, min(date), units = "days")))/3652.5,
@@ -1609,13 +1790,13 @@ long_data %>%
 
 long_data %>%
   group_by(name, df, set) %>%
-  summarise(a = mean(a)) %>% ungroup() %>% View()
+  summarise(a = mean(a)) %>% ungroup() %>% 
   mutate(year = recode(df, "1956-60 ANES"=1956, "1972-76 ANES"=1972,
                        "1980 ANES"=1980, "1990-92 ANES"=1990, 
                        "1992-97 ANES"=1992, "2000-04 ANES"=2000,
                        "2006-10 GSS"=2006, "2008-12 GSS"=2008, 
                        "2010-14 GSS"=2010, "2016-20 GSS"=2016,
-                       "2020-22 ANES"=2020)) %>%
+                       "2016-20 ANES"=2016, "2020-22 ANES"=2020)) %>%
   ggplot(aes(x = year, y = a)) + 
   geom_point() +
   facet_wrap(~name) + 
