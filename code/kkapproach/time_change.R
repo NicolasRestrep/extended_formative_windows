@@ -23,11 +23,17 @@ anes20 <- read_dta("~/Dropbox/data/anes/anes2022/anes2022")
 
 anes5_long <- anes5 %>%
   mutate(id = 1:nrow(anes5)) %>%
+  zap_labels() %>%
   select(id, V560193,	V580309,	V600578,	V600837,
          V560088, V580360, V600657, V600835,
-         V560295, V580472, V600688) %>%
+         V560295, V580472, V600688,
+         V560035, V580323, V600622) %>%
   mutate(across(c(V560088, V580360, V600657, V600835), ~ifelse(.x %in% c(7,8,9), NA, .x)),
          across(c(V560295, V580472, V600688), ~ifelse(.x > 97, NA, .x)),
+         across(c(V560035, V580323, V600622),
+                ~recode(.x, 
+                        "1"=1, "2"=1, "3"=1.5, "4"=2, "5"=2, "7"=NA_real_,
+                        "0"=NA_real_, "8"=NA_real_, "9"=NA_real_)),
          age_1 = V560295,
          age_2 = V580472,
          age_3 = V600688,
@@ -120,16 +126,20 @@ anes5_long <- anes5 %>%
          partyid_1 = as.character(V560088), 
          partyid_2 = as.character(V580360), 
          partyid_3 = as.character(V600657), 
-         partyid_4 = as.character(V600835)) %>%
-  select(id, age_1:date_4, partyid_1:partyid_4) %>%
-  pivot_longer(age_1:partyid_4) %>%
+         partyid_4 = as.character(V600835),
+         stayhome_1 = as.character(V560035), 
+         stayhome_2 = as.character(V580323), 
+         stayhome_3 = as.character(V600622)) %>%
+  select(id, age_1:date_4, partyid_1:stayhome_3) %>% 
+  pivot_longer(age_1:stayhome_3) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         partyid = as.numeric(partyid),
+         across(c(age, partyid:stayhome),
+                ~as.numeric(.x)),
          partyid = (partyid/6)*100,
-         age = as.numeric(age)) %>%
-  pivot_longer(partyid) %>%
+         stayhome = (stayhome-1)*100) %>%
+  pivot_longer(partyid:stayhome) %>%
   group_by(id, name) %>%
   mutate(d1_value = lead(date) - date,
          d2_value = lead(date,2) - date,
@@ -1044,7 +1054,8 @@ anes0_long <- anes0 %>%
                 ~ifelse(.x == 4, 3, .x)),
          across(c(M000682, M000678, M000677, M000681, 
                   M000683, M000685, M000676, M000684), 
-                ~recode(.x, "1"=1, "5"=2, "3"=3, "7"=NA_real_)),
+                ~recode(.x, "1"=1, "5"=2, "3"=3, "7"=3,
+                        "8"=NA_real_, "9"=NA_real_, "0"=NA_real_)),
          across(c(M023052, M025113, M045068,
                   M023054, M025116, M045076,
                   M023045, M025106, M045069,
@@ -1053,7 +1064,8 @@ anes0_long <- anes0 %>%
                   M023049, M025109, M045073, 
                   M023046, M025107, M045070, 
                   M023048, M025109, M045072),
-                ~recode(.x, "1"=1, "2"=3, "3"=2)),
+                ~recode(.x, "1"=1, "2"=3, "3"=2,
+                        "4"=3)),
          across(c(M000523, M023038X, M045058x), 
                 ~ifelse(.x %in% c(7,8,9), NA, .x)),
          across(c(M000446, M001368, M023022), 
@@ -1646,11 +1658,11 @@ anes16_long <- anes16 %>%
                   govins, helpblk, spendserv,
                   defscale),
                 ~(.x-1)/6*100),
-         across(c(stayhome, runfew),
-                ~(.x-1)*100),
-         across(c(wastetax,
+         across(c(stayhome, runfew,
                   natenvir, natsoc, natschools, natfare,
                   natcrime, natpoor),
+                ~(.x-1)*100),
+         across(c(wastetax),
                 ~(.x-1)/2*100),
          across(c(abortion),
                 ~(.x-1)/3*100)) %>%
@@ -1761,7 +1773,10 @@ long_data <- bind_rows(anes5_long %>% mutate(df = "1956-60 ANES"),
           anes20_long %>% mutate(df = "2020-22 ANES")) %>%
   ungroup() %>%
   mutate(dec_diff = (as.numeric(difftime(date, min(date), units = "days")))/3652.5,
-         d = as.numeric(d))
+         d = as.numeric(d)) %>%
+  mutate(age_group = ifelse(age < 26, "18-25", "34-65"),
+         age_group = ifelse(age > 25 & age < 34, "26-33", age_group),
+         age_group = ifelse(age > 65, "65+", age_group))
 
 long_data %>%
   group_by(name, df) %>% 
@@ -1789,24 +1804,28 @@ long_data %>%
   scale_color_viridis_d()
 
 long_data %>%
-  group_by(name, df, set) %>%
-  summarise(a = mean(a)) %>% ungroup() %>% 
+  group_by(name, df, set, age_group) %>%
+  summarise(a = mean(a), n = n()) %>% ungroup() %>% 
   mutate(year = recode(df, "1956-60 ANES"=1956, "1972-76 ANES"=1972,
                        "1980 ANES"=1980, "1990-92 ANES"=1990, 
                        "1992-97 ANES"=1992, "2000-04 ANES"=2000,
                        "2006-10 GSS"=2006, "2008-12 GSS"=2008, 
                        "2010-14 GSS"=2010, "2016-20 GSS"=2016,
                        "2016-20 ANES"=2016, "2020-22 ANES"=2020)) %>%
-  ggplot(aes(x = year, y = a)) + 
-  geom_point() +
+  ggplot(aes(x = year, y = a, color = age_group)) + 
+  geom_point(shape = 21, aes(fill = age_group), color = "black") + 
   facet_wrap(~name) + 
   geom_smooth(method = "lm", se = FALSE) + 
   theme_bw()
 
-m1 <- lm(a ~ d + dec_diff + I(d*dec_diff) + name, 
+
+long_data %>% arrange(desc(a))
+
+m1 <- lm(a ~ d + dec_diff + I(d*dec_diff) + name + age_group + age_group*dec_diff, 
          data = long_data)
 
-m2 <- lmer(a ~ d + dec_diff + I(d*dec_diff) + (1 + d + dec_diff | name),
+m2 <- lmer(a ~ d + dec_diff + age_group + age_group*dec_diff +
+             (1 + d + dec_diff + age_group + age_group*dec_diff | name),
      data = long_data)
 
 test <- tidy(m2) %>%
