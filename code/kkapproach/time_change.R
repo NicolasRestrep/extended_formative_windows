@@ -23,11 +23,17 @@ anes20 <- read_dta("~/Dropbox/data/anes/anes2022/anes2022")
 
 anes5_long <- anes5 %>%
   mutate(id = 1:nrow(anes5)) %>%
+  zap_labels() %>%
   select(id, V560193,	V580309,	V600578,	V600837,
          V560088, V580360, V600657, V600835,
-         V560295, V580472, V600688) %>%
+         V560295, V580472, V600688,
+         V560035, V580323, V600622) %>%
   mutate(across(c(V560088, V580360, V600657, V600835), ~ifelse(.x %in% c(7,8,9), NA, .x)),
          across(c(V560295, V580472, V600688), ~ifelse(.x > 97, NA, .x)),
+         across(c(V560035, V580323, V600622),
+                ~recode(.x, 
+                        "1"=1, "2"=1, "3"=1.5, "4"=2, "5"=2, "7"=NA_real_,
+                        "0"=NA_real_, "8"=NA_real_, "9"=NA_real_)),
          age_1 = V560295,
          age_2 = V580472,
          age_3 = V600688,
@@ -120,16 +126,20 @@ anes5_long <- anes5 %>%
          partyid_1 = as.character(V560088), 
          partyid_2 = as.character(V580360), 
          partyid_3 = as.character(V600657), 
-         partyid_4 = as.character(V600835)) %>%
-  select(id, age_1:date_4, partyid_1:partyid_4) %>%
-  pivot_longer(age_1:partyid_4) %>%
+         partyid_4 = as.character(V600835),
+         stayhome_1 = as.character(V560035), 
+         stayhome_2 = as.character(V580323), 
+         stayhome_3 = as.character(V600622)) %>%
+  select(id, age_1:date_4, partyid_1:stayhome_3) %>% 
+  pivot_longer(age_1:stayhome_3) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         partyid = as.numeric(partyid),
+         across(c(age, partyid:stayhome),
+                ~as.numeric(.x)),
          partyid = (partyid/6)*100,
-         age = as.numeric(age)) %>%
-  pivot_longer(partyid) %>%
+         stayhome = (stayhome-1)*100) %>%
+  pivot_longer(partyid:stayhome) %>%
   group_by(id, name) %>%
   mutate(d1_value = lead(date) - date,
          d2_value = lead(date,2) - date,
