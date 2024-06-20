@@ -7,7 +7,60 @@
 
 #Load in long data frame from clean_data.R file
 
-load("./clean_data/long_data.Rdata")
+load("./clean_data/long_difference.Rdata")
+
+# Summarize absolute difference at the wave-pair level for each age group
+# for each question. 
+summaries <- long_difference %>%
+  mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
+  group_by(wave_pair, name, age_group) %>%
+  summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
+            date = weighted.mean(date)) %>%
+  #Filtering out bad questions
+  filter(name != "natpoor", 
+         name != "nathome") %>% ungroup() %>%
+  mutate(dec_diff = (as.numeric(difftime(date, min(date), units = "days")))/3652.5)
+
+# Multilevel model
+m1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
+             (1 + d + dec_diff + age_group + dec_diff*age_group|name),
+           data = summaries)
+
+# Data to predict
+new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
+                        dec_diff = seq(0, 6.4, by = .1),
+                        d = 0, name = unique(summaries$name))
+
+#Predict data
+new.data$yhat <- predict(m1, newdata = new.data)
+
+#Graph predictions
+new.data %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  mutate(year = dec_diff*3652.5 + as.Date("1956-11-11")) %>%
+  ggplot(aes(x = year, y = yhat, color = age_group)) + 
+  geom_line(alpha = .3, aes(group = group)) + 
+  geom_smooth(linewidth = 2) + 
+  theme_bw() + 
+  facet_wrap(~age_group) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group",
+       title = "Predicted wave-to-wave change by age group",
+       subtitle = "Individual question trajectories and overall trajectory") + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  theme(legend.position = "none")
+
+#Look at questions instead
+new.data %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  ggplot(aes(x = dec_diff, y = yhat, color = age_group)) + 
+  geom_point(data = summaries, aes(y = a)) + 
+  geom_line(alpha = .7, aes(group = group)) + 
+  theme_bw() + 
+  facet_wrap(~name) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group")
+
 
 
 m1 <- lm(a ~ d + df + dec_diff + I(d*dec_diff), data = long_data)
