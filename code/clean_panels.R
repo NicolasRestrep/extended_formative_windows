@@ -1,47 +1,73 @@
-
 #########################################
 #### Cleaning for Stability Analysis ####
 #########################################
 
-#Packages
+# Packages ====
 library(haven)
 library(tidyverse)
 library(broom)
 library(broom.mixed)
 library(lme4)
 
-#Load in ANES panels
-anes5 <- read_dta("~/Dropbox/data/anes/anes5660/anes_mergedfile_1956to1960.dta") 
-anes7 <- read_dta("~/Dropbox/data/anes/anes7276/anes_mergedfile_1972to1976.dta")
-anes8 <- read_dta("~/Dropbox/data/anes/anes1980/anes1980.dta")
-anes90 <- read_dta("~/Dropbox/data/anes/anes9092/anes_mergedfile_1990to1992.dta")
-anes9 <- read_dta("~/Dropbox/data/anes/anes9297/anes_mergedfile_1992to1997.dta") 
-anes0 <- read_dta("~/Dropbox/data/anes/anes0004/anes_mergedfile_2000to2004.dta")
-anes16 <- read_sav("~/Dropbox/data/anes/anes1620.sav")
-anes20 <- read_dta("~/Dropbox/data/anes/anes2022/anes2022")
+# Help Functions ====
+convert_to_date <- function(date_str) {
+  year <- substr(date_str, 1, 4)
+  month <- substr(date_str, 5, 6)
+  day = substr(date_str, 7, 8)
+  formatted <- as.character(paste(year,month,day,sep="-"))
+  return(formatted)
+}
 
-#Load in GSS panels
-gss6 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel06.dta")
-gss8 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel08.dta")
-gss10 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel10.dta")
-gss20 <- read_dta("~/Dropbox/data/gss2020panel/gss2020panel.dta")
+# Read in Data ====
+anes5 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1956to1960.dta")
+anes7 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1972to1976.dta")
+anes8 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes1980.dta")
+anes90 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1990to1992.dta")
+anes9 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1992to1997.dta")
+anes0 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_2000to2004.dta")
+anes16 <- read_sav("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_2016to2020.sav")
+anes20 <- read_csv("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_2022.csv")
 
+gss6 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel06.dta")
+gss8 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel08.dta")
+gss10 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel10.dta")
+gss20 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel20.dta")
 
 ### 1956-60 ANES Panel
-#Does not include weights that compensate for sampling
-#design or sample non-response
 anes5_long <- anes5 %>%
   mutate(id = 1:nrow(anes5)) %>%
   zap_labels() %>%
-  select(id, V600569, V560193,	V580309,	V600578,	V600837,
-         V560088, V580360, V600657, V600835,
-         V560295, V580472, V600688,
-         V560035, V580323, V600622) %>%
+  select(id, V600569, #weight
+    V560193, # Interview date 1
+    V580309, # Interview date 2
+    V600578, # Interview date 3
+    V600837, # Interview date 4
+    
+    V560088, # Party ID 1 
+    V580360, # Party ID 2
+    V600657, # Party ID 3
+    V600835, # Party ID 4 
+    
+    V560295, # Age 1 
+    V580472, # Age 2
+    V600688, # Age 3
+    
+    V560035, V580323, V600622, # stayhome 
+    
+    V560097, # Pay attention campaign 1
+    V580373, # Pay attention campaign 2
+    V600664, # Pay attention campaign 3
+    
+    V560108, # People like me, no say 1
+    V600673 # People like me, no say 3
+         ) %>%
   mutate(weight_4 = as.character(V600569),
          weight_3 = weight_4,
          weight_2 = weight_4,
-         across(c(V560088, V580360, V600657, V600835), ~ifelse(.x %in% c(7,8,9), NA, .x)),
-         across(c(V560295, V580472, V600688), ~ifelse(.x > 97, NA, .x)),
+         across(c(V560088, V580360, V600657, V600835), ~ ifelse(.x %in% c(7, 8, 9), NA, .x)),
+         across(c(V560295, V580472, V600688), ~ ifelse(.x > 97, NA, .x)),
+         across(c(V560097, V580373, V600664), ~ ifelse(.x %in% c(8,9), NA, .x)), 
+         across(c(V560108, V600673), ~ ifelse(.x %in% c(8,9), NA, .x)),
          across(c(V560035, V580323, V600622),
                 ~recode(.x, 
                         "1"=1, "2"=1, "3"=1.5, "4"=2, "5"=2, "7"=NA_real_,
@@ -56,7 +82,6 @@ anes5_long <- anes5 %>%
          age_1 = as.character(age_1), age_2 = as.character(age_2),
          age_3 = as.character(age_3),
          age_4 = age_3) %>%
-  zap_labels() %>%
   mutate(date_1 = recode(V560193, "10"="1956-11-07", "11"="1956-11-08", "12"="1956-11-09", 
                          "13"="1956-11-10", "14"="1956-11-11", "15"="1956-11-12",
                          "16"="1956-11-13", "20"="1956-11-14", "21"="1956-11-15", 
@@ -141,17 +166,24 @@ anes5_long <- anes5 %>%
          partyid_4 = as.character(V600835),
          stayhome_1 = as.character(V560035), 
          stayhome_2 = as.character(V580323), 
-         stayhome_3 = as.character(V600622)) %>%
-  select(id, weight_2, weight_3, weight_4, age_1:date_4, partyid_1:stayhome_3) %>% 
-  pivot_longer(weight_2:stayhome_3) %>%
+         stayhome_3 = as.character(V600622),
+         attentioncpg_1 = as.character(V560097), 
+         attentioncpg_2 = as.character(V580373), 
+         attentioncpg_3 = as.character(V600664), 
+         ppllikeme_1 = as.character(V560108), 
+         ppllikeme_3 = as.character(V600673)) %>%
+  select(id, weight_2, weight_3, weight_4, age_1:date_4, partyid_1:ppllikeme_3) %>% 
+  pivot_longer(weight_2:ppllikeme_3) %>%
   separate(name, into = c("measure", "wave")) %>%
-  spread(measure, value) %>%
+  spread(measure, value) %>% 
   mutate(date = as.Date(date),
-         across(c(weight, age, partyid:stayhome),
+         across(c(weight, age, attentioncpg:stayhome),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
-         stayhome = (stayhome-1)*100) %>%
-  pivot_longer(partyid:stayhome) %>%
+         stayhome = (stayhome-1)*100,
+         across(c(attentioncpg, ppllikeme), 
+                ~(.x-1)/4*100), ) %>%
+  pivot_longer(attentioncpg:stayhome) %>%
   filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%  
   mutate(df = "1956-60 ANES")
 
@@ -196,8 +228,11 @@ anes7_long <- anes7 %>%
          V720093, V720574, V742233, V763166, #crooked
          V720089, V720570, V742229, V763162, #wastetax
          V720090, V720571, V742230, V763163, #trustgov
-         V720091, V720572, V742231, V763164 #runfew
-         ) %>%
+         V720091, V720572, V742231, V763164, #runfew
+         #attention political campaigns (1:very much, 3:somewhat, 5:not much interested, na 8:9), 
+         V720163, V763031, 
+         #people like me have no say (1:agree, 5:disagree, 8:9 NA)
+         V720269,	V720559, V742222, V763815) %>%
   mutate(weight_2 = "1",
          weight_3 = as.character(V742003),
          weight_4 = as.character(V764004),
@@ -274,7 +309,9 @@ anes7_long <- anes7 %>%
                   V720716, V763842,
                   V720714, V742360, V763828,
                   V720725, V742370, V763839),
-                ~ifelse(.x %in% c(98,99), NA, .x))) %>%
+                ~ifelse(.x %in% c(98,99), NA, .x)), 
+         across(c(V720163, V763031), ~ ifelse(.x %in% c(8,9), NA, .x)), 
+         across(c(V720269,	V720559, V742222, V763815), ~ ifelse(.x %in% c(8,9), NA, .x))) %>% 
   mutate(partyid_1 = as.character(V720140), partyid_3 = as.character(V742204),
          partyid_4 = as.character(V763174),
          polviews_1 = as.character(V720652), polviews_3 = as.character(V742305),
@@ -335,107 +372,188 @@ anes7_long <- anes7 %>%
          runfew_1 = as.character(V720091), 
          runfew_2 = as.character(V720572), 
          runfew_3 = as.character(V742231), 
-         runfew_4 = as.character(V763164)) %>%
-  select(c(id, weight_2:weight_5, age_1:age_5, date_1:runfew_4)) %>%
-  pivot_longer(weight_2:runfew_4) %>%
+         runfew_4 = as.character(V763164), 
+         attentioncpg_1 = as.character(V720163), 
+         attentioncpg_2 = as.character(V763031),
+         ppllikeme_1 = as.character(V720269),	
+         ppllikeme_2 = as.character(V720559), 
+         ppllikeme_3 = as.character(V742222), 
+         ppllikeme_4 = as.character(V763815)) %>% 
+  select(c(id, age_1:age_5, date_1:ppllikeme_4)) %>% 
+  pivot_longer(age_1:ppllikeme_4) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
          across(c(weight, abortion:crooked, eqrole:wastetax),
                 ~as.numeric(.x)),
+         attentioncpg = as.numeric(attentioncpg),
+         ppllikeme = as.numeric(ppllikeme),
          partyid = (partyid/6)*100,
          across(c(polviews, jobguar, govins, helpblk,
                   eqrole),
                 ~(.x - 1)/6*100),
          across(c(trust, helpful, fair,
-                  crooked, wastetax, trustgov, runfew),
+                  crooked, wastetax, trustgov, runfew,
+                  attentioncpg, ppllikeme),
                 ~(.x-1)/4*100),
          stayhome = (stayhome - 1)/4*100,
          abortion = (abortion-1)/3*100) %>%
-  pivot_longer(c(abortion, crooked, eqrole:wastetax)) %>%
+  pivot_longer(c(abortion, attentioncpg, crooked, eqrole:wastetax)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "1972-76 ANES")
 
 
-## 1980 Major Panel
-#Does not appear to be weights for this
+# Clean Data 1980 ====
+# Do not appear to be weights for this
 anes8_long <- anes8 %>%
   mutate(id = 1:nrow(anes8)) %>%
-  select(id, 
-         VMP0325, VMP2404, VMP3386, #ages
-         VMP0578, VMP2425, VMP3571, VMP4105,
-         VMP0191, VMP2212, VMP3212, VMP4022,
-         VMP0121, VMP2125, VMP3213,
-         VMP2192, VMP3284,
-         VMP0144, VMP2159, VMP3254,
-         VMP0133, VMP2137, VMP3234,
-         VMP0052, VMP2052, VMP3109,
-         VMP0053, VMP2053, VMP3110) %>% 
-  mutate(across(c(VMP0325, VMP2404, VMP3386),
-                ~ifelse(.x == 0, NA, .x)),
-         age_1 = VMP0325,
-         age_2 = VMP2404, 
-         age_3 = VMP3386,
-         age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2, age_1),
-         age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3, age_1),
-         age_2 = ifelse(is.na(age_2), age_1, age_2),
-         age_3 = ifelse(is.na(age_3), age_1, age_3),
-         age_4 = age_3,
-         across(c(age_1:age_4), ~as.character(.x))) %>% 
-  mutate(date_str = sprintf("%06d", as.integer(VMP0578)),
-         date_1 = paste(paste0("19", substr(date_str, 5, 6)), substr(date_str, 1, 2), 
-                        substr(date_str, 3, 4), sep = "-")) %>%
+  select(
+    id,
+    VMP0325,
+    VMP2404,
+    VMP3386,
+    VMP0578,
+    VMP2425,
+    VMP3571,
+    VMP4105,
+    VMP0191,
+    VMP2212,
+    VMP3212,
+    VMP4022,
+    VMP0121,
+    VMP2125,
+    VMP3213,
+    VMP2192,
+    VMP3284,
+    VMP0144,
+    VMP2159,
+    VMP3254,
+    VMP0133,
+    VMP2137,
+    VMP3234,
+    VMP0052,
+    VMP2052,
+    VMP3109,
+    VMP0053,
+    VMP2053,
+    VMP3110,
+    # attention political campaigns
+    VMP0005,
+    VMP2001,
+    VMP3001,
+    VMP4001
+  ) %>%
+  mutate(
+    across(c(VMP0325, VMP2404, VMP3386), ~ ifelse(.x == 0, NA, .x)),
+    age_1 = VMP0325,
+    age_2 = VMP2404,
+    age_3 = VMP3386,
+    age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2, age_1),
+    age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3, age_1),
+    age_2 = ifelse(is.na(age_2), age_1, age_2),
+    age_3 = ifelse(is.na(age_3), age_1, age_3),
+    age_4 = age_3,
+    across(c(age_1:age_4), ~ as.character(.x))
+  ) %>%
+  mutate(
+    date_str = sprintf("%06d", as.integer(VMP0578)),
+    date_1 = paste(
+      paste0("19", substr(date_str, 5, 6)),
+      substr(date_str, 1, 2),
+      substr(date_str, 3, 4),
+      sep = "-"
+    )
+  ) %>%
   select(-c(date_str)) %>%
-  mutate(date_str = sprintf("%06d", as.integer(VMP2425)),
-         date_2 = paste(paste0("19", substr(date_str, 5, 6)), substr(date_str, 1, 2), 
-                        substr(date_str, 3, 4), sep = "-"),
-         date_2 = ifelse(date_2 == "1999-99-99", NA, date_2)) %>%
+  mutate(
+    date_str = sprintf("%06d", as.integer(VMP2425)),
+    date_2 = paste(
+      paste0("19", substr(date_str, 5, 6)),
+      substr(date_str, 1, 2),
+      substr(date_str, 3, 4),
+      sep = "-"
+    ),
+    date_2 = ifelse(date_2 == "1999-99-99", NA, date_2)
+  ) %>%
   select(-c(date_str)) %>%
-  mutate(date_str = sprintf("%06d", as.integer(VMP3571)),
-         date_3 = paste(paste0("19", substr(date_str, 5, 6)), substr(date_str, 1, 2), 
-                        substr(date_str, 3, 4), sep = "-"),
-         date_3 = ifelse(date_3 %in% c("1900-00-00", "1999-99-99"), NA, date_3)) %>%
+  mutate(
+    date_str = sprintf("%06d", as.integer(VMP3571)),
+    date_3 = paste(
+      paste0("19", substr(date_str, 5, 6)),
+      substr(date_str, 1, 2),
+      substr(date_str, 3, 4),
+      sep = "-"
+    ),
+    date_3 = ifelse(date_3 %in% c("1900-00-00", "1999-99-99"), NA, date_3)
+  ) %>%
   select(-c(date_str)) %>%
-  mutate(date_str = sprintf("%06d", as.integer(VMP4105)),
-         date_4 = paste(paste0("19", substr(date_str, 5, 6)), substr(date_str, 1, 2), 
-                        substr(date_str, 3, 4), sep = "-"),
-         date_4 = ifelse(date_4 %in% c("1900-00-00", "1999-99-99"), NA, date_4)) %>%
+  mutate(
+    date_str = sprintf("%06d", as.integer(VMP4105)),
+    date_4 = paste(
+      paste0("19", substr(date_str, 5, 6)),
+      substr(date_str, 1, 2),
+      substr(date_str, 3, 4),
+      sep = "-"
+    ),
+    date_4 = ifelse(date_4 %in% c("1900-00-00", "1999-99-99"), NA, date_4)
+  ) %>%
   select(-c(date_str)) %>%
-  mutate(across(c(VMP0191, VMP2212, VMP3212, VMP4022),
-                ~ifelse(.x %in% c(7,8,9), NA, .x)),
-         across(c(VMP0121, VMP2125, VMP3213,
-                  VMP0144, VMP2159, VMP3254,
-                  VMP0133, VMP2137, VMP3234), 
-                ~ifelse(.x %in% c(0,8,9), NA, .x)),
-         across(c(VMP2192, VMP3284),
-                ~ifelse(.x %in% c(7,8,9), NA, .x)),
-         across(c(VMP0052, VMP2052, VMP3109,
-                  #republicans
-                  VMP0053, VMP2053, VMP3110),
-                ~ifelse(.x %in% c(998, 999), NA, .x))) %>%
-  mutate(partyid_1 = as.character(VMP0191),
-         partyid_2 = as.character(VMP2212),
-         partyid_3 = as.character(VMP3212),
-         partyid_4 = as.character(VMP4022),
-         polviews_1 = as.character(VMP0121), 
-         polviews_2 = as.character(VMP2125),
-         polviews_3 = as.character(VMP3213),
-         abortion_2 = as.character(VMP2192), 
-         abortion_3 = as.character(VMP3284),
-         spendserv_1 = as.character(VMP0144), 
-         spendserv_2 = as.character(VMP2159), 
-         spendserv_3 = as.character(VMP3254),
-         defscale_1 = as.character(VMP0133), 
-         defscale_2 = as.character(VMP2137), 
-         defscale_3 = as.character(VMP3234),
-         ftdems_1 = as.character(VMP0052), 
-         ftdems_2 = as.character(VMP2052), 
-         ftdems_3 = as.character(VMP3109),
-         ftreps_1 = as.character(VMP0053), 
-         ftreps_2 = as.character(VMP2053), 
-         ftreps_3 = as.character(VMP3110)) %>%
-  select(c(id, age_1:age_4, date_1:ftreps_3)) %>%
-  pivot_longer(age_1:ftreps_3) %>%
+  mutate(
+    across(c(VMP0191, VMP2212, VMP3212, VMP4022), ~ ifelse(.x %in% c(7, 8, 9), NA, .x)),
+    across(
+      c(
+        VMP0121,
+        VMP2125,
+        VMP3213,
+        VMP0144,
+        VMP2159,
+        VMP3254,
+        VMP0133,
+        VMP2137,
+        VMP3234, 
+        VMP0005,
+        VMP2001,
+        VMP3001,
+        VMP4001
+      ),
+      ~ ifelse(.x %in% c(0, 8, 9), NA, .x)
+    ),
+    across(c(VMP2192, VMP3284), ~ ifelse(.x %in% c(7, 8, 9), NA, .x)),
+    across(
+      c(VMP0052, VMP2052, VMP3109, #republicans
+        VMP0053, VMP2053, VMP3110),
+      ~ ifelse(.x %in% c(998, 999), NA, .x)
+    )
+  ) %>%
+  mutate(
+    partyid_1 = as.character(VMP0191),
+    partyid_2 = as.character(VMP2212),
+    partyid_3 = as.character(VMP3212),
+    partyid_4 = as.character(VMP4022),
+    polviews_1 = as.character(VMP0121),
+    polviews_2 = as.character(VMP2125),
+    polviews_3 = as.character(VMP3213),
+    abortion_2 = as.character(VMP2192),
+    abortion_3 = as.character(VMP3284),
+    spendserv_1 = as.character(VMP0144),
+    spendserv_2 = as.character(VMP2159),
+    spendserv_3 = as.character(VMP3254),
+    defscale_1 = as.character(VMP0133),
+    defscale_2 = as.character(VMP2137),
+    defscale_3 = as.character(VMP3234),
+    ftdems_1 = as.character(VMP0052),
+    ftdems_2 = as.character(VMP2052),
+    ftdems_3 = as.character(VMP3109),
+    ftreps_1 = as.character(VMP0053),
+    ftreps_2 = as.character(VMP2053),
+    ftreps_3 = as.character(VMP3110), 
+    attentioncpg_1 = as.character(VMP0005),
+    attentioncpg_2 = as.character(VMP2001),
+    attentioncpg_3 = as.character(VMP3001),
+    attentioncpg_4 = as.character(VMP4001)
+  ) %>%
+  select(c(id, age_1:age_4, date_1:attentioncpg_4)) %>%
+  pivot_longer(age_1:attentioncpg_4) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
@@ -445,12 +563,17 @@ anes8_long <- anes8 %>%
          across(c(polviews, spendserv,
                   defscale),
                 ~(.x-1)/6*100),
-         abortion = (abortion-1)/3*100) %>%
-  pivot_longer(c(abortion,defscale:spendserv)) %>%
+         abortion = (abortion-1)/3*100, 
+         attentioncpg = as.numeric(attentioncpg), 
+         attentioncpg = (attentioncpg-1)/4*100) %>%
+  pivot_longer(c(abortion,attentioncpg, defscale:spendserv)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "1980 ANES")
 
 ## 1990-92 ANES Panel
+
+# Clean Data 1990 ====
+
 anes90_long <- anes90 %>%
   mutate(id = 1:nrow(anes90)) %>%
   select(id,
@@ -486,11 +609,57 @@ anes90_long <- anes90 %>%
          V900507, V926123,
          V900505, V926121,
          V900504, V912487, V926120,
-         V900506, V912488, V926122) %>% 
-  mutate(weight_3 = as.character(V923009),
+         V900506, V912488, V926122, 
+         # Attention political campaigns(1,3)
+         V900062,	V923101, 
+         # People like me Likert (1-4)
+         V900509,	V912489, V926102,
+         # Less gvtment 
+         V900333,	V925729, 
+         # Preferential hiring
+         V900463,	V912558, V925935, 
+         # Death Penalty 
+         V900477,	V925933, 
+         # Immigrants decrease 
+         V912619,	V926235, 
+         # T: asian-americans
+         V912235,	V925339, 
+         # T: Feminists
+         V912240,	V925317, 
+         # T: welfare
+         V900159, V925318, 
+         # T: environmentalists 
+         V912230,	V925329, 
+         # T: illegal immigrants 
+         V912234, V925331, 
+         # Equal Op Success 
+         V900426, V926024, 
+         # Equal rights too far 
+         V900427,	V912705,	V926025, 
+         # Not everyone chance 
+         V900428, V926029, 
+         # Worry less equality
+         V900429,	V926026, 
+         # More chances are not a problem
+         V900430, V926027, 
+         # If people were treated equally
+         V900431,	V912703, V926028, 
+         # Moral relativity 
+         V900501,	V912702, V926115, 
+         # Traditional family ties 
+         V900502, V926117, 
+         # Slavery difficulty
+         V900523, V926129, 
+         # Irish and italians worked 
+         V900521, V926126, 
+         # Matter of hard work
+         V900522, V926128, 
+         # Religion Important 
+         V900511, V923820) %>% 
+   mutate(weight_3 = as.character(V923009),
          weight_4 = weight_3,
          weight_2 = weight_3,
-         across(c(V900552, V923903), 
+          across(c(V900552, V923903), 
                 ~ifelse(.x == 0, NA, .x)),
          age_1 = V900552,
          age_2 = age_1 + 1,
@@ -513,7 +682,8 @@ anes90_long <- anes90 %>%
   select(-year) %>% 
   mutate(across(c(V900504, V912487, V926120),
                 ~ifelse(.x == 7, 5, .x)),
-         across(c(V900320, V912333, V923634), ~ifelse(.x %in% c(7,8,9), NA, .x)),
+         across(c(V900320, V912333, V923634,V900062,V923101, 
+                  V900509, V912489, V926102), ~ifelse(.x %in% c(7,8,9), NA, .x)),
          across(c(V900406, V912450, V923509,
                   V912831, V926139,
                   V900498, V912485, V923604,
@@ -525,7 +695,22 @@ anes90_long <- anes90 %>%
                   V900507, V926123,
                   V900505, V926121,
                   V900504, V912487, V926120,
-                  V900506, V912488, V926122), 
+                  V900506, V912488, V926122, 
+                  V900333, V925729, 
+                  V900463,	V912558, V925935, 
+                  V900477,	V925933, 
+                  V912619,	V926235, 
+                  V900426, V926024, 
+                  V900427,	V912705,	V926025, 
+                  V900428, V926029, 
+                  V900429, V926026, 
+                  V900430, V926027, 
+                  V900431, V912703, V926028, 
+                  V900501,	V912702, V926115, 
+                  V900502, V926117, 
+                  V900523, V926129, 
+                  V900521, V926126, 
+                  V900511, V923820), 
                 ~ifelse(.x %in% c(0,8, 9), NA, .x)),
          across(c(V900479, V923732,
                   V900377, V923815,
@@ -536,15 +721,20 @@ anes90_long <- anes90 %>%
                   V900384, V923730,
                   V900385, V923813), ~ifelse(.x %in% c(0,6,7,8,9), NA, .x)),
          across(c(V900151, V912222, V923317,
-           V900152, V912228, V923318,
-           V900155, V912232, V925323,
-           V912231, V925333,
-           V900156, V912220, V925319,
-           V900161, V912226, V925326,
-           V900157, V925316,
-           V912233, V925327,
-           V900158, V912239, V925324),
-           ~ifelse(.x %in% c(888,997,998,999), NA, .x))) %>%
+                  V900152, V912228, V923318,
+                  V900155, V912232, V925323,
+                  V912231, V925333,
+                  V900156, V912220, V925319,
+                  V900161, V912226, V925326,
+                  V900157, V925316,
+                  V912233, V925327,
+                  V900158, V912239, V925324, 
+                  V912235, V925339, 
+                  V912240, V925317, 
+                  V900159, V925318, 
+                  V912230, V925329, 
+                  V912234, V925331),
+                ~ifelse(.x %in% c(888,997,998,999), NA, .x))) %>%
   mutate(partyid_1 = as.character(V900320),
          partyid_2 = as.character(V912333), 
          partyid_3 = as.character(V923634),
@@ -617,9 +807,60 @@ anes90_long <- anes90 %>%
          trustgov_4 = as.character(V926120),
          runfew_1 = as.character(V900506), 
          runfew_2 = as.character(V912488), 
-         runfew_4 = as.character(V926122)) %>%
-  select(c(id, weight_2, weight_3, weight_4, age_1:age_4, date_1:runfew_4)) %>%
-  pivot_longer(weight_2:runfew_4) %>%
+         runfew_4 = as.character(V926122), 
+         attentioncpg_1 = as.character(V900062),	
+         attentioncpg_3 = as.character(V923101), 
+         ppllikemeL_1 = as.character(V900509),	
+         ppllikemeL_2 = as.character(V912489), 
+         ppllikemeL_4 = as.character(V926102), 
+         lessgvt_1 = as.character(V900333), 
+         lessgvt_4 = as.character(V925729), 
+         prefhiring_1 = as.character(V900463),	
+         prefhiring_2 = as.character(V912558), 
+         prefhiring_4 = as.character(V925935), 
+         cappun_1 = as.character(V900477),	
+         cappun_4 = as.character(V925933), 
+         letin1a_2 = as.character(V912619),	
+         letin1a_4 = as.character(V926235),
+         ftasianamericans_2 = as.character(V912235),	
+         ftasianamericans_4 = as.character(V925339), 
+         ftfeminists_2 = as.character(V912240),
+         ftfeminists_4 = as.character(V925317), 
+         ftwelfare_1 = as.character(V900159),
+         ftwelfare_4 = as.character(V925318), 
+         ftenvironmental_2 = as.character(V912230), 
+         ftenvironmental_4 = as.character(V925329), 
+         ftillimmigrants_2 = as.character(V912234), 
+         ftillimmigrants_4 = as.character(V925331), 
+         eqoppsuccess_1 = as.character(V900426), 
+         eqoppsuccess_4 = as.character(V926024), 
+         eqrightstoofar_1 = as.character(V900427),	
+         eqrightstoofar_2 = as.character(V912705),	
+         eqrightstoofar_4 = as.character(V926025), 
+         noteveryonechance_1 = as.character(V900428), 
+         noteveryonechance_4 = as.character(V926029), 
+         worrylesseq_1 = as.character(V900429),	
+         worrylesseq_4 = as.character(V926026), 
+         unequalnoprob_1 = as.character(V900430), 
+         unequalnoprob_4 = as.character(V926027), 
+         equallessprob_2 = as.character(V912703), 
+         equallessprob_1 = as.character(V900431),	
+         equallessprob_4 = as.character(V926028), 
+         moralrel_1 = as.character(V900501),	
+         moralrel_2 = as.character(V912702), 
+         moralrel_4 = as.character(V926115), 
+         tradfamily_1 = as.character(V900502), 
+         tradfamily_4 = as.character(V926117), 
+         slavediff_1 = as.character(V900523), 
+         slavediff_4 = as.character(V926129), 
+         wrkwayup_1 = as.character(V900521), 
+         wrkwayup_4 = as.character(V926126), 
+         matterhrdwrk_1 = as.character(V900522), 
+         matterhrdwrk_4 = as.character(V926128), 
+         religimp_1 = as.character(V900511), 
+         religimp_3 = as.character(V923820)) %>%
+  select(c(id, weight_2, weight_3, weight_4, age_1:age_4, date_1:religimp_3)) %>%
+  pivot_longer(weight_2:religimp_3) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
@@ -630,26 +871,29 @@ anes90_long <- anes90 %>%
                   spendserv, defscale, eqrole),
                 ~(.x-1)/6*100),
          trust = (trust-1)*100,
-         across(c(stayhome, crooked, wastetax, trustgov, runfew),
+         across(c(stayhome, crooked, wastetax, trustgov, runfew, 
+                  attentioncpg, ppllikemeL, prefhiring, cappun, 
+                  letin1a, eqoppsuccess, eqrightstoofar, noteveryonechance,
+                  worrylesseq, unequalnoprob, equallessprob, 
+                  moralrel, tradfamily, slavediff, wrkwayup, 
+                  matterhrdwrk, religimp),
                 ~(.x-1)/4*100),
          abortion = (abortion - 1)/3*100,
          across(c(natenvir, nataids, natsoc, natfood, natschools,
-                  nathome, natchld),
+                  nathome, natchld, lessgvt),
                 ~(.x -1)/2*100)) %>% 
-  pivot_longer(c(abortion, crooked, defscale:wastetax)) %>%
+  pivot_longer(c(abortion, crooked, attentioncpg, wrkwayup, defscale:worrylesseq)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "1990-92 ANES")
 #Missing specific weights for 
 #wave pairs 90/91. If people have the panel weight
 #they get that wave
 
+# Clean Data 1992-97 ====
 
-#8 waves of observation
 anes9_long <- anes9 %>%
   mutate(id = 1:nrow(anes9)) %>%
-  select(id, 
-         V923008a, V923008b, V940006a, V960005a, V960005b,
-         V923903, V941203, V960605, 
+  select(id, V923903, V941203, V960605, 
          V923026, V923027, V925005, V925006, V937014, V937015, 
          V940033, V940034, V952360, V960012, V960011, V960903, V960902,
          V970367,
@@ -690,16 +934,60 @@ anes9_long <- anes9 %>%
          V926123, V941036, V961254,
          V926121, V941034, V961252,	V970321,
          V926120, V941033, V960566, V961251, V970013,
-         V926122, V941035, V961253) %>%
+         V926122, V941035, V961253, 
+         # Attention Pol campaigns, 
+         V923101, V940124, V960201, 
+         # People like me 
+         V926102,	V941038, V960568, V961245, V970014, 
+         # Spending poor people
+         V923817, V960565, 
+         # Less Government 
+         V925729, V961144, 
+         # Preferential Hiring 
+         V925935,	V937405, V941001, V961208, 
+         # Favor Death Penalty 
+         V925933, V941041, V961197, 
+         # Immigrant number 
+         V926235, V941016, V961325, 
+         # Opose homo
+         V925923, V937324, V961193, 
+         # T: Feminists 
+         V925317, V970053, 
+         # T: Welfare
+         V925318, V940309, V961036,	V970057, 
+         # T: Environmental
+         V925329,	V940310, V961041, 
+         # T: Illegal Immigrants
+         V925331, V940317, 
+         # Equal Opportunity Success
+         V926024,	V940914, V961229, 
+         # Equal rights too far 
+         V926025,	V940915, V961230, 
+         # Not everyone given a chance 
+         V926029,	V940916, V961231, 
+         # Worry less equality 
+         V926026, V940917, V961232, 
+         # Unequal no problem
+         V926027,	V940918, V961233, 
+         # More equality less problem
+         V926028, V940919, V961234, 
+         # Moral relativity 
+         V926115, V941030, V961248, 
+         # Traditional Familiy values
+         V926117, V941031, V961249, 
+         # Hrd work lazy whites
+         V926221, V961311, 
+         # Hrd work lazy blacks 
+         V926222, V961312, 
+         # Slave difficulty 
+         V926129, V941051, 
+         # Black no favors 
+         V926126, V941049, V970182, 
+         # Matter hard work
+         V926128,	V941050, V970181, 
+         # Religious important
+         V923820, V941043, V960571, V970325) %>%
   zap_labels() %>%
-  mutate(weight_1 = as.character(V923008a), 
-         weight_2 = as.character(V923008b), 
-         weight_3 = weight_2,
-         weight_4 = as.character(V940006a), 
-         weight_5 = weight_4,
-         weight_6 = as.character(V960005a), 
-         weight_7 = as.character(V960005b),
-         weight_8 = weight_7) %>%
   mutate(across(c(V923903, V941203, V960605),
                 ~ifelse(.x < 0 | .x > 95, NA, .x)),
          age_1 = ifelse(is.na(V923903) & !is.na(V941203), V941203 - 2, V923903),
@@ -751,7 +1039,9 @@ anes9_long <- anes9 %>%
          across(c(V926120, V941033, V960566, V961251, V970013),
                 ~ifelse(.x == 7, 5, .x)),
          V961253 = recode(V961253, "1"=5, "5"=1, "0"=0, "8"=8, "9"=9),
-         across(c(V923634, V937370, V940655, V952263a, V960420, V970106),
+         across(c(V923634, V937370, V940655, V952263a, V960420, V970106, 
+                  V923101, V940124, V960201, 
+                  V923817, V960565),
                 ~ifelse(.x %in% c(7,8,9), NA, .x)),
          across(c(V923509, V937204, V940839, V952253, V960365, V961269, V970302,
                   V926139, V960567, V961258, V970011,
@@ -766,8 +1056,27 @@ anes9_long <- anes9 %>%
                   V926123, V941036, V961254,
                   V926121, V941034, V961252,	V970321,
                   V926120, V941033, V960566, V961251, V970013,
-                  V926122, V941035, V961253), 
-                       ~ifelse(.x %in% c(0,8,9, 96), NA, .x)),
+                  V926122, V941035, V961253, 
+                  V926102,	V941038, V960568, V961245, V970014, 
+                  V925729, V961144, 
+                  V925933, V941041, V961197, 
+                  V926235, V941016, V961325, 
+                  V925923, V937324, V961193, 
+                  V926024, V940914, V961229, 
+                  V926025, V940915,	V961230, 
+                  V926029, V940916, V961231, 
+                  V926026, V940917, V961232, 
+                  V926027, V940918, V961233, 
+                  V926028, V940919, V961234, 
+                  V926115, V941030,	V961248, 
+                  V926117, V941031,	V961249, 
+                  V926221, V961311, 
+                  V926222, V961312, 
+                  V926129, V941051, 
+                  V926126, V941049, V970182, 
+                  V926128, V941050,	V970181, 
+                  V923820, V941043, V960571, V970325), 
+                ~ifelse(.x %in% c(0,8,9, 96), NA, .x)),
          across(c(V923732, V941014, V960503,
                   V923815, V940817, V960561,
                   V923727, V940821, V960498,
@@ -794,7 +1103,11 @@ anes9_long <- anes9 %>%
            V925327, V940304, V961037, V970042,
            V925335, V937145, V940318, V961042, V970054,
            V940312, V961035, 
-           V925324, V940308, V961039),
+           V925324, V940308, V961039, 
+           V925317, V970053, 
+           V925318, V940309, V961036,	V970057, 
+           V925329, V940310, V961041, 
+           V925331,	V940317),
            ~ifelse(.x %in% c(997,998,999,888,996), NA, .x)),
          partyid_1 = as.character(V923634),
          partyid_3 = as.character(V937370),
@@ -933,32 +1246,115 @@ anes9_long <- anes9 %>%
          #runfew (1 - all; 5 = big, NA: 0,8,9);
          runfew_2 = as.character(V926122), 
          runfew_4 = as.character(V941035), 
-         runfew_7 = as.character(V961253)
-         ) %>%
-  select(c(id, weight_1:weight_7, age_1:age_8, date_1, date_2:date_7, date_8:runfew_7)) %>%
-  pivot_longer(weight_1:runfew_7) %>%
+         runfew_7 = as.character(V961253), 
+         attentioncpg_1 = as.character(V923101), 
+         attentioncpg_4 = as.character(V940124), 
+         attentioncpg_6 = as.character(V960201), 
+         ppllikemeL_2 = as.character(V926102),
+         ppllikemeL_4 =	as.character(V941038), 
+         ppllikemeL_6 = as.character(V960568), 
+         ppllikemeL_7 = as.character(V961245), 
+         ppllikemeL_8 = as.character(V970014), 
+         spendpoorppl_1 = as.character(V923817), 
+         spendpoorppl_6 = as.character(V960565), 
+         lessgvt_2 = as.character(V925729), 
+         lessgvt_7 = as.character(V961144), 
+         prefhiring_2 = as.character(V925935),
+         prefhiring_3 = as.character(V937405), 
+         prefhiring_4 = as.character(V941001), 
+         prefhiring_7 = as.character(V961208), 
+         cappun_2 = as.character(V925933), 
+         cappun_4 = as.character(V941041), 
+         cappun_7 = as.character(V961197), 
+         letin1a_2 = as.character(V926235), 
+         letin1a_4 = as.character(V941016), 
+         letin1a_7 = as.character(V961325), 
+         oposehomo_2 = as.character(V925923), 
+         opposehomo_3 = as.character(V937324), 
+         opposehome_7 = as.character(V961193), 
+         ftfeminists_1 = as.character(V925317), 
+         ftfeminists_8 = as.character(V970053), 
+         ftwelfare_2 = as.character(V925318), 
+         ftwelfare_4 = as.character(V940309), 
+         ftwelfare_7 = as.character(V961036),	
+         ftwelfare_8 = as.character(V970057), 
+         ftenvironmental_2 = as.character(V925329),
+         ftenvironmental_4 = as.character(V940310), 
+         ftenvironmental_7 = as.character(V961041), 
+         ftillimmigrants_2 = as.character(V925331), 
+         ftillimmigrants_4 = as.character(V940317), 
+         eqoppsuccess_2 = as.character(V926024),
+         eqoppsuccess_4 = as.character(V940914),
+         eqoppsuccess_7 = as.character(V961229), 
+         eqrightstoofar_2 = as.character(V926025),	
+         eqrightstoofar_4 = as.character(V940915), 
+         eqrightstoofar_7 = as.character(V961230), 
+         noteveryonechance_2 = as.character(V926029),
+         noteveryonechance_4 = as.character(V940916), 
+         noteveryonechance_7 = as.character(V961231), 
+         worrylesseq_2 = as.character(V926026), 
+         worrylesseq_4 = as.character(V940917), 
+         worrylesseq_7 = as.character(V961232), 
+         unequalnoprob_2 = as.character(V926027), 
+         unequalnoprob_4 = as.character(V940918), 
+         unequalnoprob_7 = as.character(V961233), 
+         equallessprob_2 = as.character(V926028),
+         equallessprob_4 = as.character(V940919), 
+         equallessprob_7 = as.character(V961234), 
+         moralrel_2 = as.character(V926115), 
+         moralrel_4 = as.character(V941030),
+         moralrel_7 = as.character(V961248),
+         tradfamily_2 = as.character(V926117), 
+         tradfamily_4 = as.character(V941031), 
+         tradfamily_7 = as.character(V961249), 
+         hrdwrklazywhite_2 = as.character(V926221), 
+         hrdwrklazywhite_7 = as.character(V961311), 
+         hrdwrklazyblack_2 = as.character(V926222), 
+         hrdwrklazyblack_7 = as.character(V961312), 
+         slavediff_2 = as.character(V926129), 
+         slavediff_4 = as.character(V941051),
+         wrkwayup_2 = as.character(V926126), 
+         wrkwayup_4 = as.character(V941049), 
+         wrkwayup_8 = as.character(V970182), 
+         matterhrdwrk_2 = as.character(V926128), 
+         matterhrdwrk_4 = as.character(V941050), 
+         matterhrdwrk_8 = as.character(V970181), 
+         religimp_1 = as.character(V923820), 
+         religimp_4 = as.character(V941043), 
+         religimp_6 = as.character(V960571), 
+         religimp_8 = as.character(V970325)
+         
+  ) %>%
+  select(c(id, age_1:age_8, date_1, date_2:date_7, date_8:religimp_8)) %>%
+  pivot_longer(age_1:religimp_8) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, abortion:crooked, defscale:wastetax),
+         across(c(abortion:crooked, defscale:worrylesseq),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          across(c(polviews, jobguar, govins, helpblk,
-                  spendserv, defscale, eqrole),
+                  spendserv, defscale, eqrole, hrdwrklazywhite, 
+                  hrdwrklazyblack),
                 ~(.x - 1)/6*100),
          across(c(trust, fair),
                 ~(.x-1)*100),
-         across(c(stayhome, crooked, wastetax, trustgov, runfew),
+         across(c(stayhome, crooked, wastetax, trustgov, runfew, 
+                  attentioncpg, ppllikemeL, prefhiring, cappun, 
+                  letin1a, opposehomo, eqoppsuccess, eqrightstoofar, 
+                  noteveryonechance, worrylesseq, unequalnoprob, equallessprob, moralrel,
+                  tradfamily, slavediff, wrkwayup, matterhrdwrk, religimp),
                 ~(.x - 1)/4*100),
          abortion = (abortion-1)/3*100,
          across(c(natenvir, nataids, natsoc, natfood, natschools,
-                  nathome, natchld, natfare, natcrime),
+                  nathome, natchld, natfare, natcrime, spendpoorppl, 
+                  lessgvt),
                 ~(.x - 1)/2*100)) %>% 
-  pivot_longer(c(abortion, crooked, defscale:wastetax)) %>%
+  pivot_longer(c(abortion, attentioncpg, wrkwayup, crooked, defscale:worrylesseq)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "1992-97 ANES")
 
-## Clean 2000-04 ANES Panel
+# Clean Data 2000-04 ANES ====
 anes0_long <- anes0 %>%
   mutate(id = 1:nrow(anes0)) %>%
   select(id, 
@@ -996,8 +1392,34 @@ anes0_long <- anes0 %>%
          M001537, M025177, M045152, #crooked
          M001535, M025175, M045150, #wastetax
          M001534, M025174, M045149, #trustgov
-         M001536, M025176, M045151 #runfew
-         ) %>%
+         M001536, M025176, M045151,#runfew
+         # Attention political
+         M000301,	M001201, M023001,	M025001, 
+         # People like me 
+         M001528,	M025173, M045148, 
+         # Spend poor ppl
+         M000680, M023053A,	M025115A,	M045075a, 
+         # Spend military
+         M025105,	M045081, 
+         # Spend aid to blacks
+         M000687, M023057, M025119,	M045079,
+         # Immigrant number
+         M000510, M045109, 
+         # Favor or oppose laws around homosexuals
+         M001478, M045111, 
+         # Pay more or less taxes 
+         M023069, M025141, M045119, 
+         # T: asian-americans
+         M001327, M025072, M045040, 
+         # T: feminists
+         M001326, M025071, M045039, 
+         # T: welfare 
+         M001315, M025062, M045030, 
+         # T: environmentalists
+         M001320, M025066, M045034, 
+         # Religion important 
+         M000872, M023082, M045173
+  ) %>%
   zap_labels() %>%
   mutate(weight_1 = as.character(WT00PRE), 
          weight_2 = as.character(WT00PO), 
@@ -1053,10 +1475,20 @@ anes0_long <- anes0 %>%
                   M001537, M025177, M045152,
                   M001535, M025175, M045150,
                   M001534, M025174, M045149,
-                  M001536, M025176, M045151), 
+                  M001536, M025176, M045151, 
+                  M000301,	M001201, M023001,	M025001, 
+                  M001528,	M025173, M045148, 
+                  M000510, M045109, 
+                  M001478, M045111, 
+                  M000872, M023082, M045173), 
                 ~ifelse(.x %in% c(0,8,9), NA, .x)),
-         across(c(M000694, M001403, M045110),
+         across(c(M000694, M001403, M045110, 
+                  M000680, M023053A, M025115A,	M045075a, 
+                  M000687, M023057, M025119,	M045079, 
+                  M023069, M025141, M045119),
                 ~ifelse(.x %in% c(0,7,8,9), NA, .x)),
+         across(c(M025105,	M045081), 
+                ~ifelse(.x %in% c(0,4,8,9), NA, .x)),
          across(c(
            M001308, M025055, M045023,
            M001309, M025056, M045024,
@@ -1069,7 +1501,11 @@ anes0_long <- anes0 %>%
            M001321, M025067, M045035,
            M001314, M025061, M045029,
            M001323, M025068, M045036,
-           M001324, M025069, M045037),
+           M001324, M025069, M045037, 
+           M001327, M025072, M045040, 
+           M001326, M025071, M045039, 
+           M001315, M025062, M045030, 
+           M001320, M025066, M045034),
            ~ifelse(.x > 100, NA, .x)),
          partyid_1 = as.character(M000523),
          partyid_3 = as.character(M023038X),
@@ -1174,9 +1610,49 @@ anes0_long <- anes0 %>%
          trustgov_5 = as.character(M045149),
          runfew_2 = as.character(M001536), 
          runfew_4 = as.character(M025176), 
-         runfew_5 = as.character(M045151)) %>% 
-  select(c(id, weight_1:weight_5, age_1:age_5, date_1:runfew_5)) %>%
-  pivot_longer(weight_1:runfew_5) %>%
+         runfew_5 = as.character(M045151), 
+         attentioncpg_1 = as.character(M000301),	
+         attentioncpg_2 = as.character(M001201), 
+         attentioncpg_3 = as.character(M023001),	
+         attentioncpg_4 = as.character(M025001), 
+         ppllikemeL_2 = as.character(M001528),	
+         ppllikemeL_4 = as.character(M025173), 
+         ppllikemeL_5 = as.character(M045148), 
+         spendpoorppl_1 = as.character(M000680), 
+         spendpoorppl_3 = as.character(M023053A),	
+         spendpoorppl_4 = as.character(M025115A),	
+         spendpoorppl_5 = as.character(M045075a), 
+         natarms_4 = as.character(M025105),	
+         natarms_5 = as.character(M045081), 
+         natrace_1 = as.character(M000687),
+         natrace_3 =  as.character(M023057), 
+         natrace_4 = as.character(M025119),	
+         natrace_5 = as.character(M045079), 
+         letin1a_1 = as.character(M000510),
+         letin1a_4 = as.character(M045109), 
+         opposehomo_2 = as.character(M001478),
+         opposehomo_5 = as.character(M045111), 
+         tax_3 = as.character(M023069),
+         tax_4 = as.character(M025141),
+         tax_5 = as.character(M045119), 
+         ftasianamericans_2 = as.character(M001327), 
+         ftasianamericans_4 = as.character(M025072),
+         ftasianamericans_5 = as.character(M045040), 
+         ftfeminists_2 = as.character(M001326),
+         ftfeminists_4 = as.character(M025071), 
+         ftfeminists_5 = as.character(M045039), 
+         ftwelfare_2 = as.character(M001315),
+         ftwelfare_4 = as.character(M025062),
+         ftwelfare_5 = as.character(M045030), 
+         ftenvironmental_2 = as.character(M001320), 
+         ftenvironmental_4 = as.character(M025066),
+         ftenvironmental_5 = as.character(M045034), 
+         religimp_1 = as.character(M000872),
+         religimp_3 = as.character(M023082),
+         religimp_5 = as.character(M045173)
+  ) %>% 
+  select(c(id, weight_1:weight_5, age_1:age_5, date_1:religimp_5)) %>%
+  pivot_longer(weight_1:religimp_5) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
@@ -1187,19 +1663,21 @@ anes0_long <- anes0 %>%
                 ~(.x-1)/6*100),
          across(c(trust, fair, helpful,
                   stayhome, crooked, wastetax,
-                  runfew),
+                  runfew, attentioncpg, ppllikemeL, spendpoorppl, 
+                  natrace, letin1a, opposehomo, tax, 
+                  religimp),
                 ~(.x - 1)/4*100),
          abortion = (abortion-1)/3*100,
          across(c(natenvir, nataid,
                   nataids, natsoc, natschools, natchld,
                   natfare, natcrime,
-                  trustgov),
+                  trustgov, natarms),
                 ~(.x-1)/2*100)) %>%
-  pivot_longer(c(abortion,crooked, fair:wastetax)) %>%
+  pivot_longer(c(abortion,attentioncpg,crooked, fair:wastetax)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2000-04 ANES")
 
-## 2006-10 GSS
+# Clean GSS 2006-10 ====
 gss6_long <- gss6 %>%
   mutate(id = 1:nrow(gss6)) %>%
   select(id, 
@@ -1216,11 +1694,17 @@ gss6_long <- gss6 %>%
          natsoc_1, natsoc_2, natsoc_3,
          natchld_1, natchld_2, natchld_3,
          natfare_1, natfare_2, natfare_3,
-         natcrime_1, natcrime_2, natcrime_3) %>%
+         natcrime_1, natcrime_2, natcrime_3,
+         nateduc_1, nateduc_2, nateduc_3, 
+         natarms_1, natarms_2, natarms_3, 
+         natrace_1, natrace_2, natrace_3, 
+         cappun_1, cappun_2, cappun_3, 
+         letin1a_1, letin1a_2, letin1a_3,
+         tax_1, tax_2, tax_3,
+         wrkwayup_1, wrkwayup_2, wrkwayup_3) %>%
   mutate(weight_2 = as.character(wtpannr12),
          weight_3 = as.character(wtpannr123),
          age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
-         age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3 - 4, age_1),
          age_2 = ifelse(is.na(age_2), age_1 + 2, age_2),
          age_3 = ifelse(is.na(age_3), age_1 + 4, age_3),
          across(age_1:age_3, ~as.character(.x))) %>%
@@ -1233,31 +1717,37 @@ gss6_long <- gss6 %>%
                         sep = "-"),
          date_3 = ifelse(date_3 == "2010-NA-NA", NA, date_3),
          across(c(partyid_1, partyid_2, partyid_3), ~ifelse(.x %in% c(7), NA, .x)),
+         across(c(tax_1, tax_2, tax_3), ~ifelse(.x %in% c(4), NA, .x)),
          across(c(trust_1, trust_2, trust_3,
                   fair_1, fair_2, fair_3,
                   helpful_1, helpful_2, helpful_3), 
                 ~ifelse(.x == 3, 1.5, .x)),
-         across(partyid_1:natcrime_3,
+         across(partyid_1:wrkwayup_3,
                 ~as.character(.x))) %>%
   select(-c(wtpannr12, wtpannr123, dateintv_1, dateintv_2, dateintv_3)) %>%
   pivot_longer(c(weight_2, weight_3, age_1:date_3)) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, age, fair:trust),
+         across(c(weight, age, cappun, fair:wrkwayup),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          polviews = (polviews-1)/6*100,
          across(c(trust, fair,helpful),
                 ~(.x-1)*100),
          across(c(natenvir, nataid, natsoc, natchld,
-                  natfare, natcrime),
-                ~(.x-1)/2*100)) %>%
-  pivot_longer(fair:trust) %>%
+                  natfare, natcrime, nateduc, natarms, 
+                  natrace, tax),
+                ~(.x-1)/2*100), 
+         across(c(cappun), 
+                ~(.x)/2*100),
+         across(c(letin1a, wrkwayup), 
+                ~(.x - 1)/4*100)) %>%
+  pivot_longer(cappun, fair:wrkwayup) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2006-10 GSS")
 
-# 2008-12 GSS
+# Clean GSS 2008-12 ====
 gss8_long <- gss8 %>%
   mutate(id = 1:nrow(gss8)) %>%
   select(id, 
@@ -1274,7 +1764,14 @@ gss8_long <- gss8 %>%
          natsoc_1, natsoc_2, natsoc_3,
          natchld_1, natchld_2, natchld_3,
          natfare_1, natfare_2, natfare_3,
-         natcrime_1, natcrime_2, natcrime_3) %>%
+         natcrime_1, natcrime_2, natcrime_3, 
+         nateduc_1, nateduc_2, nateduc_3, 
+         natarms_1, natarms_2, natarms_3, 
+         natrace_1, natrace_2, natrace_3, 
+         cappun_1, cappun_2, cappun_3, 
+         letin1a_1, letin1a_2, letin1a_3,
+         tax_1, tax_2, tax_3,
+         wrkwayup_1, wrkwayup_2, wrkwayup_3) %>%
   mutate(weight_2 = as.character(wtpannr12),
          weight_3 = as.character(wtpannr123),
          age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
@@ -1294,14 +1791,15 @@ gss8_long <- gss8 %>%
          across(c(trust_1, trust_2, trust_3,
                   fair_1, fair_2, fair_3,
                   helpful_1, helpful_2, helpful_3), ~ifelse(.x == 3, 1.5, .x)),
-         across(partyid_1:natcrime_3,
+         across(c(tax_1, tax_2, tax_3), ~ifelse(.x %in% c(4), NA, .x)),
+         across(partyid_1:wrkwayup_3,
                 ~as.character(.x))) %>%
   select(-c(wtpannr12, wtpannr123, dateintv_1, dateintv_2, dateintv_3)) %>%
   pivot_longer(c(weight_2, weight_3, age_1:date_3)) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, age, fair:trust),
+         across(c(weight, age, cappun, fair:wrkwayup),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          polviews = (polviews-1)/6*100,
@@ -1309,13 +1807,19 @@ gss8_long <- gss8 %>%
                 ~(.x-1)*100),
          across(c(natenvir, nataid,
                   natsoc, natchld, natfare,
-                  natcrime),
-                ~(.x-1)/2*100)) %>%
-  pivot_longer(fair:trust) %>%
+=                  natcrime, nateduc, natarms,
+                  natrace, tax),
+                ~(.x-1)/2*100), 
+         across(c(cappun), 
+                ~(.x)/2*100), 
+         across(c(letin1a, wrkwayup), 
+                ~(.x - 1)/4*100)) %>%
+  pivot_longer(cappun, fair:wrkwayup) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2008-12 GSS")
 
-#2010-14 GSS
+# Clean GSS 2010-14 ====
+
 gss10_long <- gss10 %>%
   mutate(id = 1:nrow(gss10)) %>%
   select(id, 
@@ -1332,7 +1836,14 @@ gss10_long <- gss10 %>%
          natsoc_1, natsoc_2, natsoc_3,
          natchld_1, natchld_2, natchld_3,
          natfare_1, natfare_2, natfare_3,
-         natcrime_1, natcrime_2, natcrime_3) %>%
+         natcrime_1, natcrime_2, natcrime_3, 
+         nateduc_1, nateduc_2, nateduc_3, 
+         natarms_1, natarms_2, natarms_3, 
+         natrace_1, natrace_2, natrace_3, 
+         cappun_1, cappun_2, cappun_3, 
+         letin1a_1, letin1a_2, letin1a_3,
+         tax_1, tax_2, tax_3,
+         wrkwayup_1, wrkwayup_2, wrkwayup_3) %>%) %>%
   mutate(weight_2 = as.character(wtpannr12),
          weight_3 = as.character(WTPANNR123),
          age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
@@ -1352,27 +1863,33 @@ gss10_long <- gss10 %>%
          across(c(trust_1, trust_2, trust_3,
                   fair_1, fair_2, fair_3,
                   helpful_1, helpful_2, helpful_3), ~ifelse(.x == 3, 1.5, .x)),
-         across(partyid_1:natcrime_3,
+         across(c(tax_1, tax_2, tax_3), ~ifelse(.x %in% c(4), NA, .x)),
+         across(partyid_1:wrkwayup_3,
                 ~as.character(.x))) %>%
   select(-c(wtpannr12, WTPANNR123, dateintv_1, dateintv_2, dateintv_3)) %>%
   pivot_longer(c(weight_2, weight_3, age_1:date_3)) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, age, fair:trust),
+         across(c(weight, age, cappun, fair:wrkwayup),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          polviews = (polviews-1)/6*100,
          across(c(trust, fair,helpful),
                 ~(.x-1)*100),
          across(c(natenvir, nataid,
-                  natsoc, natchld, natfare, natcrime),
-                ~(.x-1)/2*100)) %>%
-  pivot_longer(fair:trust) %>%
+                  natsoc, natchld, natfare, natcrime, 
+                  nateduc, natarms, natrace,tax),
+                ~(.x-1)/2*100), 
+         across(c(cappun), 
+                ~(.x)/2*100),
+         across(c(letin1a, wrkwayup), 
+                ~(.x - 1)/4*100)) %>%
+  pivot_longer(cappun,fair:wrkwayup) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2010-14 GSS")
 
-## 2016-20 GSS
+# Clean GSS 2016-20 ====
 gss20_long <- gss20 %>%
   mutate(id = 1:nrow(gss20)) %>%
   select(id, 
@@ -1389,7 +1906,14 @@ gss20_long <- gss20 %>%
          natsoc_1a, natsoc_1b, natsoc_2,
          natchld_1a, natchld_1b, natchld_2,
          natfare_1a, natfare_1b, natfare_2,
-         natcrime_1a, natcrime_1b, natcrime_2) %>%
+         natcrime_1a, natcrime_1b, natcrime_2, 
+         nateduc_1a, nateduc_1b, nateduc_2, 
+         natarms_1a, natarms_1b, natarms_2, 
+         natrace_1a, natrace_1b, natrace_2, 
+         cappun_1a, cappun_1b, cappun_2, 
+         letin1a_1a, letin1a_1b, letin1a_2,
+         tax_1a, tax_1b, tax_2,
+         wrkwayup_1a, wrkwayup_1b, wrkwayup_2) %>%
   mutate(weight_2 = as.character(wtssnr_2)) %>%
   mutate(age_1a = ifelse(is.na(age_1a) & !is.na(age_2), age_2 - 4, age_1a),
          age_1b = ifelse(is.na(age_1b) & !is.na(age_2), age_2 - 2, age_1b),
@@ -1398,11 +1922,11 @@ gss20_long <- gss20 %>%
          across(age_1a:age_2, ~as.character(.x))) %>%
   mutate(md = sprintf("%04d", dateintv_1a),
          date_1a = paste(2016, substr(md, 1, 2),substr(md, 3, 4),
-                        sep = "-"),
+                         sep = "-"),
          date_1a = ifelse(date_1a == "2016-00-NA", NA, date_1a),
          md = sprintf("%04d", dateintv_1b),
          date_1b = paste(2018, substr(md, 1, 2),substr(md, 3, 4),
-                        sep = "-"),
+                         sep = "-"),
          date_1b = ifelse(date_1b == "2018-00-NA", NA, date_1b),
          md = sprintf("%04d", dateintv_2),
          date_2 = paste(2020, substr(md, 1, 2),substr(md, 3, 4),
@@ -1414,15 +1938,17 @@ gss20_long <- gss20 %>%
                   fair_1a, fair_1b, fair_2,
                   helpful_1a, helpful_1b, helpful_2), 
                 ~ifelse(.x == 3, 1.5, .x)),
-         across(partyid_1a:natcrime_2,
+         across(partyid_1a:wrkwayup_2,
                 ~as.character(.x))) %>%
-  select(id, weight_2, age_1a:age_2, date_1a, date_1b, date_2, partyid_1a:natcrime_2) %>% 
-  pivot_longer(weight_2:natcrime_2) %>%
+  select(id, weight_2, age_1a:age_2, date_1a, date_1b, date_2, partyid_1a:wrkwayup_2) %>% 
+  pivot_longer(weight_2:wrkwayup_2) %>%
+  select(id, age_1a:age_2, date_1a, date_1b, date_2, partyid_1a:wrkwayup_2) %>% 
+  pivot_longer(age_1a:wrkwayup_2) %>%
   separate(name, into = c("measure", "wave")) %>%
   mutate(wave = recode(wave, "1a"="1", "1b"="2", "2"="3")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, age, fair:trust),
+         across(c(weight, age, cappun, fair:wrkwayup),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          polviews = (polviews-1)/6*100,
@@ -1430,20 +1956,18 @@ gss20_long <- gss20 %>%
                 ~(.x-1)*100),
          across(c(natenvir, nataid,
                   natsoc, natchld,
-                  natfare, natcrime),
-                ~(.x-1)/2*100)) %>%
-  pivot_longer(fair:trust) %>%
+                  natfare, natcrime, nateduc, 
+                  natarms, natrace),
+                ~(.x-1)/2*100), 
+         across(c(cappun), 
+                ~(.x)/2*100), 
+         across(c(letin1a, wrkwayup), 
+                ~(.x - 1)/4*100)) %>%
+  pivot_longer(cappun,fair:wrkwayup) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2016-20 GSS")
 
-#2016-20 ANES
-convert_to_date <- function(date_str) {
-  year <- substr(date_str, 1, 4)
-  month <- substr(date_str, 5, 6)
-  day = substr(date_str, 7, 8)
-  formatted <- as.character(paste(year,month,day,sep="-"))
-  return(formatted)
-}
+# Clean ANES 2016-20 ====
 anes16_long <- anes16 %>%
   mutate(id = 1:nrow(anes16)) %>%
   zap_labels() %>%
@@ -1480,7 +2004,54 @@ anes16_long <- anes16 %>%
          V162311, V202479,
          V162103, V202166,
          V162108, V202170,
-         V162110, V202171) %>%
+         V162110, V202171, 
+         # Attention Campaigns
+         V161004, V201006, 
+         # People like me Likert
+         V162216, V202213, 
+         # Spend Poor 
+         V161211, V201318,
+         # Less gvt 
+         V162185, V202253, 
+         # Preferential hiring
+         V162238, V202249,
+         # Death penalty
+         V161233, V201343,
+         # Number of migrants
+         V162157, V202232,
+         # Favor Oppose Homo
+         V161229, V201412,
+         # T: asian-americans
+         V162310, V202477,
+         # T: feminists
+         V162096, V202160,
+         # T: illegal immigrants
+         V162313, V202481,
+         # T: Equality of opportunity for success
+         V162243, V202260,
+         # Worry less equality
+         V162244, V202261,
+         # Unequal no problem
+         V162245, V202262,
+         # Equality less problem
+         V162246, V202263,
+         # Moral Relativity
+         V162207, V202264,
+         # Traditional family
+         V162210, V202265,
+         # Hard work whites
+         V162345, V202515,
+         # Hard work blk 
+         V162346, V202516,
+         # Slavery difficulty
+         V162212, V202301,
+         # Blacks no favors
+         V162211, V202300,
+         # Matter of Hard work
+         V162214, V202303,
+         # Religious importance
+         V161241, V201433
+  ) %>%
   mutate(age_1 = ifelse(V161267 < 0 & V201507x > 0, V201507x, ifelse(V161267 < 0, NA, V161267)),
          age_2 = age_1,
          age_3 = ifelse(!is.na(age_1) & V201507x < 0, age_1 + 4, V201507x),
@@ -1504,7 +2075,10 @@ anes16_long <- anes16 %>%
                   V162311, V202479,
                   V162103, V202166,
                   V162108, V202170,
-                  V162110, V202171),
+                  V162110, V202171, 
+                  V162310, V202477, 
+                  V162096, V202160,
+                  V162313, V202481),
                 ~ifelse(.x < 0 | .x > 100, NA, .x)),
          across(c(V161158x, V201231x,
                   V161126, V162171, V201200,
@@ -1515,9 +2089,29 @@ anes16_long <- anes16 %>%
                   V161184, V201252,
                   V161198, V201258,
                   V161178, V201246,
-                  V161181, V201249),
+                  V161181, V201249, 
+                  V161004, V201006,
+                  V162216, V202213,
+                  V162157, V202232,
+                  V162243, V202260,
+                  V162244, V202261,
+                  V162245, V202262,
+                  V162246, V202263,
+                  V162207, V202264,
+                  V162210, V202265,
+                  V162345, V202515, 
+                  V162346, V202516,
+                  V162212, V202301,
+                  V162211, V202300, 
+                  V162214, V202303),
                 ~ifelse(.x < 0 | .x > 7, NA, .x)),
-         across(c(V161232, V201336),
+         across(c(V161232, V201336, 
+                  V161211, V201318, 
+                  V162185, V202253,
+                  V162238, V202249,
+                  V161233, V201343,
+                  V161229, V201412,
+                  V161241, V201433),
                 ~ifelse(.x < 0 | .x > 4, NA, .x)),
          across(c(V161212, V201321,
                   V161205, V201300,
@@ -1584,31 +2178,94 @@ anes16_long <- anes16 %>%
          ftjews_2 = as.character(V162108), 
          ftjews_4 = as.character(V202170),
          ftcops_2 = as.character(V162110), 
-         ftcops_4 = as.character(V202171)) %>% 
-  select(id, weight_2:weight_4, age_1:age_4, date_1:ftlabor_4) %>%
-  pivot_longer(weight_2:ftlabor_4) %>%
+         ftcops_4 = as.character(V202171),
+         attentioncpg_1 = as.character(V161004),
+         attentioncpg_3 = as.character(V201006),
+         ppllikemeL_2 = as.character(V162216),
+         ppllikemeL_4 = as.character(V202213), 
+         spendpoorppl_1 = as.character(V161211),
+         spendpoorppl_3 = as.character(V201318),
+         lessgvt_2 = as.character(V162185),
+         lessgvt_4 = as.character(V202253),
+         prefhiring_2 = as.character(V162238), 
+         prefhiring_4 = as.character(V202249),
+         cappun_1 = as.character(V161233), 
+         cappun_3 = as.character(V201343),
+         letin1a_2 = as.character(V162157), 
+         letin1a_4 = as.character(V202232), 
+         opposehomo_1 = as.character(V161229), 
+         opposehomo_3 = as.character(V201412),
+         ftasianamericans_2 = as.character(V162310),
+         ftasianamericans_4 = as.character(V202477),
+         ftfeminists_2 = as.character(V162096), 
+         ftfeminists_4 = as.character(V202160),
+         ftillimmigrants_2 = as.character(V162313),
+         ftillimmigrants_4 = as.character(V202481),
+         eqoppsuccess_2 = as.character(V162243),
+         eqoppsuccess_4 = as.character(V202260),
+         worrylesseq_2 = as.character(V162244),
+         worrylesseq_4 = as.character(V202261),
+         unequalnoprob_2 = as.character(V162245),
+         unequalnoprob_4 = as.character(V202262),
+         equallessprob_2 = as.character(V162246),
+         equallessprob_4 = as.character(V202263),
+         moralrel_2 = as.character(V162207),
+         moralrel_4 = as.character(V202264),
+         tradfamily_2 = as.character(V162210),
+         tradfamily_4 = as.character(V202265),
+         hrdwrklazywhites_2 = as.character(V162345),
+         hrdwrklazywhites_4 = as.character(V202515),
+         hrdwrklazyblack_2 = as.character(V162346),
+         hrdwrklazyblack_4 = as.character(V202516),
+         slavediff_2 = as.character(V162212),
+         slavediff_4 = as.character(V202301),
+         wrkwayup_2 = as.character(V162211),
+         wrkwayup_4 = as.character(V202300),
+         matterhrdwrk_2 = as.character(V162214),
+         matterhrdwrk_4 = as.character(V202303),
+         religimp_1 = as.character(V161241), 
+         religimp_3 = as.character(V201433)
+  ) %>% 
+  select(id, weight_2:weight_4, age_1:age_4, date_1:religimp_3) %>%
+  pivot_longer(weight_2:religimp_3) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, abortion, age, defscale:wastetax),
+         across(c(weight, abortion, attentioncpg, cappun, age, defscale:wrkwayup),
                 ~as.numeric(.x)),
          across(c(partyid, polviews, jobguar,
                   govins, helpblk, spendserv,
-                  defscale),
+                  defscale, hrdwrklazywhites, hrdwrklazyblack),
                 ~(.x-1)/6*100),
          across(c(stayhome, runfew,
                   natenvir, natsoc, natschools, natfare,
-                  natcrime, natpoor),
+                  natcrime, natpoor, lessgvt, prefhiring,
+                  cappun, opposehomo,religimp),
                 ~(.x-1)*100),
-         across(c(wastetax),
+         across(c(wastetax,
+                  attentioncpg,
+                  spendpoorppl),
                 ~(.x-1)/2*100),
          across(c(abortion),
-                ~(.x-1)/3*100)) %>%
-  pivot_longer(c(abortion, defscale:wastetax)) %>%
+                ~(.x-1)/3*100), 
+         across(c(ppllikemeL,
+                  letin1a,
+                  eqoppsuccess,
+                  worrylesseq,
+                  unequalnoprob,
+                  equallessprob,
+                  moralrel,
+                  tradfamily,
+                  slavediff,
+                  wrkwayup,
+                  matterhrdwrk), 
+                ~(.x-1)/4*100)) %>%
+  pivot_longer(c(abortion, attentioncpg, cappun, defscale:wrkwayup)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2016-20 ANES")
 
-#2020-22 ANES
+
+# Clean ANES 2020-22 ====
 anes20_long <- anes20 %>%
   mutate(id = 1:nrow(anes20)) %>%
   select(id, profile_age,
@@ -1622,7 +2279,11 @@ anes20_long <- anes20 %>%
          ftdem, w2ftdem, w3ftdem,
          ftrep, w2ftrep, w3ftrep,
          w2ftgay, w3ftgay, 
-         w2ftpolice, w3ftpolice) %>%
+         w2ftpolice, w3ftpolice,
+         w2ftfeminists, 
+         w3ftfeminists,
+         rr2, w2rr2,
+         rr1,	w2rr1) %>%
   mutate(weight_1 = as.character(weight_pre),
          weight_2 = as.character(weight_post),
          weight_3 = as.character(w3weight)) %>%
@@ -1635,7 +2296,9 @@ anes20_long <- anes20 %>%
          date_2 = paste(substr(w2start, 1, 4), substr(w2start, 5, 6),substr(w2start, 7, 8),
                         sep = "-"),
          date_3 = as.character(w3startdt),
-         across(c(pid7x, w2pid7x, w3pid7x), 
+         across(c(pid7x, w2pid7x, w3pid7x,
+                  rr2, w2rr2, 
+                  rr1,	w2rr1), 
                 ~ifelse(.x %in% c(-7, -6), NA, .x - 1)),
          across(c(lcself, w2lcself, w3lcself,
                   hp_you, w2hp_you),
@@ -1643,7 +2306,8 @@ anes20_long <- anes20 %>%
          across(c(ftdem, w2ftdem, w3ftdem,
                   ftrep, w2ftrep, w3ftrep,
                   w2ftgay, w3ftgay, 
-                  w2ftpolice, w3ftpolice),
+                  w2ftpolice, w3ftpolice, 
+                  w2ftfeminists,	w3ftfeminists),
                 ~ifelse(.x > 100 | .x < 0, NA, .x)),
          partyid_1 = as.character(pid7x), 
          partyid_2 = as.character(w2pid7x),
@@ -1662,20 +2326,47 @@ anes20_long <- anes20 %>%
          fthomo_2 = as.character(w2ftgay),
          fthomo_3 = as.character(w3ftgay),
          ftcops_2 = as.character(w2ftpolice),
-         ftcops_3 = as.character(w3ftpolice)) %>%
-  select(id, weight_1:weight_3, age_1:age_3, date_1:ftcops_3) %>%
-  pivot_longer(weight_1:ftcops_3) %>%
+         ftcops_3 = as.character(w3ftpolice),
+         ftfeminists_2 = as.character(w2ftfeminists),
+         ftfeminists_3 = as.character(w3ftfeminists),
+         slavediff_1 = as.character(rr2),
+         slavediff_2 = as.character(w2rr2),
+         wrkwayup_1 = as.character(rr1),
+         wrkwayup_2 = as.character(w2rr1)
+  ) %>%
+  select(id, weight_1:weight_3, age_1:age_3, date_1:wrkwayup_2) %>%
+  pivot_longer(weight_1:wrkwayup_2) %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>%
   mutate(date = as.Date(date),
-         across(c(weight, age, ftcops:polviews),
+         across(c(weight, age, ftcops:slavediff, wrkwayup),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          across(c(polviews, govins),
-                ~(.x - 1)/6*100)) %>%
+                ~(.x - 1)/6*100),
+         across(c(slavediff, 
+                  wrkwayup), 
+                ~(.x-1)/4*100)) %>%
   pivot_longer(ftcops:polviews) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "2020-22 ANES")
+
+# Old way of combining data sets
+#long_data <- bind_rows(anes5_long %>% mutate(df = "1956-60 ANES"),
+#                       anes7_long %>% mutate(df = "1972-76 ANES"),
+#                       anes8_long %>% mutate(df = "1980 ANES"),
+#                       anes90_long %>% mutate(df = "1990-92 ANES"),
+#                       anes9_long %>% mutate(df = "1992-97 ANES"),
+#                       anes0_long %>% mutate(df = "2000-04 ANES"),
+#                       gss6_long %>% mutate(df = "2006-10 GSS"),
+#                       gss8_long %>% mutate(df = "2008-12 GSS"),
+#                       gss10_long %>% mutate(df = "2010-14 GSS"),
+#                       gss20_long %>% mutate(df = "2016-20 GSS"),
+#                       anes16_long %>% mutate(df = "2016-20 ANES"),
+#                       anes20_long %>% mutate(df = "2020-22 ANES")) %>%
+#  ungroup() %>%
+#  mutate(dec_diff = (as.numeric(difftime(date, min(date), units = "days")))/3652.5,
+#         d = as.numeric(d)) %>%
 
 #Combine the data sets to a long "raw score" 
 #data frame first
@@ -1691,7 +2382,6 @@ long_scores <- bind_rows(anes5_long, anes7_long, anes8_long,
 #sure there's some way to speed it up. But I think it's
 #better having this code be parsimonious/not replicating
 #with each panel.
-
 
 long_difference <- long_scores %>%
   mutate(
@@ -1756,9 +2446,7 @@ long_difference <- long_scores %>%
          age_group = ifelse(age > 25 & age < 34, "26-33", age_group),
          age_group = ifelse(age > 65, "65+", age_group))
 
-
-
-
+# Save dataset ====
 #save(long_data, file = "~/Dropbox/extended_formative_windows/clean_data/long_data.Rdata")
 save(long_difference, file = "~/Dropbox/extended_formative_windows/clean_data/long_difference.Rdata")
 
