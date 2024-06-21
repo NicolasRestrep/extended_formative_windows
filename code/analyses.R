@@ -15,7 +15,7 @@ summaries <- long_difference %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
   group_by(wave_pair, name, age_group) %>%
   summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
-            date = weighted.mean(date)) %>%
+            date = weighted.mean(date), n = n()) %>%
   #Filtering out bad questions
   filter(name != "natpoor", 
          name != "nathome") %>% ungroup() %>%
@@ -39,10 +39,11 @@ new.data %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
   mutate(year = dec_diff*3652.5 + as.Date("1956-11-11")) %>%
   ggplot(aes(x = year, y = yhat, color = age_group)) + 
-  geom_line(alpha = .3, aes(group = group)) + 
+  geom_hline(yintercept = 0, color = "black") + 
+  #geom_line(alpha = .3, aes(group = group)) + 
   geom_smooth(linewidth = 2) + 
   theme_bw() + 
-  facet_wrap(~age_group) + 
+  #facet_wrap(~age_group) + 
   labs(x = "Year", y = "Predicted wave-to-wave change",
        color = "Age Group",
        title = "Predicted wave-to-wave change by age group",
