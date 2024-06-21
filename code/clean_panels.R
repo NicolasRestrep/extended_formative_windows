@@ -19,19 +19,21 @@ convert_to_date <- function(date_str) {
 }
 
 # Read in Data ====
-anes5 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1956to1960.dta")
-anes7 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1972to1976.dta")
-anes8 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes1980.dta")
-anes90 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1990to1992.dta")
-anes9 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_1992to1997.dta")
-anes0 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_2000to2004.dta")
-anes16 <- read_sav("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_mergedfile_2016to2020.sav")
-anes20 <- read_csv("~/Library/CloudStorage/Box-Box/panel_surveys/anes/anes_2022.csv")
+#Load in ANES panels
+anes5 <- read_dta("~/Dropbox/data/anes/anes5660/anes_mergedfile_1956to1960.dta") 
+anes7 <- read_dta("~/Dropbox/data/anes/anes7276/anes_mergedfile_1972to1976.dta")
+anes8 <- read_dta("~/Dropbox/data/anes/anes1980/anes1980.dta")
+anes90 <- read_dta("~/Dropbox/data/anes/anes9092/anes_mergedfile_1990to1992.dta")
+anes9 <- read_dta("~/Dropbox/data/anes/anes9297/anes_mergedfile_1992to1997.dta") 
+anes0 <- read_dta("~/Dropbox/data/anes/anes0004/anes_mergedfile_2000to2004.dta")
+anes16 <- read_sav("~/Dropbox/data/anes/anes1620.sav")
+anes20 <- read_dta("~/Dropbox/data/anes/anes2022/anes2022")
 
-gss6 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel06.dta")
-gss8 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel08.dta")
-gss10 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel10.dta")
-gss20 <- read_dta("~/Library/CloudStorage/Box-Box/panel_surveys/gss/gsspanel20.dta")
+#Load in GSS panels
+gss6 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel06.dta")
+gss8 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel08.dta")
+gss10 <- read_dta("~/Dropbox/data/gss_data/gsspanels/gsspanel10.dta")
+gss20 <- read_dta("~/Dropbox/data/gss2020panel/gss2020panel.dta")
 
 ### 1956-60 ANES Panel
 anes5_long <- anes5 %>%
@@ -177,13 +179,13 @@ anes5_long <- anes5 %>%
   separate(name, into = c("measure", "wave")) %>%
   spread(measure, value) %>% 
   mutate(date = as.Date(date),
-         across(c(weight, age, attentioncpg:stayhome),
+         across(c(weight, age, attentioncpg, partyid:stayhome),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          stayhome = (stayhome-1)*100,
          across(c(attentioncpg, ppllikeme), 
-                ~(.x-1)/4*100), ) %>%
-  pivot_longer(attentioncpg:stayhome) %>%
+                ~(.x-1)/4*100)) %>%
+  pivot_longer(c(attentioncpg, partyid:stayhome)) %>%
   filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%  
   mutate(df = "1956-60 ANES")
 
@@ -379,15 +381,13 @@ anes7_long <- anes7 %>%
          ppllikeme_2 = as.character(V720559), 
          ppllikeme_3 = as.character(V742222), 
          ppllikeme_4 = as.character(V763815)) %>% 
-  select(c(id, age_1:age_5, date_1:ppllikeme_4)) %>% 
-  pivot_longer(age_1:ppllikeme_4) %>%
+  select(c(id, weight_2:weight_5, age_1:age_5, date_1:ppllikeme_4)) %>% 
+  pivot_longer(weight_2:ppllikeme_4) %>%
   separate(name, into = c("measure", "wave")) %>%
-  spread(measure, value) %>%
+  spread(measure, value) %>% 
   mutate(date = as.Date(date),
          across(c(weight, abortion:crooked, eqrole:wastetax),
                 ~as.numeric(.x)),
-         attentioncpg = as.numeric(attentioncpg),
-         ppllikeme = as.numeric(ppllikeme),
          partyid = (partyid/6)*100,
          across(c(polviews, jobguar, govins, helpblk,
                   eqrole),
@@ -570,9 +570,7 @@ anes8_long <- anes8 %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "1980 ANES")
 
-## 1990-92 ANES Panel
-
-# Clean Data 1990 ====
+# Clean Data 1990-92 ANES ====
 
 anes90_long <- anes90 %>%
   mutate(id = 1:nrow(anes90)) %>%
@@ -862,9 +860,9 @@ anes90_long <- anes90 %>%
   select(c(id, weight_2, weight_3, weight_4, age_1:age_4, date_1:religimp_3)) %>%
   pivot_longer(weight_2:religimp_3) %>%
   separate(name, into = c("measure", "wave")) %>%
-  spread(measure, value) %>%
+  spread(measure, value) %>% 
   mutate(date = as.Date(date),
-         across(c(weight, age, abortion, crooked, defscale:wastetax),
+         across(c(weight, abortion:crooked, wrkwayup, defscale:worrylesseq),
                 ~as.numeric(.x)),
          partyid = (partyid/6)*100,
          across(c(polviews, jobguar, helpblk,
@@ -882,7 +880,7 @@ anes90_long <- anes90 %>%
          across(c(natenvir, nataids, natsoc, natfood, natschools,
                   nathome, natchld, lessgvt),
                 ~(.x -1)/2*100)) %>% 
-  pivot_longer(c(abortion, crooked, attentioncpg, wrkwayup, defscale:worrylesseq)) %>%
+  pivot_longer(c(abortion, attentioncpg:crooked, defscale:wastetax, worrylesseq:wrkwayup)) %>%
   filter(!is.na(age), !is.na(value)) %>% arrange(id, name, date) %>%
   mutate(df = "1990-92 ANES")
 #Missing specific weights for 
@@ -1323,7 +1321,6 @@ anes9_long <- anes9 %>%
          religimp_4 = as.character(V941043), 
          religimp_6 = as.character(V960571), 
          religimp_8 = as.character(V970325)
-         
   ) %>%
   select(c(id, age_1:age_8, date_1, date_2:date_7, date_8:religimp_8)) %>%
   pivot_longer(age_1:religimp_8) %>%
