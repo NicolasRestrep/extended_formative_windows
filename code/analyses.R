@@ -15,20 +15,21 @@ summaries <- long_difference %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
   group_by(wave_pair, name, age_group) %>%
   summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
-            date = weighted.mean(date), n = n()) %>%
+            date = weighted.mean(date), n = n(), sd = sd(abs_diff)) %>%
   #Filtering out bad questions
   filter(name != "natpoor", 
          name != "nathome") %>% ungroup() %>%
-  mutate(dec_diff = (as.numeric(difftime(date, min(date), units = "days")))/3652.5)
+  mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
+  mutate(se = sd/sqrt(n))
 
 # Multilevel model
 m1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
              (1 + d + dec_diff + age_group + dec_diff*age_group|name),
-           data = summaries)
+           data = summaries %>% filter(sd > 0), weights = 1/se)
 
 # Data to predict
 new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
-                        dec_diff = seq(0, 6.4, by = .1),
+                        dec_diff = seq(-6.4, 0, by = .1),
                         d = 0, name = unique(summaries$name))
 
 #Predict data
@@ -37,13 +38,13 @@ new.data$yhat <- predict(m1, newdata = new.data)
 #Graph predictions
 new.data %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
-  mutate(year = dec_diff*3652.5 + as.Date("1956-11-11")) %>%
+  mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
   ggplot(aes(x = year, y = yhat, color = age_group)) + 
   geom_hline(yintercept = 0, color = "black") + 
-  #geom_line(alpha = .3, aes(group = group)) + 
+  geom_line(alpha = .2, aes(group = group)) + 
   geom_smooth(linewidth = 2) + 
   theme_bw() + 
-  #facet_wrap(~age_group) + 
+  facet_wrap(~age_group) + 
   labs(x = "Year", y = "Predicted wave-to-wave change",
        color = "Age Group",
        title = "Predicted wave-to-wave change by age group",
@@ -105,18 +106,18 @@ m1 <- lm(a ~ d + dec_diff + I(d*dec_diff) + name + age_group + age_group*dec_dif
 m2 <- lmer(a ~ d + dec_diff + (1 + d + dec_diff | name),
            data = long_data, weights = weight)
 
-test <- tidy(m2) %>%
+test <- tidy(m1) %>%
   filter(effect == "fixed") %>%
   mutate(fe = estimate) %>%
   select(term, fe)
 
 
-augment(ranef(m2, condVar = TRUE)) %>%
+augment(ranef(m1, condVar = TRUE)) %>%
   left_join(test, by = c("variable"="term")) %>%
   mutate(estimate = estimate + fe, lb = lb + fe, ub = ub + fe) %>%
   ggplot(aes(x = estimate, y = level, xmin = lb, xmax = ub)) + 
   geom_vline(xintercept = 0, linetype = 2) + 
-  geom_vline(data = tidy(fixef(m2)) %>% mutate(variable = names, estimate = x),
+  geom_vline(data = tidy(fixef(m1)) %>% mutate(variable = names, estimate = x),
              aes(xintercept = estimate), color = "firebrick", linetype = 2) +
   geom_linerange() + 
   geom_point() + 
