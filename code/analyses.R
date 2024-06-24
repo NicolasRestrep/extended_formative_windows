@@ -9,6 +9,19 @@
 
 load("./clean_data/long_difference.Rdata")
 
+#Panel summaries
+psummaries <- long_difference %>%
+  mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
+  group_by(name, df) %>%
+  summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
+            date = weighted.mean(date), n = n(), sd = sd(abs_diff)) %>%
+  #Filtering out bad questions
+  filter(name != "natpoor", 
+         name != "nathome") %>% ungroup() %>%
+  mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
+  mutate(se = sd/sqrt(n))
+
+
 # Summarize absolute difference at the wave-pair level for each age group
 # for each question. 
 summaries <- long_difference %>%
@@ -20,7 +33,8 @@ summaries <- long_difference %>%
   filter(name != "natpoor", 
          name != "nathome") %>% ungroup() %>%
   mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
-  mutate(se = sd/sqrt(n))
+  mutate(se = sd/sqrt(n)) %>%
+  mutate(name = ifelse(name == "nateduc", "natschools", name))
 
 # Multilevel model
 m1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
