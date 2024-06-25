@@ -9,6 +9,19 @@
 
 load("./clean_data/long_difference.Rdata")
 
+#Panel summaries
+psummaries <- long_difference %>%
+  mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
+  group_by(name, df) %>%
+  summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
+            date = weighted.mean(date), n = n(), sd = sd(abs_diff)) %>%
+  #Filtering out bad questions
+  filter(name != "natpoor", 
+         name != "nathome") %>% ungroup() %>%
+  mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
+  mutate(se = sd/sqrt(n))
+
+
 # Summarize absolute difference at the wave-pair level for each age group
 # for each question. 
 summaries <- long_difference %>%
@@ -20,12 +33,19 @@ summaries <- long_difference %>%
   filter(name != "natpoor", 
          name != "nathome") %>% ungroup() %>%
   mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
-  mutate(se = sd/sqrt(n))
+  mutate(se = sd/sqrt(n)) %>%
+  mutate(name = ifelse(name == "nateduc", "natschools", name))
+
 
 # Multilevel model
 m1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
              (1 + d + dec_diff + age_group + dec_diff*age_group|name),
            data = summaries %>% filter(sd > 0), weights = 1/se)
+
+m2 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
+             (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group|name),
+           data = summaries %>% filter(sd > 0), weights = 1/se)
+
 
 # Data to predict
 new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
@@ -33,7 +53,7 @@ new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
                         d = 0, name = unique(summaries$name))
 
 #Predict data
-new.data$yhat <- predict(m1, newdata = new.data)
+new.data$yhat <- predict(m2, newdata = new.data)
 
 #Graph predictions
 new.data %>%
