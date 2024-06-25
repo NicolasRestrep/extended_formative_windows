@@ -12,7 +12,7 @@ load("./clean_data/long_difference.Rdata")
 #Panel summaries
 psummaries <- long_difference %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
-  group_by(name, df) %>%
+  group_by(name, wave_pair) %>%
   summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
             date = weighted.mean(date), n = n(), sd = sd(abs_diff)) %>%
   #Filtering out bad questions
@@ -25,6 +25,7 @@ psummaries <- long_difference %>%
 # Summarize absolute difference at the wave-pair level for each age group
 # for each question. 
 summaries <- long_difference %>%
+  filter(age <= 80) %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
   group_by(wave_pair, name, age_group) %>%
   summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
@@ -38,6 +39,10 @@ summaries <- long_difference %>%
 
 
 # Multilevel model
+m0 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
+             (1 + d + dec_diff + age_group|name),
+           data = summaries %>% filter(sd > 0), weights = 1/se)
+
 m1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
              (1 + d + dec_diff + age_group + dec_diff*age_group|name),
            data = summaries %>% filter(sd > 0), weights = 1/se)
@@ -46,11 +51,22 @@ m2 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group +
              (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group|name),
            data = summaries %>% filter(sd > 0), weights = 1/se)
 
+m4 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
+             d*age_group*dec_diff +
+             (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
+                d*age_group*dec_diff|name),
+           data = summaries %>% filter(sd > 0), weights = 1/se)
+
+
+m3 <- lmer(a ~ d + dec_diff + 
+             (1 + d + dec_diff |name),
+           data = psummaries %>% filter(sd > 0), weights = 1/se)
+
 
 # Data to predict
 new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
                         dec_diff = seq(-6.4, 0, by = .1),
-                        d = 0, name = unique(summaries$name))
+                        d = 2, name = unique(summaries$name))
 
 #Predict data
 new.data$yhat <- predict(m2, newdata = new.data)
@@ -74,12 +90,13 @@ new.data %>%
 
 #Look at questions instead
 new.data %>%
+  left_join(test, by = c("name"="name")) %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
-  ggplot(aes(x = dec_diff, y = yhat, color = age_group)) + 
-  geom_point(data = summaries, aes(y = a)) + 
+  ggplot(aes(x = dec_diff.x, y = yhat, color = age_group)) + 
+  #geom_point(data = summaries, aes(y = a)) + 
   geom_line(alpha = .7, aes(group = group)) + 
   theme_bw() + 
-  facet_wrap(~name) + 
+  facet_wrap(~reorder(name, dec_diff.y)) + 
   labs(x = "Year", y = "Predicted wave-to-wave change",
        color = "Age Group")
 
@@ -143,6 +160,29 @@ augment(ranef(m1, condVar = TRUE)) %>%
   geom_point() + 
   facet_grid(.~variable, scales = "free_x") + 
   theme_bw()
+
+
+## Overall trajectories for questions
+
+new.data2 <- expand_grid(dec_diff = seq(-6.4, 0, by = .1),
+                        d = 0, name = unique(psummaries$name))
+#Predict data
+new.data2$yhat <- predict(m3, newdata = new.data2)
+new.data2 %>%
+  left_join(test, by = c("name"="name")) %>%
+  mutate(direction = ifelse(dec_diff.y > .5, "1. Positive", 
+                            ifelse(dec_diff.y < -.5, "3. Negative", 
+                                   "2. Stable"))) %>%
+  ggplot(aes(x = dec_diff.x, y = yhat)) + 
+  geom_line(alpha = .7, aes(color = direction)) + 
+  theme_bw() + 
+  facet_wrap(~reorder(name, dec_diff.y)) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change")
+
+
+test <- ranef(m3)$name %>%
+  rownames_to_column(var = "name") %>%
+  select(name, dec_diff)
 
 
 
