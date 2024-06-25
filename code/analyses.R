@@ -36,10 +36,16 @@ summaries <- long_difference %>%
   mutate(se = sd/sqrt(n)) %>%
   mutate(name = ifelse(name == "nateduc", "natschools", name))
 
+
 # Multilevel model
 m1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
              (1 + d + dec_diff + age_group + dec_diff*age_group|name),
            data = summaries %>% filter(sd > 0), weights = 1/se)
+
+m2 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
+             (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group|name),
+           data = summaries %>% filter(sd > 0), weights = 1/se)
+
 
 # Data to predict
 new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
@@ -47,7 +53,7 @@ new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
                         d = 0, name = unique(summaries$name))
 
 #Predict data
-new.data$yhat <- predict(m1, newdata = new.data)
+new.data$yhat <- predict(m2, newdata = new.data)
 
 #Graph predictions
 new.data %>%
