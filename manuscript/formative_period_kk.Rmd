@@ -22,7 +22,7 @@ header-includes:
    - \usepackage{graphicx}
 mainfont: Minion Pro
 fontsize: 12pt
-abstract: Early adulthood is consistently identified as a “formative period” in the life course, when people have heightened probability of changing their personal culture. This probability has often been attributed to the social conditions of adolescence. Over the past 70 years, changes in the timing of major life course events such as marriage and childbirth have transformed and extended this life stage. We leverage these changes to explore whether changes in the structure of the life course have affected how likely people of different cohorts are to change their stated opinions over time. We find strikingly little difference in the rates of opinion change among young people in different eras. People of all ages have similar attitude behaviors over time. The overall pattern suggests either that social conditions are not strongly related to attitude stability or that different social shifts have had counter-vailing effects that produce aggregate stability in rates of change. 
+abstract: "Early adulthood is consistently identified as a “formative period” in the life course when people have heightened probability of changing their opinions, beliefs, and political preferences. This heightened rate of change is often attributed to the social conditions of this life stage. In this paper, we explore whether substantical changes in the timing and ubiquity of major life course transitions over the the past 70 years have affected the rate at which early adults and the rest of the population change their opinions on political and social issues. Contrary to expectations, we find that early adults have not become more likely to change attitudes and opinions since the 1960s. Instead, we find that other age groups have become more stable opinion holders."
 ---
 
 ```{r setup, include=FALSE}
@@ -31,21 +31,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-Adolescence and young adulthood are typically identified in social science literature as "impressionable years" -- a stage of the life course in which people are more susceptible to broad social currents, when their opinions are more malleable, and when peoples' core ideas and attitudes are formed [@krosnick1989; @alwin1991]. Research regularly finds that people are more likely to change their preferences, attitudes, and opinions in these life stages than other life stages, with opinions and dispositions becoming more stable once these life stages have passed [@sears2013; @kiley2020]. This pattern, in which young people are open to cultural change and become more resistant over time, underpins dynamics around cohortization that are frequently invoked in larger models of social change [@ryder1965; @mannheim1952].
+Adolescence and young adulthood are frequently identified in social science literature as "impressionable years" -- a stage of the life course in which people are more susceptible to broad social currents, when their opinions are more malleable, and when they form the core ideas and attitudes that shape subsequent decision making [@krosnick1989; @alwin1991]. In support of this idea, regularly finds that people in these life stages are more likely to change their preferences, attitudes, and opinions than people in other life stages [@sears2013; @kiley2020]. This pattern, in which young people show greater openness to cultural change but become more resistant over time, underpins dynamics around cohortization that are frequently invoked in larger models of social and cultural change [@ryder1965; @mannheim1952].
 
-However, why people in this life stage appear to show more frequent opinion change relative to older people is unclear. Explanations in the social sciences tend to highlight the unique social features of these early life stages -- high rates of mobility between social contexts, participation in educational institutions, and cultural expectations about pursuing "new experiences" -- that shape how people are exposed to new sources of information or their ability to update opinions in the face of new information [@alwin1991; @danigelis2007]. Alternative explanations in the social sciences also focus on the unique features of middle age that tend to stabilize attitudes during this period, including higher levels of social authority [@eaton2009; @visser2004]. Work in biology, psychology, and cultural evolution, in contrast, shows that peoples' cognition changes in ways that might make them more resistant to new information as they age [CITATION]. While both social and cognitive/biological mechanisms likely play a role in facilitating opinion change in this life stage, the relative contributions of each are unclear.
+However, why people in this life stage appear to show more frequent opinion change relative to older people is unclear. Explanations in the social sciences tend to highlight the unique social features of these early life stages -- high rates of mobility between social contexts, participation in educational institutions, and cultural expectations about pursuing "new experiences" -- that shape how people are exposed to new sources of information or their ability to update opinions in the face of new information [@alwin1991; @danigelis2007]. Other related explanations focus on the unique features of middle age that might stabilize attitudes during this period, including people holding positions with higher levels of social authority during middle age [@eaton2009; @visser2004]. At the same time, work in biology, psychology, and cultural evolution finds that peoples' cognition changes in ways that might make them more resistant to new information as they age [CITATION], suggesting the differences between early adults and the rest of the population might be more rooted in biological and cognitive mechanisms than social mechanisms. 
 
-Clarifying the relative importance of different mechanisms that drive the frequency of opinion change during this formative period is important for understanding the mutually reinforcing processes of social change and cultural evolution. If openness to cultural change in early adulthood is principally a function of the social structure of life during these ages, then delays in the timing and ubiquity of life course transitions like marriage and childbearing, and increases in college-going, could have significant effects on the broader process of macro-social change. Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2021; @robbins2022] that decrease distinctions between life course stages might make older people more open to change in more recent eras than they were in earlier eras, diminishing the importance of "cohorts" for social change and increasing the importance of intrapersonal change over time [@kiley2020; @vaisey2016]. If the mechanisms are principally cognitive and biological, rather than social, then these changes are unlikely to affect rates of social change in the same way.
+While both social and cognitive/biological mechanisms likely play a role in facilitating opinion change during early adulthood, the relative contributions of each are unclear, and clarifying their relative importance is important for understanding the mutually reinforcing processes of social change and cultural evolution. If openness to cultural change in early adulthood is principally a function of the social structure of life during these ages, then delays in the timing and ubiquity of life course transitions like marriage and childbearing, and increases in college-going, could have significant effects on the broader process of macro-social change. Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2021; @robbins2022] that decrease distinctions between life course stages might make older people more open to change in more recent eras than they were in earlier eras, diminishing the importance of "cohorts" for social change and increasing the importance of intrapersonal change over time [@kiley2020; @vaisey2016]. If the mechanisms are principally cognitive and biological, rather than social, then these broader changes are unlikely to affect rates of social change in the same way.
 
-In this paper, we explore how rates of opinion change in different age groups have changed in response to broader social structure and changes in the timing of life course events since the 1950s. Over the course of the 20th century, the timing of life-course transitions such as completing schooling, entering the workforce, getting married, leaving one's parents' home, and having children have changed dramatically, with most of these event occurring later in the life course in more recent cohorts [@buchmann1989; @bruckner2005]. Similarly, the "early adulthood" stage of life has become more detached from family and other role obligations, giving people in this life stage more freedom to explore new ideas and lifestyle choices [@rosenfeld2009]. This suggests both a lengthening of and an intensification of this stage of the life course in ways that potentially affect the rates at which people undergo cultural change.
+In this paper, we explore how rates of opinion change in different age groups have changed over the past 70 years in response to broader social structure and changes in the timing of life course events. Since the 1950s, the timing of life-course transitions such as completing schooling, entering the workforce, getting married, leaving one's parents' home, and having children have changed dramatically, with most of these event occurring later in the life course in more recent cohorts [@buchmann1989; @bruckner2005]. Similarly, the "early adulthood" stage of life has become more detached from family and other role obligations, giving people in this life stage more freedom to explore new ideas and lifestyle choices [@rosenfeld2009]. This suggests both a lengthening of and an intensification of this stage of the life course in ways that potentially affect the rates at which people undergo cultural change.
 
-We take advantage of this change over time to explore whether young adults of different cohorts demonstrate more or less change in their political opinions over time relative to other members of the population.
+Drawing on data for 77 questions asked multiple times across 12 panel surveys dating from the 1950s through the 2020s, we model the amount of change people make over time in social and political attitudes as a function of age categories. Consistent with the "impressionable years" hypothesis, we find that members of the youngest age groups (18-25 and 26-33) are more likely to make changes of opinion than older respondents in the most recent panels but not in the earliest panels. This difference emerged over the second half of 20th Century not because young adults become more likely to make changes but because middle-aged and older respondents become less likely to make changes. 
 
-We decompose over-time responses into reliability (a lack of random, non-persisting fluctuations) and stability (true consistency in latent dispositions net of these random fluctuations) for a range of political attitudes in nine nationally representative panel data sets spanning from the 1950s through the 2010s. We separately estimate these parameters for a comparable set of age groups in each panel to evaluate whether response reliability or stability changed as new cohorts moved through the same age ranges under different social conditions.
-
-Consistent with the "impressionable years" hypothesis, we find that the youngest respondents in each panel (ages 18-25) are consistently the least stable opinion reporters, suggesting they are more likely than other respondents to make durable changes in their views. They are also among the least reliable reporters, suggesting considerable short-term but non-persisting change in their views. But we find no consistent trajectory in either measure over time, among members of this age group or other members of the population. Notably, respondents aged 26 to 33 continue to look more like older age groups than the youngest age group in their rates of opinion stability and reliability, providing little evidence of "lengthening" of this formative window.
-
-We believe these findings have important implications for our understanding of why early adulthood is a significant formative period. While these findings do not provide conclusive evidence of one mechanism over the other, they confine the range of potential theories about the relationship between life course stages and attitude change. They suggest that there is something relatively timeless -- potentially biological and cognitive factors -- that accounts for increased opinion variance in young people, and that, barring significant evidence of counter-currents that stabilize people, changes in the social conditions of early adulthood have not increased the degree to which young people make meaningful changes of opinion.
+We believe these findings have important implications for our understanding of why early adulthood is a significant formative period for cultural and political attitudes. 
 
 # Impressionable Years
 
@@ -123,18 +119,17 @@ We have framed our hypotheses as expectations derived from the framework suggest
 
 # Analytical Strategy
 
-## Data and Methods
+## Data
 
-Our general question is whether, when presented with the same question during the same age range, more recent cohorts will demonstrate more change over time. Analyzing this question requires data on opinion and attitude reports over time for members of different cohorts at different time points, coming from the same general population. To construct such a data source, we combine several panel surveys conducted by the American National Election Studies and the General Social Survey spanning about 60 years. Both the ANES and GSS are designed to generalize to the non-institutionalized U.S. adult (18+) population, and can be thought of as tapping the same general population. We included a total of 12 panels in our search: ANES panels from 1956-60, 1972-76, 1980, 1990-92, 1992-97, 2000-04, 2016-20, and 2020-22; and GSS panels from 2006-10, 2008-12, 2010-14, and 2016-20. We evaluated an additional panel conducted by the ANES in 2008-09 (with an additional follow-up in 2010), but no questions overlapped this panel and any other panel.
+Our general question is whether, when presented with the same question during the same age range, more recent cohorts will demonstrate more change over time than members of earlier cohorts. Analyzing this question requires data on opinion and attitude reports over time for members of different cohorts at different time points, coming from the same general population. To construct such a data source, we combine several panel surveys conducted by the American National Election Studies and the General Social Survey spanning about 60 years. Both the ANES and GSS are designed to generalize to the non-institutionalized U.S. adult (18+) population, and therefore can be thought of as tapping the same general population. We included a total of 12 panels in our search: ANES panels from 1956-60, 1972-76, 1980, 1990-92, 1992-97, 2000-04, 2016-20, and 2020-22; and GSS panels from 2006-10, 2008-12, 2010-14, and 2016-20. We evaluated an additional panel conducted by the ANES in 2008-10, but no questions overlapped this panel and any other panel.
 
-For reasons explained below, we identified questions that were asked in at least three different panels with at least one of those panels asking some respondents to answer the question at three or more separate time points. Because three of the GSS panels overlap considerably (2006-10, 2008-12, and 2010-14) and contain the same set of questions, we did not treat these as separate panels for the purposes of generating three distinct time points. In other words, questions needed to appear in these panels and an ANES panel to be included in our analysis. 
+For reasons explained below, we identified questions that were asked in at least three different panels with at least one of those panels asking some respondents to answer the question at three or more separate time points. Because three of the GSS panels overlap considerably (2006-10, 2008-12, and 2010-14) and contain the same set of questions, we did not treat these as separate panels for the purposes of generating three distinct time points. In other words, questions needed to appear in these panels and an ANES panel to be included in our analysis. When question wording changed across panels, we harmonize response options to the question structure with the fewest response options.
 
-This produced a total of ### questions tapping a broad range of topics including political and ideological identification, government policy preferences, preferences for federal spending on different priorities, views on government efficacy, views on social issues and social change, and sentiment toward various political and social groups. 
-
+This produced a total of 77 questions tapping a broad range of topics including political and ideological identification, general government policy preferences, preferences for federal spending on different priorities, views on government efficacy, views on social issues and social change, and sentiment toward various political and social groups. 
 
 ## Methods
 
-When questions are observed in multiple panels, differences in the amount of change we observe could be attributable to either changes in the population's ability to report stable attitudes over time or to the structural features of the survey administration. Specifically, the amount of change observed over time might be due to variation in the duration between waves, with longer duration between observations leading to more wave-to-wave change as people experiences more shocks that should shift their opinions. In our data, panel duration varied from less than one year (the 1980 ANES Major Panel Study) to about five years (the 1992-97 ANES), and duration between questions ranged from a few days (for questions asked in both pre- and post-election surveys in the ANES panels) to about five years (questions asked in 1992 and 1997), with peaks around 2 years and 4 years.
+When questions are observed in multiple panels, differences in the amount of change we observe could be attributable to either changes in the population's capacity to report stable attitudes over time or to the structural features of the survey administration. Specifically, the amount of change observed over time might be due to variation in the duration between waves, with longer duration between observations leading to more wave-to-wave change as people experiences more shocks that should shift their opinions. In our data, panel duration varied from less than one year (the 1980 ANES Major Panel Study) to about five years (the 1992-97 ANES), and duration between questions ranged from a few days (for questions asked in both pre- and post-election surveys in the ANES panels) to about five years (questions asked in 1992 and 1997), with peaks around 2 years and 4 years.
 
 In the one-item, one-panel case (e.g., partisan identification in the 1972-76 panel), we could model the absolute change from wave-to-wave as a function of an intercept and the duration between observations. 
 
@@ -167,6 +162,8 @@ In this framework, the first-level model models the absolute difference in a pai
 
 For all models, we normalize response scales between 0 and 100. 
 
+In all models, respondents in the 18-25 age group serve as the reference category. 
+
 # Weights
 
 We focus on using weights that accounts for sampling design. 
@@ -178,20 +175,6 @@ For the 2020-22 ANES panel.
 
 # Results
 
-Model 1 in Table XXX presents the main effects and variance components of the multilevel model presented above.
-
-The intercept term in Model 1 suggests that, on average, survey respondents are expected to vary by almost a fifth of the response scale on average (18 points) in the most recent years of the survey, controlling for duration between observations, on any particular question. This is a rather high level of variance, but consistent with previous studies that find that on any particular question survey respondents tend to make large wave-to-wave changes, or that survey questions about political attitudes have high levels of measurement error [@ansolabehere2009; @converse1965]. At the same time, random-effect variance around this main intercept term is quite large, with a standard deviation of about 5.86. On some questions, respondents are expected to change their responses by about 40 percent of the scale between observations, while on others almost no wave-to-wave change is expected, meaning people tend to respond with the same answer over time.
-
-Second, duration between observations is positively but weakly associated with wave-to-wave absolute change. For every additional year between waves, respondents' absolute deviance increases about .71 points. Notably, variance around this main effect is relatively small (s.d. = 0.43). In other words, while some items demonstrate a stronger effect of duration than others, these differences are of comparable magnitude. Given the comparatively high level of wave-to-wave change independent of duration, our results broadly suggest that most wave-to-wave change is non-persisting, consistent with findings from other recent work [@kiley2020; @lersch2023]. 
-
-Turning now to the coefficients for age groups, members of the youngest age group (18-25) are notably less stable than respondents in other age groups in the most recent panels. Respondents in the 26-33 age group are about 1.5 points more stable on average, respondents in the 34-65 age group are about 3 points more stable on average, and respondents in the 65 and over age group are about 4 points more stable on average, than respondents in the 18 to 25 age group. This provides broad evidence for the "impressionable years" and "increasing persistence" hypotheses, as the youngest age groups are less stable than others, followed by the 26-33 age group.
-
-The main effect of year of observation in decades is negative and also small. On average, respondents exhibit less wave-to-wave change in their responses in more recent panels. However, question-level random effects vary considerably around this main effect, with a standard deviation of about .88. This suggests that while some items show decreased wave-to-wave change over time, others show increased wave-to-wave change over time. 
-
-
-Turning now to the central question of whether the amount of change we observe for each group has changed over time, we turn to the interaction effects between time and age group. The coefficient for the reference category (18-25) suggests that respondents in this age group have not become any more or less stable opinion responders since the start of the observation window.
-
-
 
 ## Life Course Changes
 
@@ -201,133 +184,45 @@ In the early panel (1956-60), respondents in the lowest age group look very simi
 
 These trends set the stage for what to expect in terms of reliability and stability. To the extent that these measures as proxies for life stages that influence attitude stability and reliability, then we should see the youngest age group look similar to the older age groups in the 1950s, and diverge by the 1970s, continuing to diverge over time. Respondents in the 26-33 age group should remain similar to older respondents for most panels, but begin to diverge by the 1990s and especially by the 2000s.
 
-## Systematic Change
+## Opinion Changes
 
-We first evaluate the average estimates for absolute mean change for each age group. Figure 1 plots the average asbolute slope for each of the three age groups in each panel across all questions asked in that panel. Again, which questions are asked in each panel varies significantly. 
+Model 1 in Table XXX presents the main effects and variance components of the multilevel model presented above. In all models, the 18-25 age group serves as the reference category, and the time variable is centered on the most recent panel (2016-2020), so coefficients reflect expectations for change in recent years, rather than at earlier time points.
 
-```{r}
-bind_rows(mean_val5, mean_val8, mean_val9, mean_val7,
-          mean_val2k, mean_val90, mean_val06,
-          mean_val08, mean_val10) %>%
-  mutate(year = recode(df, "anes2k"=2000, "anes5"=1956,
-                       "anes7"=1972, "anes9"=1992,
-                       "anes8"=1980, "anes90"=1990,
-                       "gss06"=2006, "gss08"=2008,
-                       "gss10"=2010)) %>%
-  filter(year != 1980, year != 1990) %>%
-  ggplot(aes(x = year, y = mean, fill = group)) + 
-  geom_point(size = 2, shape = 21, color = "black") + 
-  theme_bw() + 
-  labs(x = "Year", y = "Abs. Slope", fill = "Age Group")
-```
+The intercept term in Model 1 suggests that, on average, survey respondents in the 18-25 age group are expected to vary by almost a fifth of the response scale on average (18 points) in the most recent years of the survey, controlling for duration between observations, on any particular question. This is a rather high level of variance, but consistent with previous studies that find that on any particular question survey respondents tend to make large wave-to-wave changes, or that survey questions about political attitudes have high levels of measurement error [@ansolabehere2009; @converse1965]. At the same time, random-effect variance around this main intercept term is quite large ($\sigma_{\beta_0} = 5.9220$). On several questions, respondents are expected to change their responses by about 40 percent of the scale between observations, while on others almost no wave-to-wave change is expected, meaning people tend to respond with the same answer over time.
 
-Overall, we see few general patterns across age groups over time. There is little consistency in which age group displays the largest absolute change in each of the panels or the trajectory of rates of change across the panels. The 2006 and 2008 General Social Survey have the highest absolute change over time, but the 2010 panel, the most recent, is highly comparable to the other panels. While people in the 18 to 25 age range display higher rates of change than people in the 26-33 and 34 and older age group in the most two recent panels (the 2008 and 2010 GSS panels), suggesting some evidence of an intensification of early adulthood, they fall below people ages 34 and over in the panel begun only two years prior and overlapping (the 2006 GSS panel).
+The coefficients for age groups other than the reference category suggest that, on average, other age groups are more stable than people in the 18-25 age range in the most recent panels. Respondents in the 26-33 age group are about 1.1 points more stable on average, respondents in the 34-65 age group are about 2.2 points more stable on average, and respondents in the 65 and over age group are about 3.5 points more stable on average, than respondents in the 18 to 25 age group. This provides broad evidence for the "impressionable years" and "increasing persistence" hypotheses, as the youngest age groups are less stable than others, followed by the 26-33 age group.
 
-In aggregating questions, we see no evidence for the "elongation" hypothesis that people in the 26 to 33 age range increasingly look like people in the 18 to 25 age range. People in the 26 to 33 age range are functionally identical to people over 34 in all panels, and they do not show any evidence of becoming more like people in the 18 to 25 age range over time. 
+Duration between observations is positively but weakly associated with wave-to-wave absolute change. For every additional year between responses, the expected absolute deviance for respondents between the ages of 18 and 25 increases about .9 points. Notably, variance around this main effect is relatively small (s.d. = 0.52), meaning each one year duration only increases the amount changed by between .5 and 1.5. Given the comparatively high level of wave-to-wave change independent of duration (18 points), our results broadly suggest that most wave-to-wave change is non-persisting, consistent with findings from other recent work [@kiley2020; @lersch2023]. While often called "measurement error," this change conflates both random change due to measurement error and true non-persisting change.
 
-One challenge we noted at the outset is that the composition of questions in each panel changes over time, meaning our understanding of the general trajectories of age groups across cohorts might be biased by changes in question content, questions wording, or survey administration. To control for these potential sources of bias, we explore only questions that have been repeated almost verbatim in multiple panels. These are the seven-point scale of partisan identification (from Strong Democrat to Strong Republican) and the seven-point scale of political ideology (from Extremely Liberal to Extremely Conservative). These results are presented in Figure XXX below.
+The interactions between age and duration are, for the most part, small and not statistically significant, meaning groups make "real" change at roughly the same rates over time. People over 25 make slightly less change than people 18-25 for each additional year of observation, suggesting that the youngest age groups might be making more durable changes of opinion than their older counterparts, but these differences are small and substantively negligible, especially compared to the amount of non-persisting change. 
+
+The intensification of early adulthood hypothesis (H3) generally suggests that the youngest respondents should make more change over time in more recent cohorts than their counterparts from earlier cohorts did when they were the same ages. The effect of year of observation in decades for people in the 18-25 age group ($\beta = 0.14345$, $t = 0.754$) is substantively small and not statistically significant. On average, recent cohorts in this age group make approximately the same amount of wave-to-wave change in recent years as earlier cohorts did, accounting for the kinds of questions they were asked and time between waves. However, question-level random effects vary considerably around this main effect, with a standard deviation of about 1.4316. This suggests that the overall flat effect obscures quite large question-level differences, with some questions becoming more stable and others becoming less stable. We return to consider these question-specific trends later.  
+
+Next, the extended early adulthood framework (H1) suggests that we should see a closing of the gap between people in the 18-25 and 26-33 age groups over time. The interaction between year of observation and the 26-33 age category is small and not statistically significant ($\beta = -0.03560$, $p=-0.361$), suggesting that people in this age group have also not become any more or less likely to make changes of opinion since the earliest panels, and have also not become any more or less similar to the youngest respondents, and that significant changes in the social environment have not made more recent cohorts any more likely to make attitude changes than earlier cohorts were when they were in this age range.
+
+However, it is important to understand the full picture of change over time before drawing substantive conclusions. Table XXX shows that, in contrast to people in the 18-25 and 26-33 age range, respondents in older age groups do show a notable time trend -- people in this age range become more stable opinion holders over time. To more clearly illustrate overall trends, Figure XXX plots the predicted time level of change for respondents in each age category over time.
 
 ```{r}
-bind_rows(bind_rows(group_meansc5) %>% mutate(year = 1956), 
-          bind_rows(group_meansc7) %>% mutate(year = 1972),
-          bind_rows(group_meansc9) %>% mutate(year = 1992), 
-          bind_rows(group_meansc2k) %>% mutate(year = 2000),
-          bind_rows(group_meansc06) %>% mutate(year = 2006),
-          bind_rows(group_meansc08) %>% mutate(year = 2008),
-          bind_rows(group_meansc10) %>% mutate(year = 2010)) %>%
-  filter(var %in% c("polviews", "partyid")) %>%
-  mutate(var = recode(var, "polviews"="Ideology",
-                      "partyid"="Identitification")) %>%
-  ggplot(aes(x = year, y = abs_mean_slope, fill = group)) +
-  geom_point(shape = 21, size = 2) + 
-  facet_wrap(~var) + 
+new.data %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
+  ggplot(aes(x = year, y = yhat, color = age_group)) + 
+  geom_hline(yintercept = 0, color = "black") + 
+  #geom_line(alpha = .2, aes(group = group)) + 
+  geom_smooth(linewidth = 2) + 
   theme_bw() + 
-  labs(x = "Year", y = "Abs. Mean Slope", 
-       fill = "Age Group")
-
+  #facet_wrap(~age_group) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group",
+       title = "Predicted wave-to-wave change by age group",
+       subtitle = "Individual question trajectories and overall trajectory") + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  theme(legend.position = "none")
 ```
 
-For partisan identification, we see some evidence for the intensification hypothesis, with people in the 18-25 age range showing higher average absolute slopes than people in the other two age ranges.  However, though the population as a whole also makes more linear change in partisan identification as well during these more recent years, complicating the overall picture. There is no evidence that people in the 26-33 age range increase more than the general population in this time frame, suggesting no evidence of the elongation of the formative period.
-
-We see no corresponding pattern for political ideology. Respondents in the 18 to 25 age range look remarkably similar to respondents in other age groups, and there is no obvious trajectory across cohorts. In one panel (the GSS panel beginning in 2006), people in this age range show higher rates of change, but this pattern does not hold even for the other GSS panels that overlap this panel. People in the 26 to 33 age range cannot be distinguished from people over 34 even in the most recent cohorts, suggesting no evidence for the elongation hypothesis.
+In the earliest panels, the oldest respondents (65 and over) are substantially less stable opinion holders than younger respondents, while the remaining three age groups (18-25, 26-33, and 34-64) appear to change at approximately equal rates. As noted previously, respondents in the 18-25 and 26-33 age ranges demonstrate similar levels of opinion change over time. 
 
 
-## Non-systematic change
-
-```{r}
-bind_rows(mean_var5, mean_var8, mean_var9, mean_var7,
-          mean_var2k, mean_var90, mean_var06,
-          mean_var08, mean_var10) %>%
-  mutate(year = recode(df, "anes2k"=2000, "anes5"=1956,
-                       "anes7"=1972, "anes9"=1992,
-                       "anes8"=1980, "anes90"=1990,
-                       "gss06"=2006, "gss08"=2008,
-                       "gss10"=2010)) %>%
-  filter(year != 1980, year != 1990) %>%
-  ggplot(aes(x = year, y = mean, fill = group)) + 
-  geom_point(size = 2, shape = 21, color = "black") + 
-  theme_bw() + 
-  labs(x = "Year", y = "Abs. Slope", fill = "Age Group")
-
-```
-
-In the early panels (the 1956 and 1972 ANES panels), there is little evidence that the youngest respodents exhibited more or less consistency over time in their attitude reports than the rest of the sample. In the 1956 panel, they have the lowest residual variance around their latent trajectories, and in the 1972 panel, they fall between the other two groups. However, in more recent cohorts, people in this age group consistently have the most residual variance of the three groups. Whether this is due to lack of knowledge of the political system (and therefore measurement error), or whether these vacillations around their latent trajectories are due to "exploration" across attitudes is not clear from these results.
-
-There is no consistent evidence for "elongation" of early adulthood in these data, as people in the 26-33 age group show no consistent trajectory over time.
-
-Turning again to the 
-
-```{r}
-bind_rows(bind_rows(variancec5) %>% mutate(year = 1956), 
-          bind_rows(variancec7) %>% mutate(year = 1972),
-          bind_rows(variancec9) %>% mutate(year = 1992), 
-          bind_rows(variancec2k) %>% mutate(year = 2000),
-          bind_rows(variancec06) %>% mutate(year = 2006),
-          bind_rows(variancec08) %>% mutate(year = 2008),
-          bind_rows(variancec10) %>% mutate(year = 2010)) %>%
-  filter(var %in% c("polviews", "partyid")) %>%
-  mutate(var = recode(var, "polviews"="Ideology",
-                      "partyid"="Identitification")) %>%
-  ggplot(aes(x = year, y = mse, fill = group)) +
-  geom_point(shape = 21, size = 2) + 
-  facet_wrap(~var) + 
-  theme_bw() + 
-  labs(x = "Year", y = "Abs. Mean Slope", 
-       fill = "Age Group")
-
-```
-
-
-
-We first evaluate the average estimates for reliability and stability for each panel and for each age group to establish a baseline of comparison. Table 1 presents the average reliability and stability for each panel. Across panels, the 1956-58-60 panel shows the lowest average reliability of all the panels.[^badq] The 1980 panel, with the shortest time between waves (about 3 months between each wave), has notably higher reliability than other panels, a fact established in previous work [@krosnick1989]. Having less time between waves increases the reliability of responses. The remaining panels all have comparable average reliabilities, with many within .02 of each other.
-
-[^badq]: This is potentially due to improvements in question-asking since the ANES first administered this survey. Many questions in this panel have been critiqued as difficult for average Americans to answer.
-
-Average stability estimates are also generally comparable across panels, ranging withing a couple points of each other. Of note here is that differences between the GSS panels are quite large, with the 2008-10-12 panel showing the highest label of stability while the 2010-12-14 panel showing the lowest, even though these panels contain the exact same questions and overlap considerably in terms of time.
-
-Table XXX presents the average reliability and stability for age groups. Here we see results broadly consistent with the "impressionable years" hypothesis. First, the 18-25 year old group has notably lower stability than other groups, suggesting higher rates of change in their "true" attitudes over time. Stability tends to increase up through middle age (42-29) before leveling off. Second, reliability is also substantially lower for the youngest age group and increases consistently as groups get larger. For both measures, the largest jump is between the youngest age group (18-25) and the one following it (26-33), supporting the impressionable years model over an increasing persistence model.
-
-These results reinforce life-course patterns established in other work and extend it to more recent panels, but they do not say anything about whether changes in the life course have extended or intensified the "impressionable years" by decreasing stability and reliability in the youngest group (18-25) over time or extending the values seen in that group up the age ladder (to respondents in the 26-33 group). For that we must examine age groups separately by panel.
-
-## Over-Time Trends
-
-Table XXX summarizes the average reliability and stability estimated for each of the age groups for each of the panels analyzed. The "formative period" or "impressionable years" hypothesis and previous work [@alwin2007; @alwin1989] suggests that we should observe low stability for the youngest cohorts and large and approximately equal stability in the older groups. The "extended early adulthood" hypotheses suggests that, over time, people in the 26-33 age group should come to more closely resemble people in the 18-25 age group, meaning their average stability will decrease over time as people in this age group continue to make durable changes of culture. The "intensification" of early adulthood hypothesis suggests that 18-25 year olds (and possible 26-33 year olds) will move farther apart from the rest of the population, both in terms of stability and reliability, as they make more temporary changes (lower reliability) and durable changes (lower stability) over time.
-
-It is important to note that some age-group/panel combinations have very small sample sizes, which can lead to large sampling errors and produce problematic estimates of reliability. Because of this, we remove some reliability and stability estimates that are outside the bounds of plausibility or were not able to be estimated. If a question produced an impalusible value for one of the age groups, we remove it for all age groups.
-
-Because information in the table is difficult to process, and because some of the panels have much higher average levels of stability and reliability because of shorter duration, Figure ... plots the average reliability estimates by panel, with each panel pegged to year it begain (e.g., the 1972-74-76 panel is plotted at 1972). The figure and table show the same overall age trends as the aggregate data. Across panels, the youngest respondents (ages 18-25) are the least stable respondents. In eight of the nine panels, they have the lowest average stability, and in the remaining panel, they have the second-lowest. However, there is no clear age pattern beyond that. Respondents in the second-youngest age group (26-33) have the second-lowest stability in only two of the panels (1990 and 2008), but this does not seem to indicate a pattern. In other panels, both early and late, these respondents seem indistinguishable from other respondents, especially in the 2006-10 and 2010-14 GSS panels (the most recent).
-
-There is no clear time trajectory for any age group when it comes to stability, even accounting for different average duration across panels. Groups do not, on average, appear to be getting more or less stable over time, with responses from the most recent GSS panels looking quite similar to responses from the 1972-76 ANES panel. 
-
-Turning next to the question of reliability, the youngest aged group (18-25) are typically among the least reliable respondents in each panel, suggesting they are making higher rates of non-durable change in their attitudes than other member of the population. However, the pattern is not as consistent as with stability, and there is not always a clear gap between the youngest and the rest of the population. Other groups -- especially the oldest (66-83) -- frequently show less reliability in each panel. In terms of reliability, the second-youngest group (26-33) are functionally indistinguishable from middle-aged respondents in each panel, and much closer to those respondents than the youngest, providing no evidence for the "extended formative period" hypothesis. Again, as with stability, these findings reflect previous work on reliability and show that patterns continue in more recent panels.
-
-In terms of change over time, there appears to be a slight upward trend in reliability across the panels, even accounting for the two panels with different duration -- the 1980 and the 1990-91-92 ANES panels. However, aside from the general upward trend, there do not appear to be distinct time trends for any of the age groups.
-
-## Question Fixed Effects
-
-The preceding analysis has assumed that panels are generally comparable, and that average estimates of reliability and stability are comparable across panels as measures of reliability and stability toward "salient" issues for that period. We now turn toward exploring the reliability and stability for questions that are asked only in multiple panels. Table XXX presents regression coefficient estimates for model regressing stability estimates on time and fixed effects for question and panel, with an interaction between time and age group. The table shows that there is no discernible time trend for the stability estimates of 18-25 year olds, nor is their time trend statistically significantly different from the time trends for the other age groups.
-
-Table XXX presents similar coefficient estimates for the model regressing reliability on time and fixed effects for question, with an interaction between time and age group. The table also shows no meaningful time trend for respondents 18-25. The coefficient for the interaction between time and the 58-65 age group is statistically significant, suggesting people in this group became slightly more stable over time compared to 18-25 year olds, but it is difficult to make a clear judgment about the overall trend, and there are no other statistically significant interaction terms.
 
 # Discussion
 
