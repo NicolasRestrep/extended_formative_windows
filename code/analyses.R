@@ -38,6 +38,8 @@ summaries <- long_difference %>%
   mutate(name = ifelse(name == "nateduc", "natschools", name))
 
 
+
+
 # Multilevel model
 m0 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + 
              (1 + d + dec_diff + age_group|name),
@@ -66,13 +68,14 @@ m3 <- lmer(a ~ d + dec_diff +
 # Data to predict
 new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
                         dec_diff = seq(-6.4, 0, by = .1),
-                        d = 2, name = unique(summaries$name))
+                        d = c(0,1), name = unique(summaries$name))
 
 #Predict data
-new.data$yhat <- predict(m2, newdata = new.data)
+new.data$yhat <- predict(m4, newdata = new.data)
 
 #Graph predictions
 new.data %>%
+  filter(d == 0) %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
   mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
   ggplot(aes(x = year, y = yhat, color = age_group)) + 
@@ -84,6 +87,25 @@ new.data %>%
   labs(x = "Year", y = "Predicted wave-to-wave change",
        color = "Age Group",
        title = "Predicted wave-to-wave change by age group",
+       subtitle = "Individual question trajectories and overall trajectory") + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  theme(legend.position = "none")
+
+#Marginal effect of "year" duration
+new.data %>%
+  spread(d, yhat) %>%
+  mutate(year_diff = `1`-`0`) %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
+  ggplot(aes(x = year, y = year_diff, color = age_group)) + 
+  geom_hline(yintercept = 0, color = "black") + 
+  geom_line(alpha = .2, aes(group = group)) + 
+  geom_smooth(linewidth = 2) + 
+  theme_bw() + 
+  facet_wrap(~age_group) + 
+  labs(x = "Year", y = "Predicted change for one-year duration change",
+       color = "Age Group",
+       title = "Predicted duration effect by age group",
        subtitle = "Individual question trajectories and overall trajectory") + 
   scale_color_brewer(type = "qual", palette = 2) +
   theme(legend.position = "none")
@@ -143,13 +165,13 @@ m1 <- lm(a ~ d + dec_diff + I(d*dec_diff) + name + age_group + age_group*dec_dif
 m2 <- lmer(a ~ d + dec_diff + (1 + d + dec_diff | name),
            data = long_data, weights = weight)
 
-test <- tidy(m1) %>%
+test <- tidy(m2) %>%
   filter(effect == "fixed") %>%
   mutate(fe = estimate) %>%
   select(term, fe)
 
 
-augment(ranef(m1, condVar = TRUE)) %>%
+augment(ranef(m2, condVar = TRUE)) %>%
   left_join(test, by = c("variable"="term")) %>%
   mutate(estimate = estimate + fe, lb = lb + fe, ub = ub + fe) %>%
   ggplot(aes(x = estimate, y = level, xmin = lb, xmax = ub)) + 
