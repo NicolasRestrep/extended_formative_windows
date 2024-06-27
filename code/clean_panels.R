@@ -279,7 +279,7 @@ anes7_long <- anes7 %>%
          V720096, V720577, V742236, V763743 #electmatter (1,2,3,5) (1 - good deal, 3 - some, 5 not much) (0,8,9, NA)
          ) %>%
   mutate(weight_2 = "1",
-         weight_3 = as.character(V742003),
+         weight_3 = ifelse(V742003 == 0, "1", as.character(V742003)),
          weight_4 = as.character(V764004),
          weight_5 = weight_4,
          age_1 = V720294, 
@@ -637,7 +637,8 @@ anes8_long <- anes8 %>%
          attentioncpg = (attentioncpg-1)/4*100) %>%
   pivot_longer(c(abortion,attentioncpg, defscale:spendserv)) %>%
   filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%
-  mutate(df = "1980 ANES")
+  mutate(df = "1980 ANES") %>%
+  mutate(weight = 1)
 
 # Clean Data 1990-92 ANES ====
 
@@ -2633,7 +2634,6 @@ long_difference <- long_scores %>%
          age_group = ifelse(age > 25 & age < 34, "26-33", age_group),
          age_group = ifelse(age > 65, "65+", age_group))
 
-long_difference %>% group_by(name, df) %>% summarise(meana = mean(abs_diff)) %>% View()
 
 # Save dataset ====
 #save(long_data, file = "~/Dropbox/extended_formative_windows/clean_data/long_data.Rdata")
