@@ -21,7 +21,6 @@ psummaries <- long_difference %>%
   mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
   mutate(se = sd/sqrt(n))
 
-
 # Summarize absolute difference at the wave-pair level for each age group
 # for each question. 
 summaries <- long_difference %>%
@@ -29,7 +28,8 @@ summaries <- long_difference %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
   group_by(wave_pair, name, age_group) %>%
   summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
-            date = weighted.mean(date), n = n(), sd = sd(abs_diff)) %>%
+            date = weighted.mean(date), n = n(), sd = sd(abs_diff),
+            weighted_n = sum(weight)) %>%
   #Filtering out bad questions
   filter(name != "natpoor", 
          name != "nathome") %>% ungroup() %>%
@@ -54,28 +54,65 @@ m2 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group +
            data = summaries %>% filter(sd > 0), weights = 1/se)
 
 m4 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
-             d*age_group*dec_diff +
+             d*dec_diff + d*age_group*dec_diff +
              (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
-                d*age_group*dec_diff|name),
+                d*dec_diff + d*age_group*dec_diff|name),
            data = summaries %>% filter(sd > 0), weights = 1/se)
 
+#Remove third-order interaction and random effects around third-order interaction term
+m4.1 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group +
+             d*dec_diff +
+             (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
+                d*dec_diff|name),
+           data = summaries %>% filter(sd > 0), weights = 1/se)
+#Significant improvement in model fit (>400 decrease in BIC)
 
-m3 <- lmer(a ~ d + dec_diff + 
-             (1 + d + dec_diff |name),
-           data = psummaries %>% filter(sd > 0), weights = 1/se)
+#Remove random effects for d*dec_diff
+m4.2 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group +
+               d*dec_diff +
+               (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group|name),
+             data = summaries %>% filter(sd > 0), weights = 1/se)
+# 70-pt improvement
+
+#Remove random effects for d*age_group
+m4.3 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group +
+               d*dec_diff +
+               (1 + d + dec_diff + age_group + dec_diff*age_group|name),
+             data = summaries %>% filter(sd > 0), weights = 1/se)
+#300-pt improvement
+
+#Removing dec_diff*age_group random effect
+m4.4 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + d*dec_diff +
+               (1 + d + dec_diff + age_group|name),
+             data = summaries %>% filter(sd > 0), weights = 1/se)
+
+#Seems to be the best fitting model
+m4.5 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*dec_diff +
+               (1 + d + dec_diff + age_group|name),
+             data = summaries %>% filter(sd > 0), weights = 1/se)
+
+
+m4.6 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*dec_diff +
+               (1 + d + dec_diff + age_group|name),
+             data = summaries %>% filter(sd > 0), weights = 1/se)
+
+
+# m3 <- lmer(a ~ d + dec_diff + 
+#              (1 + d + dec_diff |name),
+#            data = psummaries %>% filter(sd > 0), weights = 1/se)
 
 
 # Data to predict
 new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
                         dec_diff = seq(-6.4, 0, by = .1),
-                        d = c(0,1), name = unique(summaries$name))
+                        d = c(0,1,2), name = unique(summaries$name))
 
 #Predict data
-new.data$yhat <- predict(m4, newdata = new.data)
+new.data$yhat <- predict(m4.5, newdata = new.data)
 
 #Graph predictions
 new.data %>%
-  filter(d == 0) %>%
+  filter(d == 2) %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
   mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
   ggplot(aes(x = year, y = yhat, color = age_group)) + 
@@ -105,20 +142,23 @@ new.data %>%
   facet_wrap(~age_group) + 
   labs(x = "Year", y = "Predicted change for one-year duration change",
        color = "Age Group",
-       title = "Predicted duration effect by age group",
+       title = "Predicted marginal effect of additional year of observation by age group",
        subtitle = "Individual question trajectories and overall trajectory") + 
-  scale_color_brewer(type = "qual", palette = 2) +
-  theme(legend.position = "none")
+  scale_color_brewer(type = "qual", palette = 2) 
 
 #Look at questions instead
 new.data %>%
-  left_join(test, by = c("name"="name")) %>%
+  filter(d == 1) %>%
+  group_by(name) %>%
+  mutate(order_var = ifelse(dec_diff == 0, yhat, 0),
+         order_var == max(order_var)) %>%
+  #left_join(test, by = c("name"="name")) %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
-  ggplot(aes(x = dec_diff.x, y = yhat, color = age_group)) + 
+  ggplot(aes(x = dec_diff, y = yhat, color = age_group)) + 
   #geom_point(data = summaries, aes(y = a)) + 
   geom_line(alpha = .7, aes(group = group)) + 
   theme_bw() + 
-  facet_wrap(~reorder(name, dec_diff.y)) + 
+  facet_wrap(~reorder(name, yhat)) + 
   labs(x = "Year", y = "Predicted wave-to-wave change",
        color = "Age Group")
 
