@@ -118,6 +118,7 @@ anes5_demog <- anes5 %>%
   select(
     id, marital_1:race_3
   ) %>% 
+  mutate_all(as.character) %>% 
   pivot_longer(marital_1:race_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
@@ -584,7 +585,8 @@ anes20_demog <- anes20 %>%
       profile_racethnicity %in% c(3,4) ~ 3
     )
   ) %>% 
-  select(id, marital:race)
+  select(id, marital:race) %>%
+  mutate_all(as.character)
 
 # GSS 2006-2010 demographics ====
 
