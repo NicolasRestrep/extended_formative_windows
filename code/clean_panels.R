@@ -2560,10 +2560,7 @@ long_scores <- bind_rows(anes5_long, anes7_long, anes8_long,
                          gss6_long, gss8_long, gss10_long,
                          gss20_long, anes16_long, anes20_long) %>%
   group_by(id, name, df) %>% 
-  mutate(nobs = n()) %>% filter(nobs > 1) %>% ungroup()
-
-# Need Cleaning
-# 1990-92 ANES matterhrdwrk
+  mutate(nobs = n()) %>% filter(nobs > 1) %>% ungroup() 
 
 #Then combine them to calculate difference scores
 #This calculation takes a very long time, I'm
