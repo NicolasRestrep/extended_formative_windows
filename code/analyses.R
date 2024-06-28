@@ -9,6 +9,25 @@
 
 load("./clean_data/long_difference.Rdata")
 
+source("./code/get_dem_variables.R")
+
+long_demo <- bind_rows(anes5_demog %>% mutate(df = "1956-60 ANES"), 
+                       anes7_demog %>% mutate(df = "1972-76 ANES"), 
+                       anes8_demographic %>% mutate(df = "1980 ANES"),
+                       anes9_demog %>% mutate(df = "1990-92 ANES"), 
+                       anes90_demog %>% mutate(df = "1992-97 ANES"), 
+                       anes0_demog %>% mutate(df = "2000-04 ANES"), 
+                       gss6_demog %>% mutate(df = "2006-10 GSS"), 
+                       gss8_demog %>% mutate(df = "2008-12 GSS"), 
+                       gss10_demog %>% mutate(df = "2010-14 GSS"), 
+                       anes16_demog %>% mutate(df = "2016-20 ANES"), 
+                       anes20_demog %>% mutate(df = "2020-22 ANES"), 
+                       gss20_demog %>% mutate("2016-20 GSS")) %>%
+  mutate(evermarried = ifelse(marital %in% c("married", "other"), 1, 0),
+         ba = ifelse(ed == "ba", 1, 0)) 
+
+
+
 #Panel summaries
 psummaries <- long_difference %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
@@ -53,6 +72,7 @@ m2 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group +
              (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group|name),
            data = summaries %>% filter(sd > 0), weights = 1/se)
 
+#Fully elaborated model
 m4 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
              d*dec_diff + d*age_group*dec_diff +
              (1 + d + dec_diff + age_group + dec_diff*age_group + d*age_group + 
@@ -146,21 +166,27 @@ new.data %>%
        subtitle = "Individual question trajectories and overall trajectory") + 
   scale_color_brewer(type = "qual", palette = 2) 
 
+
+slopes <- as.data.frame(ranef(m4.5)$name) %>%
+  rownames_to_column(var = "name") %>%
+  mutate(slope = dec_diff) %>%
+  select(name, slope) 
+
 #Look at questions instead
 new.data %>%
-  filter(d == 1) %>%
+  filter(d == 1, age_group %in% c("18-25", "34-65")) %>%
   group_by(name) %>%
-  mutate(order_var = ifelse(dec_diff == 0, yhat, 0),
-         order_var == max(order_var)) %>%
+  left_join(slopes) %>% 
   #left_join(test, by = c("name"="name")) %>%
   mutate(group = paste(age_group, name, sep = "-")) %>%
   ggplot(aes(x = dec_diff, y = yhat, color = age_group)) + 
   #geom_point(data = summaries, aes(y = a)) + 
   geom_line(alpha = .7, aes(group = group)) + 
   theme_bw() + 
-  facet_wrap(~reorder(name, yhat)) + 
+  facet_wrap(~reorder(name, slope), nrow = 11, ncol = 7) + 
   labs(x = "Year", y = "Predicted wave-to-wave change",
-       color = "Age Group")
+       color = "Age Group") + 
+  theme()
 
 
 
