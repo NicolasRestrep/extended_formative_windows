@@ -143,6 +143,24 @@ The central question of our analysis pertains to age, and as such we classify re
 
 We are also interested in the effect of having undergone a set of life-course transitions on attitude stability to more directly test whether divergences in life course structure drove changes in attitude stability. To this end, we include a set of indicator variables capturing whether people have undergone certain demographic transitions. These include 1) whether a respondent is currently enrolled in school; 2) whether a respondent has ever been married; and 3) whether a respondent has ever had a child. We also include an indicator for whether a respondent reported completing college to separately explore whether higher rates of college completion explain changes over time across age groups.
 
+For the 1990-92 panel, respondents did not re-report their employment status, marital status, educational attainment, and parental status for the 1991 wave. Respondents who participated in that wave were coded as according to their response in the 1990 wave for these items. 
+
+
+
+Children:
+
+
+Broadly speaking, questions tapping marital status tend to capture the same . In contrast, questions tapping the number of children a respondent has vary significantly across panels and even within panels. Specifically, questions occasionally tap how many children are currently living with the respondent and occasionally tap how many children the respondent has ever had. While these items are highly correlated for respondents with young children, these two approaches to the question produce significant differences in rates among parents whose children have left home. They also produce differences among respondents who live in 
+
+1990 pre: Number of children in house
+1991: copied from 1990
+1992: any children?
+1992 post: copies from 1992pre
+1993: copied from 1992 pre
+1994: any children ever
+96: Any children under 18 in household
+
+
 ## Methods
 
 When questions are observed in multiple panels, differences in the amount of change we observe could be attributable to either changes in the population's capacity to report stable attitudes over time (our main theoretical interest) or to the structural features of the survey administration. Specifically, variation in the amount of change people makes in their responses observed over time might be due to variation in the duration between waves, with longer duration between observations leading to more wave-to-wave change as people experience more shocks that should shift their opinions. In our data, panel duration varied from less than one year (the 1980 ANES Major Panel Study) to about five years (the 1992-97 ANES), and duration between questions ranged from a few days (for questions asked in both pre- and post-election surveys in the ANES panels) to about five years (questions asked in 1992 and 1997), with peaks around 2 years and 4 years.

@@ -133,10 +133,10 @@ anes5_demog <- anes5 %>%
 anes7_demog <- anes7 %>% 
   mutate(id = 1:nrow(.), 
          across(c(V742410:V742417,V763373:V763378), ~ifelse(.x %in% c(0,98,99), NA, .x)),
-         oldestkid_2 = pmax(V742410,V742411,V742412,
+         oldestkid_3 = pmax(V742410,V742411,V742412,
                             V742413,V742414,V742415,
                             V742416,V742417, na.rm = TRUE),
-         oldestkid_3 = pmax(V763373,V763374,V763375,
+         oldestkid_4 = pmax(V763373,V763374,V763375,
                             V763376,V763377,V763378, na.rm = TRUE), 
          #resp's education
          ed_1 = ifelse(V720300 %in% c(98,99), NA, V720300),
@@ -144,67 +144,91 @@ anes7_demog <- anes7 %>%
                                       41,42,43), "less than", ed_1),
          ed_1 = ifelse(V720300 %in% c(51,61,71,50), "hs", ed_1),
          ed_1 = ifelse(V720300 %in% c(81,82,83,84,85,86), "ba", ed_1),
-         ed_2 = ifelse(V742423 %in% c(98,99), NA, V742423),
-         ed_2 = ifelse(V742423 %in% c(0,1,2,3,4), "less than", ed_2),
-         ed_2 = ifelse(V742423 %in% c(5,6,7,8), "hs", ed_2),
-         ed_2 = ifelse(V742423 %in% c(9,10), "ba", ed_2),
-         ed_3 = ifelse(V763389 %in% c(98, 99), NA, V763389),
-         ed_3 = ifelse(V763389 %in% c(0,1,2,3,4), "less than", ed_3),
-         ed_3 = ifelse(V763389 %in% c(5,6,7,8), "hs", ed_3),
-         ed_3 = ifelse(V763389 %in% c(9,10), "ba", ed_3),
+         ed_2 = ed_1,
+         ed_3 = ifelse(V742423 %in% c(98,99), NA, V742423),
+         ed_3 = ifelse(V742423 %in% c(0,1,2,3,4), "less than", ed_3),
+         ed_3 = ifelse(V742423 %in% c(5,6,7,8), "hs", ed_3),
+         ed_3 = ifelse(V742423 %in% c(9,10), "ba", ed_3),
+         ed_4 = ifelse(V763389 %in% c(98, 99), NA, V763389),
+         ed_4 = ifelse(V763389 %in% c(0,1,2,3,4), "less than", ed_4),
+         ed_4 = ifelse(V763389 %in% c(5,6,7,8), "hs", ed_4),
+         ed_4 = ifelse(V763389 %in% c(9,10), "ba", ed_4),
+         ed_5 = ed_4,
          #marital status
          marital_1 = ifelse(V720295 == 9, NA, V720295),
          marital_1 = ifelse(V720295 %in% c(2), "single/nm", marital_1),
          marital_1 = ifelse(V720295 %in% c(1,7), "married", marital_1),
          marital_1 = ifelse(V720295 %in% c(3,4,5), "other", marital_1),
-         marital_2 = ifelse(V742407 == 9, NA, V742407),
-         marital_2 = ifelse(V742407 %in% c(2), "single/nm", marital_2),
-         marital_2 = ifelse(V742407 %in% c(1,7), "married", marital_2),
-         marital_2 = ifelse(V742407 %in% c(3,4,5), "other", marital_2),
-         marital_3 = ifelse(V763370 == 9, NA, V763370),
-         marital_3 = ifelse(V763370 %in% c(2), "single/nm", marital_3),
-         marital_3 = ifelse(V763370 %in% c(1,7), "married", marital_3),
-         marital_3 = ifelse(V763370 %in% c(3,4,5), "other", marital_3),
+         marital_2 = marital_1,
+         marital_3 = ifelse(V742407 == 9, NA, V742407),
+         marital_3 = ifelse(V742407 %in% c(2), "single/nm", marital_3),
+         marital_3 = ifelse(V742407 %in% c(1,7), "married", marital_3),
+         marital_3 = ifelse(V742407 %in% c(3,4,5), "other", marital_3),
+         marital_4 = ifelse(V763370 == 9, NA, V763370),
+         marital_4 = ifelse(V763370 %in% c(2), "single/nm", marital_4),
+         marital_4 = ifelse(V763370 %in% c(1,7), "married", marital_4),
+         marital_4 = ifelse(V763370 %in% c(3,4,5), "other", marital_4),
+         marital_5 = marital_4,
          #children
-         anychild_2 = ifelse(V742408 %in% c(0, 9), NA, V742408),
-         anychild_2 = ifelse(V742408 == 1, 1, anychild_2),
-         anychild_2 = ifelse(V742408 == 5, 0, anychild_2),
-         anychild_3 = ifelse(V763371 %in% c(0, 9), NA, V763371),
-         anychild_3 = ifelse(V763371 == 1, 1, anychild_3),
-         anychild_3 = ifelse(V763371 == 5, 0, anychild_3),
-         anychild_1 = ifelse(anychild_2 == 0 | oldestkid_2 < 2, 0, 1),
-         anychild_1a = ifelse(anychild_3 == 0 | oldestkid_3 < 4, 0, 1),
+         #Indicator for whether a respondent has any children
+         anychild_3 = ifelse(V742408 %in% c(0, 9), NA, V742408),
+         anychild_3 = ifelse(V742408 == 1, 1, anychild_3),
+         anychild_3 = ifelse(V742408 == 5, 0, anychild_3),
+         anychild_4 = ifelse(V763371 %in% c(0, 9), NA, V763371),
+         anychild_4 = ifelse(V763371 == 1, 1, anychild_4),
+         anychild_4 = ifelse(V763371 == 5, 0, anychild_4),
+         
+         ##
+         anychild_1 = ifelse(anychild_3 == 0 | oldestkid_3 < 2, 0, 1),
+         anychild_1a = ifelse(anychild_4 == 0 | oldestkid_4 < 4, 0, 1),
          anychild_1 = ifelse(is.na(anychild_1), anychild_1a, anychild_1), 
+         
+         anychild_2 = anychild_1,
+         anychild_5 = anychild_4,
+         
          # Sex
          sex_1 = ifelse(V720424 == 9, NA, V720424), 
-         sex_2 = ifelse(V742553 == 9, NA, V742553), 
-         sex_3 = ifelse(V763512 == 9, NA, V763512),
+         sex_3 = ifelse(V742553 == 9, NA, V742553), 
+         sex_4 = ifelse(V763512 == 9, NA, V763512),
          #Race 
          race_1 = case_when(
            V720425 == 1 ~ 1, 
            V720425 == 2 ~ 2, 
            V720425 %in% c(3,4,5,6,7) ~ 3, 
            V720425 == 9 ~ NA_real_), 
-         race_2 = case_when(
+         race_3 = case_when(
            V742554 == 1 ~ 1, 
            V742554 == 2 ~ 2, 
            V742554 %in% c(3,4,5,6,7) ~ 3, 
            V742554 == 9 ~ NA_real_), 
-         race_3 = case_when(
+         race_4 = case_when(
            V763513 == 1 ~ 1, 
            V763513 == 2 ~ 2, 
            V763513 %in% c(3,4,5,6,7) ~ 3, 
            V763513 == 9 ~ NA_real_), 
-         student_1 = as.character(ifelse(V720306 == 8, 1, 0))) %>% 
-  select(id, oldestkid_2:student_1) %>% 
+         student_1 = case_when(
+           V720306 == 8 ~ 1,
+           V720306 %in% c(1,2,3,4,5,6,7) ~ 0,
+           V720306 == 0 ~ NA_real_),
+         student_3 = case_when(
+           V742443 == 8 ~ 1,
+           V742443 %in% c(1,2,3,4,5,6,7) ~ 0,
+           V742443 == 0 ~ NA_real_),
+         student_4 = case_when(
+           V763409 == 8 ~ 1,
+           V763409 %in% c(1,2,3,4,5,6,7) ~ 0,
+           V763409 == 0 ~ NA_real_),
+         ) %>% 
+  select(id, oldestkid_3:student_4) %>% 
   select(-c(anychild_1a)) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(oldestkid_2:student_1) %>%
+  pivot_longer(oldestkid_3:student_4) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  ) %>%
+  arrange(id, wave)
 
 # ANES 1980 demographics ====
 
@@ -295,12 +319,14 @@ anes90_demog <- anes90 %>%
       V900553 %in% c(3,4,5,7) ~ "other", 
       V900553 %in% c(8,9) ~ NA_character_
     ),
-    marital_2 = case_when(
+    marital_2 = marital_1,
+    marital_3 = case_when(
       V923904 %in% c(1) ~ "married", 
       V923904 == 2 ~ "single/nm", 
       V923904 %in% c(3,4,5,7) ~ "other", 
       V923904 %in% c(0,8,9) ~ NA_character_
     ), 
+    marital_4 = marital_3,
     # Education 
     educ_1 = case_when(
       V900557 %in% c(1,2) ~ "less than",
@@ -308,44 +334,66 @@ anes90_demog <- anes90 %>%
       V900557 %in% c(6,7) ~ "ba", 
       V900557 %in% c(98,99) ~ NA_character_
     ), 
+    educ_2 = educ_1,
     educ_3 = case_when(
       V923908 %in% c(1,2) ~ "less than",
       V923908 %in% c(3,4,5) ~ "hs", 
       V923908 %in% c(6,7) ~ "ba", 
       V923908 %in% c(98,99) ~ NA_character_
     ), 
+    educ_4 = educ_3,
     # Children 
     across(c(V900030,V900031,V900032,V900033), 
            ~ifelse(.x == 9, NA_real_, .x)), 
     nkids_1 = V900030 + V900031 + V900032 +V900033, 
+    anychild_1 = ifelse(nkids_1 > 0, 1, 0),
+    anychild_2 = anychild_1,
     anychild_3 = case_when(
       V924136 %in% c(1,2) ~ 1, 
       V924136 == 5 ~ 0, 
       V924136 %in% c(0,9) ~ NA_real_
     ), 
+    anychild_4 = anychild_3,
     across(c(V924137,V924138,V924139,V924140), 
            ~ifelse(.x %in% c(8,9), NA_real_, .x)), 
     childlt_3 = V924137+V924138+V924139+V924140, 
     # Sex
-    sex_1 = ifelse(V924201 %in% c(0,9), NA, V924201),
+    sex_1 = V900547,
+    sex_2 = sex_1,
+    sex_3 = ifelse(V924201 %in% c(0,9), NA, V924201),
+    sex_4 = sex_3,
     # Race 
     race_1 = case_when(
       V900549 == 1 ~ 1, 
       V900549 == 2 ~ 2, 
       V900549 %in% c(3,4) ~ 3, 
-      V900549 == 9 ~ NA_real_
-    ), 
+      V900549 == 9 ~ NA_real_), 
+    race_2 = race_1,
     race_3 = case_when(
       V924202 == 1 ~ 1, 
       V924202 == 2 ~ 2, 
       V924202 %in% c(3,4) ~ 3, 
-      V924202 %in% c(0,9) ~ NA_real_
-    ), 
-    student_1 = ifelse(V900565 %in% c(80, 81), 1, 0)
-  ) %>% 
-  select(id, marital_1:student_1) %>% 
+      V924202 %in% c(0,9) ~ NA_real_), 
+    race_4 = race_3,
+    student_1 = case_when(
+      V900565 %in% c(80, 81) ~ 1,
+      V900565 %in% c(10,15,16,17,18,20,
+                     40,50,51,60,61,70,
+                     71,75) ~ 0,
+      V900565 == 99 ~ NA_real_),
+    student_2 = student_1,
+    student_3 = case_when(
+      V923914 == 0 ~ NA_real_,
+      V923914 %in% c(10,15,16,17,18,20,
+                     40,50,51,60,61,70,
+                     71,75) ~ 0,
+      V923914 %in% c(80, 81) ~ 1,
+      V923914 == 99 ~ NA_real_),
+    student_4 = student_3
+    ) %>% 
+  select(id, marital_1:student_4, -c(nkids_1, childlt_3)) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(marital_1:student_1) %>%
+  pivot_longer(marital_1:student_4) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -362,54 +410,89 @@ anes9_demog <- anes9 %>%
          #marital status
          V923904,V941204,V960606,
          #children
+         V924136,
          V923079:V923082,
          V960048:V960051,
          V941428, 
          # Sex 
          V924201, 
+         V941434,
+         V960066,
          # Race
          V924202, 
          V941435,
          V960067, 
          # Student status 
-         V923914
+         V923914,
+         V941215,
+         V960615
   ) %>% 
   mutate(
     marital_1 = ifelse(V923904 %in% c(9,0), NA, V923904),
     marital_1 = ifelse(V923904 %in% c(1,7), "married", marital_1),
     marital_1 = ifelse(V923904 %in% c(2), "single/nm", marital_1),
     marital_1 = ifelse(V923904 %in% c(3,4,5,8), "other", marital_1),
-    marital_2 = ifelse(V941204 %in% c(9,0,8), NA, V941204),
-    marital_2 = ifelse(V941204 %in% c(1,7), "married", marital_2),
-    marital_2 = ifelse(V941204 %in% c(2), "single/nm", marital_2),
-    marital_2 = ifelse(V941204 %in% c(3,4,5), "other", marital_2),
-    marital_3 = ifelse(V960606 %in% c(9,0,8), NA, V960606),
-    marital_3 = ifelse(V960606 %in% c(1,6), "married", marital_3),
-    marital_3 = ifelse(V960606 %in% c(5), "single/nm", marital_3),
-    marital_3 = ifelse(V960606 %in% c(2,3,4), "other", marital_3),
+    marital_2 = marital_1,
+    marital_3 = marital_1,
+    marital_4 = ifelse(V941204 %in% c(9,0,8), NA, V941204),
+    marital_4 = ifelse(V941204 %in% c(1,7), "married", marital_4),
+    marital_4 = ifelse(V941204 %in% c(2), "single/nm", marital_4),
+    marital_4 = ifelse(V941204 %in% c(3,4,5), "other", marital_4),
+    marital_5 = marital_4,
+    marital_6 = ifelse(V960606 %in% c(9,0,8), NA, V960606),
+    marital_6 = ifelse(V960606 %in% c(1,6), "married", marital_6),
+    marital_6 = ifelse(V960606 %in% c(5), "single/nm", marital_6),
+    marital_6 = ifelse(V960606 %in% c(2,3,4), "other", marital_6),
+    marital_7 = marital_6,
+    marital_8 = marital_7,
     #children
-    nkids_1 = ifelse(V923079 == 9, 0, V923079) + ifelse(V923080 == 9, 0, V923080) + 
-      ifelse(V923081 == 9, 0, V923081) + ifelse(V923081 == 9, 0, V923081),
-    anychild_1 = ifelse(nkids_1 > 0, 1, 0),
+    anychild_1 = case_when(
+      V924136 %in% c(1,2) ~ 1,
+      V924136 == 5 ~ 0,
+      V924136 %in% c(0,9) ~ NA_real_
+    ),
+    anychild_2 = anychild_1,
+    anychild_3 = anychild_2,
     #any children?
-    anychild_2 = ifelse(V941428 %in% c(8,9), NA, V941428),
-    anychild_2 = ifelse(V941428 %in% c(1,2), 1, anychild_2),
-    anychild_2 = ifelse(V941428 %in% c(5), 0, anychild_2),
-    #education
+    anychild_4 = case_when(
+      V941428 %in% c(8,9) ~ NA,
+      V941428 %in% c(1,2) ~ 1,
+      V941428 == 5 ~ 0
+    ),
+    anychild_5 = anychild_4,
+    across(c(V960048, V960049, V960050, V960051),
+           ~ifelse(.x > 5, 0, .x)),
+    nkids_6 = V960048 + V960049 + V960050 + V960051,
+    anychild_6 = ifelse(nkids_6 > 0, 1, 0),
+    anychild_7 = anychild_6,
+    anychild_8 = anychild_7,
+    #education,
     ed_1 = ifelse(V923908 %in% c(98,99,0), NA, V923908),
     ed_1 = ifelse(V923908 %in% c(1,2), "less than", ed_1),
     ed_1 = ifelse(V923908 %in% c(3,4,5), "hs", ed_1),
     ed_1 = ifelse(V923908 %in% c(6,7), "ba", ed_1),
-    ed_2 = ifelse(V941209 %in% c(98,99,0), NA, V941209),
-    ed_2 = ifelse(V941209 %in% c(1,2), "less than", ed_2),
-    ed_2 = ifelse(V941209 %in% c(3,4,5), "hs", ed_2),
-    ed_2 = ifelse(V941209 %in% c(6,7), "ba", ed_2) ,
-    ed_3 = ifelse(V960610 %in% c(8,9,0), NA, V960610),
-    ed_3 = ifelse(V960610 %in% c(1,2), "less than", ed_3),
-    ed_3 = ifelse(V960610 %in% c(3,4,5), "hs", ed_3),
-    ed_3 = ifelse(V960610 %in% c(6,7), "ba", ed_3), 
+    ed_2 = ed_1,
+    ed_3 = ed_2,
+    ed_4 = ifelse(V941209 %in% c(98,99,0), NA, V941209),
+    ed_4 = ifelse(V941209 %in% c(1,2), "less than", ed_4),
+    ed_4 = ifelse(V941209 %in% c(3,4,5), "hs", ed_4),
+    ed_4 = ifelse(V941209 %in% c(6,7), "ba", ed_4) ,
+    ed_5 = ed_4,
+    ed_6 = ifelse(V960610 %in% c(8,9,0), NA, V960610),
+    ed_6 = ifelse(V960610 %in% c(1,2), "less than", ed_6),
+    ed_6 = ifelse(V960610 %in% c(3,4,5), "hs", ed_6),
+    ed_6 = ifelse(V960610 %in% c(6,7), "ba", ed_6), 
+    ed_7 = ed_6,
+    ed_8 = ed_7,
     #Sex 
-    sex_1 = ifelse(V924201 == 9, NA, V924201), 
+    sex_1 = ifelse(V924201 == 9, NA, V924201),
+    sex_2 = sex_1,
+    sex_3 = sex_2,
+    sex_4 = ifelse(V941434 == 9, NA, V941434),
+    sex_5 = sex_4,
+    sex_6 = V960066,
+    sex_7 = sex_6,
+    sex_8 = sex_7,
     #Race 
     race_1 = case_when(
       V924202 == 1 ~ 1, 
@@ -417,24 +500,51 @@ anes9_demog <- anes9 %>%
       V924202 %in% c(3,4,7) ~ 3, 
       V924202 == 9 ~ NA_real_
     ), 
-    race_2 = case_when(
+    race_2 = race_1,
+    race_3 = race_2,
+    race_4 = case_when(
       V941435 == 1 ~ 1, 
       V941435 == 2 ~ 2, 
       V941435 %in% c(3,4,7) ~ 3, 
       V941435 == 9 ~ NA_real_
     ), 
-    race_3 = case_when(
+    race_5 = race_4,
+    race_6 = case_when(
       V960067 == 1 ~ 1, 
       V960067 == 2 ~ 2, 
       V960067 %in% c(3,4,7) ~ 3, 
       V960067 == 9 ~ NA_real_
     ), 
+    race_7 = race_6,
+    race_8 = race_7,
     # Student status 
-    student_1 = ifelse(V923914 %in% c(18, 75, 80, 91), 1, 0),
+    student_1 = case_when(
+      V923914 %in% c(18,75,80,91) ~ 1,
+      V923914 == 99 ~ NA_real_,
+      V923914 %in% c(10,15,16,17,20,
+                     40,50,51,60,61,70,
+                     71,75,80,81) ~ 0),
+    student_2 = student_1,
+    student_3 = student_2,
+    student_4 = case_when(
+      V941215 %in% c(18,75,80,91) ~ 1,
+      V923914 == 99 ~ NA_real_,
+      V923914 %in% c(10,15,16,17,20,
+                     40,50,51,60,61,70,
+                     71,75,80,81) ~ 0),
+    student_5 = student_4,
+    student_6 = case_when(
+      V960615 %in% c(18,75,80,91) ~ 1,
+      V960615 == 99 ~ NA_real_,
+      V960615 %in% c(10,15,16,17,20,
+                     40,50,51,60,61,70,
+                     71,75,80,81) ~ 0),
+    student_7 = student_6,
+    student_8 = student_7
   ) %>%
-  select(id, marital_1:student_1) %>% 
+  select(id, marital_1:student_8, -c(nkids_6)) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(marital_1:student_1) %>%
+  pivot_longer(marital_1:student_8) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -453,13 +563,13 @@ anes0_demog <- anes0 %>%
       M000909 %in% c(2,3,4,6) ~ "other", 
       M000909 %in% c(8,9) ~ NA_character_
     ), 
-    marital_2 = case_when(
+    marital_3 = case_when(
       M023127A == 1 ~ "married", 
       M023127A == 5 ~ "single/nm", 
       M023127A %in% c(2,3,4,6) ~ "other", 
       M023127A %in% c(8,9) ~ NA_character_
     ), 
-    marital_3 = case_when(
+    marital_5 = case_when(
       M045176 == 1 ~ "married", 
       M045176 == 5 ~ "single/nm", 
       M045176 %in% c(2,3,4,6) ~ "other", 
