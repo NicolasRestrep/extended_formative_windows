@@ -563,12 +563,14 @@ anes0_demog <- anes0 %>%
       M000909 %in% c(2,3,4,6) ~ "other", 
       M000909 %in% c(8,9) ~ NA_character_
     ), 
+    marital_2 = marital_1,
     marital_3 = case_when(
       M023127A == 1 ~ "married", 
       M023127A == 5 ~ "single/nm", 
       M023127A %in% c(2,3,4,6) ~ "other", 
       M023127A %in% c(8,9) ~ NA_character_
     ), 
+    marital_4 = marital_3,
     marital_5 = case_when(
       M045176 == 1 ~ "married", 
       M045176 == 5 ~ "single/nm", 
@@ -585,21 +587,52 @@ anes0_demog <- anes0 %>%
       M001024 > 15, NA_real_, 
       M001024
     ), 
+    anychild_2 = anychild_1,
+    anychild_3 = anychild_2,
+    anychild_4 = anychild_3,
+    anychild_5 = anychild_4,
     # Education 
-    educ_2 = case_when(
+    educ_1 = case_when(
+      M000913 %in% c(1,2) ~ "less than",
+      M000913 %in% c(3,4,5) ~ "hs",
+      M000913 %in% c(6,7) ~ "ba",
+      M000913 %in% c(0,9) ~ NA_character_
+    ),
+    educ_2 = educ_1,
+    educ_3 = case_when(
       M023131 %in% c(1,2) ~ "less than", 
       M023131 %in% c(3,4,5) ~ "hs", 
       M023131 %in% c(6,7) ~ "ba", 
       M023131 %in% c(0,9) ~ NA_character_
     ), 
+    educ_4 = educ_3,
+    educ_5 = educ_4,
     # Sex 
-    sex_2 = case_when(
+    sex_1 = M001029,
+    sex_2 = sex_1,
+    sex_3 = case_when(
       M023153 == 1 ~ 1, 
       M023153 == 2 ~ 2, 
       M023153 %in% c(0,9) ~ NA_real_
     ), 
+    sex_4 = sex_3,
+    sex_5 = sex_4,
     # Race 
+    race_1 = case_when(
+      M001006a == 50 ~ 1,
+      M001006a == 10 ~ 2,
+      M001006a %in% c(20,30,40,60,
+                      75,76,79,80,90) ~ 3
+    ),
+    race_2 = race_1,
     race_3 = case_when(
+      M023150 %in% c(1,12,13,14,15) ~ 2,
+      M023150 == 5 ~ 1,
+      M023150 %in% c(2,3,4,23,24,25,34,
+                     35,45,77) ~ 3,
+    ),
+    race_4 = race_3,
+    race_5 = case_when(
       M045185x == 50 ~ 1, 
       M045185x == 10 ~ 2, 
       M045185x %in% c(12,13,14,15,20,23,
@@ -608,16 +641,33 @@ anes0_demog <- anes0 %>%
       M045185x %in% c(80, 88, 89, 0) ~ NA_real_
     ), 
     # student status 
-    student_1 = ifelse(M000919 %in% c(18, 75, 80, 81), 1, 0)
+    student_1 = case_when(
+      M000919 %in% c(10,15,16,17,20,40,50,
+                     51,60,61,70,71) ~ 0,
+      M000919 %in% c(18,75,80,81) ~ 1
+    ),
+    student_2 = student_1,
+    student_3 = case_when(
+      M023132X %in% c(1,2,3,4,5,6,12,16,26,
+                      34,35,36,45,46,47,467) ~ 0,
+      M023132X %in% c(7,17,67,167) ~ 1
+    ),
+    student_4 = student_3,
+    student_5 = case_when(
+      M045178x %in% c(1,2,3,4,5,6,14,16,26,34,
+                      35,36,45,46,47,146) ~ 0,
+      M045178x %in% c(7,17,67,167) ~ 1
+    )
   ) %>% 
-  select(id, marital_1:student_1) %>% 
+  select(id, marital_1:student_5, -c(nkids_1)) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(marital_1:student_1) %>%
+  pivot_longer(marital_1:student_5) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  ) %>%
+  arrange(id, wave)
 
 
 # ANES 2016 demographics ====
@@ -626,34 +676,63 @@ anes16_demog <- anes16 %>%
     id = 1:nrow(.),
     # Marriage
     marital_1 = case_when(
-      V165739 < 1 ~ NA_character_,
-      V165739 == 1 ~ "married",
-      V165739 == 6 ~ "single/nm",
-      V165739 %in% c(3, 4, 5) ~ "other"
+      V161268 < 1 ~ NA_character_,
+      V161268 %in% c(1,2) ~ "married",
+      V161268 == 6 ~ "single/nm",
+      V161268 %in% c(3, 4, 5) ~ "other"
     ),
-    marital_2 = case_when(
+    marital_2 = marital_1,
+    marital_3 = case_when(
       V201508 < 1 ~ NA_character_,
       V201508 %in% c(1, 2) ~ "married",
       V201508 == 6 ~ "single/nm",
       V201508 %in% c(3, 4, 5) ~ "other"
     ),
+    marital_4 = marital_3,
     # Children
     childlt_1 = ifelse(V161324 < 0, NA_real_, V161324),
-    childlt_2 = ifelse(V201567 < 0, NA_real_, V201567),
-    anychild_1 = case_when(V165506 > 1 ~ NA_real_, V165506 == 1 ~ 1, V165506 == 2 ~ 0), 
+    childlt_3 = ifelse(V201567 < 0, NA_real_, V201567),
+    anychild_1 = case_when(
+      V161324 < 0 ~ NA_real_,
+      V161324 == 0 ~ 0, 
+      V161324 > 0 ~ 1
+    ),
+    anychild_2 = anychild_1,
+    anychild_3 = case_when(
+      V201567 < 0 ~ NA_real_,
+      V201567 == 0 ~ 0,
+      V201567 > 0 ~ 1
+    ),
+    anychild_4 = anychild_3,
     # Education 
-    educ_2 = case_when(
+    educ_1 = case_when(
+      V161270 < 1 ~ NA_character_,
+      V161270 %in% c(1,2,3,4,5,6,7) ~ "less than",
+      V161270 %in% c(8,9,10,11,12,90,95) ~ "hs",
+      V161270 %in% c(13,14,15,16) ~ "ba"
+    ),
+    educ_2 = educ_1,
+    educ_3 = case_when(
       V201511x < 1 ~ NA_character_,
       V201511x == 1 ~ "less than", 
       V201511x %in% c(2,3) ~ "hs", 
       V201511x %in% c(4,5) ~ "ba"
     ), 
+    educ_4 = educ_3,
     # Sex
-    sex_2 = case_when(
+    sex_1 = case_when(
+      V161342 < 1 ~ NA_real_,
+      V161342 == 1 ~ 1,
+      V161342 == 2 ~ 2,
+      V161342 == 3 ~ 2
+    ),
+    sex_2 = sex_1,
+    sex_3 = case_when(
       V201600 < 1 ~ NA_real_, 
       V201600 == 1 ~ 1, 
       V201600 == 2 ~ 2
     ), 
+    sex_4 = sex_3,
     # Race
     race_1 = case_when(
       V161310x < 1 ~ NA_real_,
@@ -661,26 +740,30 @@ anes16_demog <- anes16 %>%
       V161310x == 2 ~ 2, 
       V161310x %in% c(3,4,5,6) ~ 3
     ), 
-    race_2 = case_when(
+    race_2 = race_1,
+    race_3 = case_when(
       V201549x < 1 ~ NA_real_,
       V201549x == 1 ~ 1, 
       V201549x == 2 ~ 2, 
       V201549x %in% c(3,4,5,6) ~ 3
     ), 
+    race_4 = race_3,
     student_1 = ifelse(
       V161275x %in% c(18, 80, 81), 
       1, 
       0
     ), 
-    student_2 = ifelse(
+    student_2 = student_1,
+    student_3 = ifelse(
       V201533x %in% c(18, 80, 81), 
       1, 
       0
-    )
+    ),
+    student_4 = student_3
   ) %>% 
-  select(id, marital_1:student_2) %>% 
+  select(id, marital_1:student_4) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(marital_1:student_2) %>%
+  pivot_longer(marital_1:student_4) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
