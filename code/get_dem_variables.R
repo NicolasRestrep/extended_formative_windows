@@ -65,7 +65,9 @@ anes5_demog <- anes5 %>%
     V580469,
     V600685,
     #student status 
-    V560120
+    V560120,
+    V580479,
+    V600695
   ) %>%
   mutate(
     marital_1 = V560177,
@@ -83,6 +85,7 @@ anes5_demog <- anes5 %>%
     marital_3 = ifelse(V600690 %in% c(2), "single/nm", marital_3),
     marital_3 = ifelse(V600690 %in% c(1), "married", marital_3),
     marital_3 = ifelse(V600690 %in% c(3, 4, 5), "other", marital_3),
+    marital_4 = marital_3,
     #IS there a child under 18 in the household.
     anychild_1 = as.character(ifelse(V560178 == 99, NA, V560178)),
     anychild_1 = as.character(ifelse(V560178 == 0, 0, 1)),
@@ -90,6 +93,7 @@ anes5_demog <- anes5 %>%
     anychild_2 = as.character(ifelse(V580475 == 0, 0, 1)),
     anychild_3 = as.character(ifelse(V600691 == 99, NA, V600691)),
     anychild_3 = as.character(ifelse(V600691 == 0, 0, 1)),
+    anychild_4 = anychild_3,
     #The third education variable is differently coded
     ed_1 = ifelse(V560181 == 9, NA, V560181),
     ed_1 = ifelse(V560181 %in% c(0, 1, 2, 3, 4), "less than", ed_1),
@@ -107,22 +111,28 @@ anes5_demog <- anes5 %>%
     ),
     ed_3 = ifelse(V600694 %in% c(51, 61, 71), "hs", ed_3),
     ed_3 = ifelse(V600694 %in% c(81, 82), "ba", ed_3),
+    ed_4 = ed_3,
     #1 = male, 2 = female
     sex_1 = as.character(V560171),
     sex_2 = as.character(V580468),
     sex_3 = as.character(V600684),
+    sex_4 = sex_3,
     #1 = white, 2 = negro, 3 = other.
     race_1 = as.character(V560172),
     race_2 = as.character(V580469),
     race_3 = as.character(V600685),
+    race_4 = race_3,
     # Student status 
-    student_1 = as.character(ifelse(V560120 %in% c(92), 1, 0))
+    student_1 = as.character(ifelse(V560120 == 92, 1, 0)),
+    student_2 = as.character(ifelse(V580479 == 92, 1, ifelse(V580479 == 99, NA, 0))),
+    student_3 = as.character(ifelse(V600695 == 92, 1, ifelse(V600695 == 99, NA, 0))),
+    student_4 = student_3
   )  %>% 
   select(
-    id, marital_1:student_1
+    id, marital_1:student_4
   ) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(marital_1:student_1) %>%
+  pivot_longer(marital_1:student_4) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -171,6 +181,8 @@ anes7_demog <- anes7 %>%
          marital_5 = marital_4,
          #children
          #Indicator for whether a respondent has any children
+         anychild_1 = ifelse(V720296 == 5, 1, 0),
+         anychild_2 = anychild_1,
          anychild_3 = ifelse(V742408 %in% c(0, 9), NA, V742408),
          anychild_3 = ifelse(V742408 == 1, 1, anychild_3),
          anychild_3 = ifelse(V742408 == 5, 0, anychild_3),
@@ -179,23 +191,26 @@ anes7_demog <- anes7 %>%
          anychild_4 = ifelse(V763371 == 5, 0, anychild_4),
          
          ##
-         anychild_1 = ifelse(anychild_3 == 0 | oldestkid_3 < 2, 0, 1),
-         anychild_1a = ifelse(anychild_4 == 0 | oldestkid_4 < 4, 0, 1),
-         anychild_1 = ifelse(is.na(anychild_1), anychild_1a, anychild_1), 
+         # anychild_1 = ifelse(anychild_3 == 0 | oldestkid_3 < 2, 0, 1),
+         # anychild_1a = ifelse(anychild_4 == 0 | oldestkid_4 < 4, 0, 1),
+         # anychild_1 = ifelse(is.na(anychild_1), anychild_1a, anychild_1), 
          
          anychild_2 = anychild_1,
          anychild_5 = anychild_4,
          
          # Sex
          sex_1 = ifelse(V720424 == 9, NA, V720424), 
+         sex_2 = sex_1,
          sex_3 = ifelse(V742553 == 9, NA, V742553), 
          sex_4 = ifelse(V763512 == 9, NA, V763512),
+         sex_5 = sex_4,
          #Race 
          race_1 = case_when(
            V720425 == 1 ~ 1, 
            V720425 == 2 ~ 2, 
            V720425 %in% c(3,4,5,6,7) ~ 3, 
            V720425 == 9 ~ NA_real_), 
+         race_2 = race_1,
          race_3 = case_when(
            V742554 == 1 ~ 1, 
            V742554 == 2 ~ 2, 
@@ -206,10 +221,12 @@ anes7_demog <- anes7 %>%
            V763513 == 2 ~ 2, 
            V763513 %in% c(3,4,5,6,7) ~ 3, 
            V763513 == 9 ~ NA_real_), 
+         race_5 = race_4,
          student_1 = case_when(
            V720306 == 8 ~ 1,
            V720306 %in% c(1,2,3,4,5,6,7) ~ 0,
            V720306 == 0 ~ NA_real_),
+         student_2 = student_1,
          student_3 = case_when(
            V742443 == 8 ~ 1,
            V742443 %in% c(1,2,3,4,5,6,7) ~ 0,
@@ -218,11 +235,12 @@ anes7_demog <- anes7 %>%
            V763409 == 8 ~ 1,
            V763409 %in% c(1,2,3,4,5,6,7) ~ 0,
            V763409 == 0 ~ NA_real_),
+         student_5 = student_4
          ) %>% 
-  select(id, oldestkid_3:student_4) %>% 
-  select(-c(anychild_1a)) %>% 
+  select(id, oldestkid_3:student_5) %>% 
+  select(-c(oldestkid_3, oldestkid_4)) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(oldestkid_3:student_4) %>%
+  pivot_longer(ed_1:student_5) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -232,7 +250,7 @@ anes7_demog <- anes7 %>%
 
 # ANES 1980 demographics ====
 
-anes8_demographic <- anes8 %>% 
+anes8_demog <- anes8 %>% 
   mutate(id = 1:nrow(.), 
          # Marital [1: married, 2: never married, 3: divorced, 4: separated, 5: widowed, 7: living together, 9: NA]
          marital_1 = case_when(
@@ -253,6 +271,7 @@ anes8_demographic <- anes8 %>%
            VMP3387 %in% c(3,4,5) ~ "other", 
            VMP3387 == 9 ~ NA_character_
          ), 
+         marital_4 = marital_3,
          # Education Summary 
          educ_1 = case_when(
            VMP0334 %in% c(1,2,3,4) ~ "less than",
@@ -260,6 +279,9 @@ anes8_demographic <- anes8 %>%
            VMP0334 %in% c(9,10) ~ "ba", 
            VMP0334 %in% c(98,99) ~ NA_character_
          ), 
+         educ_2 = educ_1,
+         educ_3 = educ_2,
+         educ_4 = educ_3,
          # Children -- sum total amount of children 
          across(c(VMP0589,VMP0590,VMP0591,VMP0592,
                   VMP2435,VMP2436,VMP2437,VMP2438,
@@ -269,15 +291,20 @@ anes8_demographic <- anes8 %>%
          nkids_1 = VMP0589 + VMP0590 + VMP0591 + VMP0592, 
          nkids_2 = VMP2435 + VMP2436 + VMP2437 + VMP2438, 
          nkids_3 = VMP3581 + VMP3582 + VMP3583 + VMP3583, 
+         nkids_4 = nkids_3,
          anychild_1 = case_when(
            VMP3388 == 1 ~ 1, 
            VMP3388 == 5 ~ 0, 
            VMP3388 %in% c(0,9) ~ NA_real_
          ),
-         anychild_2 = ifelse(nkids2 > 0 | anychild_1==1,1,0),
+         anychild_2 = ifelse(nkids_2 > 0 | anychild_1==1,1,0),
+         anychild_3 = anychild_2,
+         anychild_4 = anychild_3,
          # Sex 
          sex_1 = ifelse(VMP3552 == 9, NA, VMP3552), 
+         sex_2 = sex_1,
          sex_3 = ifelse(VMP4097 == 9, NA, VMP4097),
+         sex_4 = sex_3,
          # Race 
          race_1 = case_when(
            VMP0558 == 1 ~ 1, 
@@ -297,11 +324,15 @@ anes8_demographic <- anes8 %>%
            VMP3553 %in% c(3,4,7) ~ 3, 
            VMP3553 == 9 ~ NA_real_
          ), 
-         student_1 = ifelse(VMP0352 == 8, 1, 0)
+         race_4 = race_3,
+         student_1 = ifelse(VMP0352 == 8, 1, 0),
+         student_2 = student_1,
+         student_3 = student_2,
+         student_4 = student_3
   ) %>% 
-  select(id, marital_1:student_1) %>% 
+  select(id, marital_1:student_4) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(marital_1:student_1) %>%
+  pivot_longer(marital_1:student_4) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -781,29 +812,51 @@ anes20_demog <- anes20 %>%
   mutate(
     id = 1:nrow(.), 
     # Marriage
-    marital = case_when(
+    marital_1 = case_when(
       profile_marital == 1 ~ "married", 
       profile_marital == 5 ~ "single/nm", 
       profile_marital %in% c(2,3,4,6) ~ "other"
     ), 
+    marital_2 = marital_1,
+    marital_3 = marital_2,
     # It seems we don't have information about children
+    #Series of "people in household aged X-y questions 
+    anychild_1 = ifelse(profile_hh01 + profile_hh25 + profile_hh612 + 
+                          profile_hh1317 > 0, 1, 0),
+    anychild_2 = anychild_1,
+    anychild_3 = anychild_2,
     # Education
-    educ = case_when(
+    educ_1 = case_when(
       profile_educ5 == 1 ~ "less than", 
       profile_educ5 %in% c(2,3) ~ "hs", 
       profile_educ5 %in% c(4,5) ~ "ba"
     ), 
+    educ_2 = educ_1,
+    educ_3 = educ_2,
     # Sex 
-    sex = profile_gender, 
+    sex_1 = profile_gender, 
+    sex_2 = sex_1,
+    sex_3 = sex_2,
     # Race
-    race = case_when(
+    race_1 = case_when(
       profile_racethnicity == 1 ~ 1, 
       profile_racethnicity == 2 ~ 2, 
       profile_racethnicity %in% c(3,4) ~ 3
-    )
+    ),
+    race_2 = race_1,
+    race_3 = race_2,
+    student_1 = ifelse(profile_employ == 7, 1, 0),
+    student_2 = student_1,
+    student_3 = student_2
   ) %>% 
-  select(id, marital:race) %>% 
-  mutate_all(as.character)
+  select(id, marital_1:student_3) %>% 
+  mutate_all(as.character) %>%
+  pivot_longer(marital_1:student_3) %>%
+  separate(name, into = c("measure", "wave")) %>%
+  pivot_wider(
+    names_from = measure, 
+    values_from = value
+  )
 
 # GSS 2006-2010 demographics ====
 
@@ -817,7 +870,7 @@ gss6_demog <- gss6 %>%
          degree_1, degree_2, degree_3, 
          sex_1, sex_2, sex_3, 
          race_1, race_2, race_3, 
-         wrkstat_1
+         wrkstat_1, wrkstat_2, wrkstat_3
   ) %>%
   mutate(age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
          age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3 - 4, age_1)) %>%
@@ -836,11 +889,13 @@ gss6_demog <- gss6 %>%
                        "3"="ba", "4"="ba"),
          ed_3 = recode(degree_3, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"), 
-         student_1 = ifelse(wrkstat_1 %in% c(6), 1, 0)
+         student_1 = ifelse(wrkstat_1 == 6, 1, 0),
+         student_2 = ifelse(wrkstat_2 == 6, 1, 0),
+         student_3 = ifelse(wrkstat_3 == 6, 1, 0)
   ) %>% 
-  select(id, sex_1:race_3, marital_1:student_1) %>% 
+  select(id, sex_1:race_3, marital_1:student_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_1) %>%
+  pivot_longer(sex_1:student_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -852,14 +907,15 @@ gss6_demog <- gss6 %>%
 gss8_demog <- gss8 %>%
   zap_labels() %>%
   mutate(id = 1:nrow(.)) %>% 
-  select(id, 
+  select(id,
          age_1, age_2, age_3, 
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
-         degree_1, degree_2, degree_3,
+         degree_1, degree_2, degree_3, 
          sex_1, sex_2, sex_3, 
          race_1, race_2, race_3, 
-         wrkstat_1) %>%
+         wrkstat_1, wrkstat_2, wrkstat_3
+  ) %>%
   mutate(age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
          age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3 - 4, age_1)) %>%
   mutate(marital_1 = recode(marital_1, "1"="married", "2"="other", "3"="other", "4"="other",
@@ -877,10 +933,13 @@ gss8_demog <- gss8 %>%
                        "3"="ba", "4"="ba"),
          ed_3 = recode(degree_3, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"), 
-         student_1 = ifelse(wrkstat_1 %in% c(6), 1, 0)) %>% 
-  select(id, sex_1:race_3, marital_1:student_1) %>% 
+         student_1 = ifelse(wrkstat_1 == 6, 1, 0),
+         student_2 = ifelse(wrkstat_2 == 6, 1, 0),
+         student_3 = ifelse(wrkstat_3 == 6, 1, 0)
+  ) %>% 
+  select(id, sex_1:race_3, marital_1:student_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_1) %>%
+  pivot_longer(sex_1:student_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -894,13 +953,15 @@ gss8_demog <- gss8 %>%
 gss10_demog <- gss10 %>%
   zap_labels() %>%
   mutate(id = 1:nrow(.)) %>% 
-  select(id, age_1, age_2, age_3, 
+  select(id,
+         age_1, age_2, age_3, 
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
          degree_1, degree_2, degree_3, 
          sex_1, sex_2, sex_3, 
          race_1, race_2, race_3, 
-         wrkstat_1) %>%
+         wrkstat_1, wrkstat_2, wrkstat_3
+  ) %>%
   mutate(age_1 = ifelse(is.na(age_1) & !is.na(age_2), age_2 - 2, age_1),
          age_1 = ifelse(is.na(age_1) & !is.na(age_3), age_3 - 4, age_1)) %>%
   mutate(marital_1 = recode(marital_1, "1"="married", "2"="other", "3"="other", "4"="other",
@@ -918,10 +979,13 @@ gss10_demog <- gss10 %>%
                        "3"="ba", "4"="ba"),
          ed_3 = recode(degree_3, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"), 
-         student_1 = ifelse(wrkstat_1 %in% c(6), 1, 0)) %>% 
-  select(id, sex_1:race_3, marital_1:student_1) %>% 
+         student_1 = ifelse(wrkstat_1 == 6, 1, 0),
+         student_2 = ifelse(wrkstat_2 == 6, 1, 0),
+         student_3 = ifelse(wrkstat_3 == 6, 1, 0)
+  ) %>% 
+  select(id, sex_1:race_3, marital_1:student_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_1) %>%
+  pivot_longer(sex_1:student_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
@@ -975,6 +1039,7 @@ gss20_demog <- gss20 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
+         race_3 = ifelse(is.na(race_1), race_2, race_1),
          childs_1 = ifelse(childs_1 > 0, 1, 0),
          childs_2 = ifelse(childs_2 > 0, 1, 0),
          childs_3 = ifelse(childs_3 > 0, 1, 0),
@@ -984,9 +1049,9 @@ gss20_demog <- gss20 %>%
                        "3"="ba", "4"="ba"),
          ed_3 = recode(degree_3, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"), 
-         student_1 = ifelse(student_1 %in% c(6), 1, 0), 
-         student_2 = ifelse(student_2 %in% c(6), 1, 0), 
-         student_3 = ifelse(student_3 %in% c(6), 1, 0)) %>% 
+         student_1 = ifelse(student_1 == 6, 1, 0), 
+         student_2 = ifelse(student_2 == 6, 1, 0), 
+         student_3 = ifelse(student_3 == 6, 1, 0)) %>% 
   select(id, sex_1:race_3, marital_1:student_3) %>% 
   mutate_all(as.character) %>% 
   pivot_longer(sex_1:student_3) %>%
