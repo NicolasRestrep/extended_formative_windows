@@ -2636,6 +2636,11 @@ long_difference <- long_scores %>%
 #save(long_data, file = "~/Dropbox/extended_formative_windows/clean_data/long_data.Rdata")
 save(long_difference, file = "~/Dropbox/extended_formative_windows/clean_data/long_difference.Rdata")
 
+rm(anes5, anes7, anes8, anes90, anes9, anes0, anes16, anes20,
+   gss6, gss8, gss10, gss20)
+rm(anes5_long, anes7_long, anes8_long, anes90_long, anes9_long, anes0_long, anes16_long, anes20_long,
+   gss6_long, gss8_long, gss10_long, gss20_demog)
+
 
 # cappun has a midpoint in the 90-92 and 92-97 scales, but not in the GSS panels
 # and then has it in the 16-20 ANEs
