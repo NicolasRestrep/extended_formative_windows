@@ -6,7 +6,11 @@
 ~%2FDropbox%2Fextended_formative_windows%2Fclean_datasets.R="11CE8C4B"
 ~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fanalyses.R="7ED67D1B"
 ~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fclean_panels.R="9EF5A932"
+<<<<<<< HEAD
 ~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fexploring_demogs.R="25ED2638"
+=======
+~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fexploring_demogs.R="FA03C6B0"
+>>>>>>> e7737563cfc6e575b94cd1ef1c55472ed0ab0308
 ~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fget_dem_variables.R="21B617D8"
 ~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fkkapproach%2Fmodel_kk.Rmd="DAB83CBE"
 ~%2FDropbox%2Fextended_formative_windows%2Fcode%2Fkkapproach%2Fslope_analysis.R="311E398C"
