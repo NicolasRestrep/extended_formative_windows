@@ -8,24 +8,11 @@
 #Load in long data frame from clean_data.R file
 
 load("./clean_data/long_difference.Rdata")
+load("./clean_data/long_demog.Rdata")
 
 source("./code/get_dem_variables.R")
 
-long_demo <- bind_rows(anes5_demog %>% mutate(df = "1956-60 ANES"), 
-                       anes7_demog %>% mutate(df = "1972-76 ANES"), 
-                       anes8_demographic %>% mutate(df = "1980 ANES"),
-                       anes9_demog %>% mutate(df = "1990-92 ANES"), 
-                       anes90_demog %>% mutate(df = "1992-97 ANES"), 
-                       anes0_demog %>% mutate(df = "2000-04 ANES"), 
-                       gss6_demog %>% mutate(df = "2006-10 GSS"), 
-                       gss8_demog %>% mutate(df = "2008-12 GSS"), 
-                       gss10_demog %>% mutate(df = "2010-14 GSS"), 
-                       anes16_demog %>% mutate(df = "2016-20 ANES"), 
-                       anes20_demog %>% mutate(df = "2020-22 ANES"), 
-                       gss20_demog %>% mutate("2016-20 GSS")) %>%
-  mutate(evermarried = ifelse(marital %in% c("married", "other"), 1, 0),
-         ba = ifelse(ed == "ba", 1, 0)) 
-
+long_diff_demo <- left_join(long_difference, long_demog, by = c("df"="df", "id"="id", "t1"="wave"))
 
 
 #Panel summaries
@@ -42,12 +29,16 @@ psummaries <- long_difference %>%
 
 # Summarize absolute difference at the wave-pair level for each age group
 # for each question. 
-summaries <- long_difference %>%
-  filter(age <= 80) %>%
+summaries <- long_diff_demo %>%
+  filter(age <= 80, !is.na(ba), !is.na(evermarried), !is.na(student)) %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
   group_by(wave_pair, name, age_group) %>%
-  summarise(d = weighted.mean(duration), a = weighted.mean(abs_diff),
-            date = weighted.mean(date), n = n(), sd = sd(abs_diff),
+  summarise(d = weighted.mean(duration, weight = weight), a = weighted.mean(abs_diff, weight = weight),
+            pct_ba = weighted.mean(ba, weight = weight),
+            pct_lt = weighted.mean(lt, weight = weight),
+            pct_married = weighted.mean(evermarried, weight = weight),
+            pct_student = weighted.mean(student, weight = weight),
+            date = weighted.mean(date, weight = weight), n = n(), sd = sd(abs_diff),
             weighted_n = sum(weight)) %>%
   #Filtering out bad questions
   filter(name != "natpoor", 
@@ -108,6 +99,11 @@ m4.4 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*age_group + d
 
 #Seems to be the best fitting model
 m4.5 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*dec_diff +
+               (1 + d + dec_diff + age_group|name),
+             data = summaries %>% filter(sd > 0), weights = 1/se)
+
+m4.5b <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*dec_diff +
+                pct_ba + pct_married + pct_student + 
                (1 + d + dec_diff + age_group|name),
              data = summaries %>% filter(sd > 0), weights = 1/se)
 
@@ -187,6 +183,91 @@ new.data %>%
   labs(x = "Year", y = "Predicted wave-to-wave change",
        color = "Age Group") + 
   theme()
+
+
+
+
+time_1 <- summaries %>% filter(wave_pair == "1-2-1956-60 ANES") %>%
+  group_by(age_group) %>%
+  summarise(across(c(pct_ba, pct_married, pct_student),
+                   ~mean(.x))) %>%
+  mutate(time = "1")
+time_t <- summaries %>% filter(wave_pair == "2-3-2020-22 ANES") %>%
+  group_by(age_group) %>% 
+  summarise(across(c(pct_ba, pct_married, pct_student),
+                   ~mean(.x))) %>% 
+  mutate(time = "t")
+times <- bind_rows(time_1, time_t)
+
+
+
+new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
+                        dec_diff = c(-6.4,0),
+                        d = c(0,1,2), name = unique(summaries$name),
+                        time = c("1", "t")) %>%
+  left_join(times, by = c("age_group" = "age_group", "time"="time")) %>%
+  filter(dec_diff == 0 | time == 1)
+
+#Predict data
+new.data$yhat <- predict(m4.5c, newdata = new.data)
+
+#Graph predictions 
+new.data %>%
+  filter(d == 2) %>%
+  mutate(time = recode(time, "1"="Counterfactual", "t"="Observed")) %>%
+  mutate(time = ifelse(dec_diff == -6.4, "Start", time)) %>%
+  group_by(age_group, dec_diff, time) %>%
+  summarise(yhat = mean(yhat)) %>%
+  ungroup() %>%
+  select(-dec_diff) %>%
+  spread(time, yhat) %>%
+  pivot_longer(Counterfactual:Observed) %>%
+  mutate(Start.Time = -6.4, Finish.Time = 0) %>%
+  ggplot(aes(x = Start.Time, xend = Finish.Time, y = Start, yend = value,
+             linetype = name, color = age_group)) +
+  geom_segment() + 
+  geom_line(aes(color = age_group)) + 
+  #geom_point(size = 3) +
+  theme_bw() + 
+  scale_shape_manual(values = c(21,22)) + 
+  scale_fill_brewer(type = "qual", palette = 2,
+                     guide = "none") + 
+  scale_color_brewer(type = "qual", palette = 2,
+                    guide = "none") + 
+  labs(x = "Age Group", y = "Expected change for 2-year duration",
+       shape = "Estimate",
+       title = "Counterfactual expectation of change",
+       subtitle = "Holding demographic variables constant at 1956 levels") + 
+  facet_wrap(~age_group)
+
+#Graph predictions
+new.data %>%
+  filter(d == 2) %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
+  ggplot(aes(x = year, y = yhat, color = age_group)) + 
+  geom_hline(yintercept = 0, color = "black") + 
+  #geom_line(alpha = .2, aes(group = group)) + 
+  geom_smooth(linewidth = 2) + 
+  theme_bw() + 
+  facet_wrap(~age_group) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group",
+       title = "Predicted wave-to-wave change by age group",
+       subtitle = "Individual question trajectories and overall trajectory") + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  theme(legend.position = "none")
+
+
+
+
+
+
+
+
+
+
+
 
 
 
