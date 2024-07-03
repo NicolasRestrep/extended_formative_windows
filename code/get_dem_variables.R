@@ -113,9 +113,9 @@ anes5_demog <- anes5 %>%
     ed_3 = ifelse(V600694 %in% c(81, 82), "ba", ed_3),
     ed_4 = ed_3,
     #1 = male, 2 = female
-    sex_1 = as.character(V560171),
-    sex_2 = as.character(V580468),
-    sex_3 = as.character(V600684),
+    sex_1 = as.character(ifelse(V560171 == 9, NA, V560171)),
+    sex_2 = as.character(ifelse(V580468 == 9, NA, V580468)),
+    sex_3 = as.character(ifelse(V600684 == 9, NA, V600684)),
     sex_4 = sex_3,
     #1 = white, 2 = negro, 3 = other.
     race_1 = as.character(V560172),
@@ -137,7 +137,8 @@ anes5_demog <- anes5 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  ) %>%
+  mutate(df = "1956-60 ANES")
 
 # ANES 1970 demographics ====
 anes7_demog <- anes7 %>% 
@@ -246,7 +247,8 @@ anes7_demog <- anes7 %>%
     names_from = measure, 
     values_from = value
   ) %>%
-  arrange(id, wave)
+  arrange(id, wave)%>%
+  mutate(df = "1972-76 ANES")
 
 # ANES 1980 demographics ====
 
@@ -273,15 +275,15 @@ anes8_demog <- anes8 %>%
          ), 
          marital_4 = marital_3,
          # Education Summary 
-         educ_1 = case_when(
+         ed_1 = case_when(
            VMP0334 %in% c(1,2,3,4) ~ "less than",
            VMP0334 %in% c(5,6,7,8) ~ "hs", 
            VMP0334 %in% c(9,10) ~ "ba", 
            VMP0334 %in% c(98,99) ~ NA_character_
          ), 
-         educ_2 = educ_1,
-         educ_3 = educ_2,
-         educ_4 = educ_3,
+         ed_2 = ed_1,
+         ed_3 = ed_2,
+         ed_4 = ed_3,
          # Children -- sum total amount of children 
          across(c(VMP0589,VMP0590,VMP0591,VMP0592,
                   VMP2435,VMP2436,VMP2437,VMP2438,
@@ -337,7 +339,8 @@ anes8_demog <- anes8 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  mutate(df = "1980 ANES")
 
 # ANES 1990-92 demographics ====
 
@@ -359,20 +362,20 @@ anes90_demog <- anes90 %>%
     ), 
     marital_4 = marital_3,
     # Education 
-    educ_1 = case_when(
+    ed_1 = case_when(
       V900557 %in% c(1,2) ~ "less than",
       V900557 %in% c(3,4,5) ~ "hs", 
       V900557 %in% c(6,7) ~ "ba", 
       V900557 %in% c(98,99) ~ NA_character_
     ), 
-    educ_2 = educ_1,
-    educ_3 = case_when(
+    ed_2 = ed_1,
+    ed_3 = case_when(
       V923908 %in% c(1,2) ~ "less than",
       V923908 %in% c(3,4,5) ~ "hs", 
       V923908 %in% c(6,7) ~ "ba", 
       V923908 %in% c(98,99) ~ NA_character_
     ), 
-    educ_4 = educ_3,
+    ed_4 = ed_3,
     # Children 
     across(c(V900030,V900031,V900032,V900033), 
            ~ifelse(.x == 9, NA_real_, .x)), 
@@ -429,7 +432,8 @@ anes90_demog <- anes90 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  mutate(df = "1990-92 ANES")
 
 # ANES 1992-1997 demographics ====
 
@@ -580,7 +584,8 @@ anes9_demog <- anes9 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  mutate(df = "1992-97 ANES")
 
 # ANES 2000 demographics ====
 
@@ -623,21 +628,21 @@ anes0_demog <- anes0 %>%
     anychild_4 = anychild_3,
     anychild_5 = anychild_4,
     # Education 
-    educ_1 = case_when(
+    ed_1 = case_when(
       M000913 %in% c(1,2) ~ "less than",
       M000913 %in% c(3,4,5) ~ "hs",
       M000913 %in% c(6,7) ~ "ba",
       M000913 %in% c(0,9) ~ NA_character_
     ),
-    educ_2 = educ_1,
-    educ_3 = case_when(
+    ed_2 = ed_1,
+    ed_3 = case_when(
       M023131 %in% c(1,2) ~ "less than", 
       M023131 %in% c(3,4,5) ~ "hs", 
       M023131 %in% c(6,7) ~ "ba", 
       M023131 %in% c(0,9) ~ NA_character_
     ), 
-    educ_4 = educ_3,
-    educ_5 = educ_4,
+    ed_4 = ed_3,
+    ed_5 = ed_4,
     # Sex 
     sex_1 = M001029,
     sex_2 = sex_1,
@@ -698,7 +703,8 @@ anes0_demog <- anes0 %>%
     names_from = measure, 
     values_from = value
   ) %>%
-  arrange(id, wave)
+  arrange(id, wave)%>%
+  mutate(df = "2000-04 ANES")
 
 
 # ANES 2016 demographics ====
@@ -736,20 +742,20 @@ anes16_demog <- anes16 %>%
     ),
     anychild_4 = anychild_3,
     # Education 
-    educ_1 = case_when(
+    ed_1 = case_when(
       V161270 < 1 ~ NA_character_,
       V161270 %in% c(1,2,3,4,5,6,7) ~ "less than",
       V161270 %in% c(8,9,10,11,12,90,95) ~ "hs",
       V161270 %in% c(13,14,15,16) ~ "ba"
     ),
-    educ_2 = educ_1,
-    educ_3 = case_when(
+    ed_2 = ed_1,
+    ed_3 = case_when(
       V201511x < 1 ~ NA_character_,
       V201511x == 1 ~ "less than", 
       V201511x %in% c(2,3) ~ "hs", 
       V201511x %in% c(4,5) ~ "ba"
     ), 
-    educ_4 = educ_3,
+    ed_4 = ed_3,
     # Sex
     sex_1 = case_when(
       V161342 < 1 ~ NA_real_,
@@ -799,7 +805,8 @@ anes16_demog <- anes16 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  mutate(df = "2016-20 ANES")
 
 # ANES 2020 demographics ====
 
@@ -826,13 +833,13 @@ anes20_demog <- anes20 %>%
     anychild_2 = anychild_1,
     anychild_3 = anychild_2,
     # Education
-    educ_1 = case_when(
+    ed_1 = case_when(
       profile_educ5 == 1 ~ "less than", 
       profile_educ5 %in% c(2,3) ~ "hs", 
       profile_educ5 %in% c(4,5) ~ "ba"
     ), 
-    educ_2 = educ_1,
-    educ_3 = educ_2,
+    ed_2 = ed_1,
+    ed_3 = ed_2,
     # Sex 
     sex_1 = profile_gender, 
     sex_2 = sex_1,
@@ -856,7 +863,8 @@ anes20_demog <- anes20 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  mutate(df = "2020-22 ANES")
 
 # GSS 2006-2010 demographics ====
 
@@ -900,7 +908,9 @@ gss6_demog <- gss6 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  ) %>%
+  select(-c(childs, wrkstat, degree))%>%
+  mutate(df = "2006-10 GSS")
 # I am worried that some of the education statuses seem to be changing quite wildly 
 
 # GSS 2008-2012 demographics ====
@@ -944,7 +954,9 @@ gss8_demog <- gss8 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  select(-c(childs, wrkstat, degree))%>%
+  mutate(df = "2008-12 GSS")
 
 # Again some inconsistency with the education values here 
 
@@ -970,9 +982,9 @@ gss10_demog <- gss10 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         childs_1 = ifelse(childs_1 > 0, 1, 0),
-         childs_2 = ifelse(childs_2 > 0, 1, 0),
-         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         anychild_1 = ifelse(childs_1 > 0, 1, 0),
+         anychild_2 = ifelse(childs_2 > 0, 1, 0),
+         anychild_3 = ifelse(childs_3 > 0, 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -990,7 +1002,9 @@ gss10_demog <- gss10 %>%
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  )%>%
+  select(-c(childs, wrkstat, degree))%>%
+  mutate(df = "2010-14 GSS")
 
 # GSS 2016-2020 demographics ====
 
@@ -1040,9 +1054,9 @@ gss20_demog <- gss20 %>%
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
          race_3 = ifelse(is.na(race_1), race_2, race_1),
-         childs_1 = ifelse(childs_1 > 0, 1, 0),
-         childs_2 = ifelse(childs_2 > 0, 1, 0),
-         childs_3 = ifelse(childs_3 > 0, 1, 0),
+         anychild_1 = ifelse(childs_1 > 0, 1, 0),
+         anychild_2 = ifelse(childs_2 > 0, 1, 0),
+         anychild_3 = ifelse(childs_3 > 0, 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -1052,11 +1066,12 @@ gss20_demog <- gss20 %>%
          student_1 = ifelse(student_1 == 6, 1, 0), 
          student_2 = ifelse(student_2 == 6, 1, 0), 
          student_3 = ifelse(student_3 == 6, 1, 0)) %>% 
-  select(id, sex_1:race_3, marital_1:student_3) %>% 
+  select(id, sex_1:race_3, marital_1:marital_3, student_1:ed_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_3) %>%
+  pivot_longer(sex_1:ed_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )
+  ) %>%
+  mutate(df = "2016-20 GSS")
