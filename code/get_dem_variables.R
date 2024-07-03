@@ -1683,3 +1683,36 @@ gss20_demog <- gss20 %>%
     values_from = value
   ) %>%
   mutate(df = "2016-20 GSS")
+
+long_demog <- bind_rows(anes5_demog,
+                        anes7_demog,
+                        anes8_demog,
+                        anes90_demog,
+                        anes9_demog,
+                        anes0_demog,
+                        anes16_demog,
+                        anes20_demog,
+                        gss6_demog,
+                        gss8_demog,
+                        gss10_demog,
+                        gss20_demog) %>%
+  mutate(evermarried = recode(marital, "married"=1, "other"=1, "single/nm"=0),
+         female = recode(sex, "1"=0, "2"=1),
+         ba = recode(ed, "hs"=0, "less than"=0, "ba"=1),
+         lt = recode(ed, "hs"=0, "less than"=1, "ba"=0),
+         everkid = as.numeric(everkid),
+         kidinhouse = as.numeric(kidinhouse),
+         student = as.numeric(student),
+         id = as.numeric(id)) %>%
+  select(df, id, wave, evermarried, student, everkid, kidinhouse, ba, lt)
+
+save(long_demog, file = "~/Dropbox/extended_formative_windows/clean_data/long_demog.Rdata")
+
+rm(anes5, anes7, anes8, anes90, anes9, anes0, anes16, anes20,
+   gss6, gss8, gss10, gss20)
+rm(anes5_demog, anes7_demog, anes8_demog, anes90_demog, anes9_demog, anes0_demog, anes16_demog, anes20_demog,
+   gss6_demog, gss8_demog, gss10_demog, gss20_demog)
+
+
+
+
