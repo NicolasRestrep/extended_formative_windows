@@ -87,13 +87,13 @@ anes5_demog <- anes5 %>%
     marital_3 = ifelse(V600690 %in% c(3, 4, 5), "other", marital_3),
     marital_4 = marital_3,
     #IS there a child under 18 in the household.
-    anychild_1 = as.character(ifelse(V560178 == 99, NA, V560178)),
-    anychild_1 = as.character(ifelse(V560178 == 0, 0, 1)),
-    anychild_2 = as.character(ifelse(V580475 == 99, NA, V580475)),
-    anychild_2 = as.character(ifelse(V580475 == 0, 0, 1)),
-    anychild_3 = as.character(ifelse(V600691 == 99, NA, V600691)),
-    anychild_3 = as.character(ifelse(V600691 == 0, 0, 1)),
-    anychild_4 = anychild_3,
+    kidinhouse_1 = as.character(ifelse(V560178 == 99, NA, V560178)),
+    kidinhouse_1 = as.character(ifelse(V560178 == 0, 0, 1)),
+    kidinhouse_2 = as.character(ifelse(V580475 == 99, NA, V580475)),
+    kidinhouse_2 = as.character(ifelse(V580475 == 0, 0, 1)),
+    kidinhouse_3 = as.character(ifelse(V600691 == 99, NA, V600691)),
+    kidinhouse_3 = as.character(ifelse(V600691 == 0, 0, 1)),
+    kidinhouse_4 = kidinhouse_3,
     #The third education variable is differently coded
     ed_1 = ifelse(V560181 == 9, NA, V560181),
     ed_1 = ifelse(V560181 %in% c(0, 1, 2, 3, 4), "less than", ed_1),
@@ -118,9 +118,9 @@ anes5_demog <- anes5 %>%
     sex_3 = as.character(ifelse(V600684 == 9, NA, V600684)),
     sex_4 = sex_3,
     #1 = white, 2 = negro, 3 = other.
-    race_1 = as.character(V560172),
-    race_2 = as.character(V580469),
-    race_3 = as.character(V600685),
+    race_1 = ifelse(V560172 == 7, 3, ifelse(V560172 == 9, NA, V560172)),
+    race_2 = ifelse(V580469 == 7, 3, ifelse(V580469 == 9, NA, V580469)),
+    race_3 = ifelse(V600685 == 7, 3, ifelse(V600685 == 9, NA, V600685)),
     race_4 = race_3,
     # Student status 
     student_1 = as.character(ifelse(V560120 == 92, 1, 0)),
@@ -128,6 +128,44 @@ anes5_demog <- anes5 %>%
     student_3 = as.character(ifelse(V600695 == 92, 1, ifelse(V600695 == 99, NA, 0))),
     student_4 = student_3
   )  %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4)) %>%
+  #Roll-backward imputation
+  mutate(marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(
     id, marital_1:student_4
   ) %>% 
@@ -181,24 +219,30 @@ anes7_demog <- anes7 %>%
          marital_4 = ifelse(V763370 %in% c(3,4,5), "other", marital_4),
          marital_5 = marital_4,
          #children
-         #Indicator for whether a respondent has any children
-         anychild_1 = ifelse(V720296 == 5, 1, 0),
-         anychild_2 = anychild_1,
-         anychild_3 = ifelse(V742408 %in% c(0, 9), NA, V742408),
-         anychild_3 = ifelse(V742408 == 1, 1, anychild_3),
-         anychild_3 = ifelse(V742408 == 5, 0, anychild_3),
-         anychild_4 = ifelse(V763371 %in% c(0, 9), NA, V763371),
-         anychild_4 = ifelse(V763371 == 1, 1, anychild_4),
-         anychild_4 = ifelse(V763371 == 5, 0, anychild_4),
-         
-         ##
-         # anychild_1 = ifelse(anychild_3 == 0 | oldestkid_3 < 2, 0, 1),
-         # anychild_1a = ifelse(anychild_4 == 0 | oldestkid_4 < 4, 0, 1),
-         # anychild_1 = ifelse(is.na(anychild_1), anychild_1a, anychild_1), 
-         
-         anychild_2 = anychild_1,
-         anychild_5 = anychild_4,
-         
+
+         #
+         #Kid in house variable is ages 6+, so severely undercounting
+         #early adults
+         kidinhouse_1 = NA,
+         #kidinhouse_1 = ifelse(V720296 == 5, 1, 0),
+         kidinhouse_2 = NA,
+         kidinhouse_3 = NA,
+         kidinhouse_4 = NA,
+         kidinhouse_5 = NA,
+         everkid_1 = NA,
+         everkid_2 = NA,
+         everkid_3 = case_when(
+           V742408 %in% c(0,9) ~ NA_real_,
+           V742408 == 1 ~ 1,
+           V742408 == 5 ~ 0
+         ),
+         everkid_4 = case_when(
+           V763371 %in% c(0,9) ~ NA_real_,
+           V763371 == 1 ~ 1,
+           V763371 == 5 ~ 0
+         ),
+         everkid_5 = everkid_4,
+
          # Sex
          sex_1 = ifelse(V720424 == 9, NA, V720424), 
          sex_2 = sex_1,
@@ -238,6 +282,64 @@ anes7_demog <- anes7 %>%
            V763409 == 0 ~ NA_real_),
          student_5 = student_4
          ) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         marital_5 = ifelse(is.na(marital_5), marital_4, marital_5),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         kidinhouse_5 = ifelse(is.na(kidinhouse_5), kidinhouse_4, kidinhouse_5),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_3, everkid_4),
+         everkid_5 = ifelse(is.na(everkid_5), everkid_4, everkid_5),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         ed_5 = ifelse(is.na(ed_5), ed_4, ed_5),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         sex_5 = ifelse(is.na(sex_5), sex_4, sex_5),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         race_5 = ifelse(is.na(race_5), race_4, race_5),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4),
+         student_5 = ifelse(is.na(student_5), student_4, student_5)) %>%
+  #Roll-backward imputation
+  mutate(marital_4 = ifelse(is.na(marital_4), marital_5, marital_4),
+         marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_5, kidinhouse_4),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_5, everkid_4),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_4, everkid_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_4 = ifelse(is.na(ed_4), ed_5, ed_4),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_4 = ifelse(is.na(sex_4), sex_5, sex_4),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_4 = ifelse(is.na(race_4), race_5, race_4),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_4 = ifelse(is.na(student_4), student_5, student_4),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(id, oldestkid_3:student_5) %>% 
   select(-c(oldestkid_3, oldestkid_4)) %>% 
   mutate_all(as.character) %>% 
@@ -285,23 +387,28 @@ anes8_demog <- anes8 %>%
          ed_3 = ed_2,
          ed_4 = ed_3,
          # Children -- sum total amount of children 
+         # in household
          across(c(VMP0589,VMP0590,VMP0591,VMP0592,
                   VMP2435,VMP2436,VMP2437,VMP2438,
-                  VMP3581,VMP3582,VMP3583,VMP3583), 
+                  VMP3581,VMP3582,VMP3583,VMP3584), 
                 ~ifelse(.x == 9, NA_real_, .x)),
          
          nkids_1 = VMP0589 + VMP0590 + VMP0591 + VMP0592, 
          nkids_2 = VMP2435 + VMP2436 + VMP2437 + VMP2438, 
-         nkids_3 = VMP3581 + VMP3582 + VMP3583 + VMP3583, 
+         nkids_3 = VMP3581 + VMP3582 + VMP3583 + VMP3584, 
          nkids_4 = nkids_3,
-         anychild_1 = case_when(
+         everkid_1 = NA,
+         everkid_2 = NA,
+         everkid_3 = case_when(
            VMP3388 == 1 ~ 1, 
            VMP3388 == 5 ~ 0, 
            VMP3388 %in% c(0,9) ~ NA_real_
          ),
-         anychild_2 = ifelse(nkids_2 > 0 | anychild_1==1,1,0),
-         anychild_3 = anychild_2,
-         anychild_4 = anychild_3,
+         everkid_4 = NA,
+         kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+         kidinhouse_2 = ifelse(nkids_2 > 0, 1, 0),
+         kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
+         kidinhouse_4 = kidinhouse_3,
          # Sex 
          sex_1 = ifelse(VMP3552 == 9, NA, VMP3552), 
          sex_2 = sex_1,
@@ -332,6 +439,50 @@ anes8_demog <- anes8 %>%
          student_3 = student_2,
          student_4 = student_3
   ) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_3, everkid_4),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4)) %>%
+  #Roll-backward imputation
+  mutate(marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_4, everkid_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(id, marital_1:student_4) %>% 
   mutate_all(as.character) %>% 
   pivot_longer(marital_1:student_4) %>%
@@ -380,17 +531,21 @@ anes90_demog <- anes90 %>%
     across(c(V900030,V900031,V900032,V900033), 
            ~ifelse(.x == 9, NA_real_, .x)), 
     nkids_1 = V900030 + V900031 + V900032 +V900033, 
-    anychild_1 = ifelse(nkids_1 > 0, 1, 0),
-    anychild_2 = anychild_1,
-    anychild_3 = case_when(
+    kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+    kidinhouse_2 = kidinhouse_1,
+    everkid_1 = NA,
+    everkid_2 = NA,
+    everkid_3 = case_when(
       V924136 %in% c(1,2) ~ 1, 
       V924136 == 5 ~ 0, 
       V924136 %in% c(0,9) ~ NA_real_
     ), 
-    anychild_4 = anychild_3,
-    across(c(V924137,V924138,V924139,V924140), 
+    everkid_4 = everkid_3,
+    across(c(V924137, V924139),
            ~ifelse(.x %in% c(8,9), NA_real_, .x)), 
-    childlt_3 = V924137+V924138+V924139+V924140, 
+    nkids_3 = V924137 + V924139,
+    kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
+    kidinhouse_4 = kidinhouse_3,
     # Sex
     sex_1 = V900547,
     sex_2 = sex_1,
@@ -425,7 +580,52 @@ anes90_demog <- anes90 %>%
       V923914 == 99 ~ NA_real_),
     student_4 = student_3
     ) %>% 
-  select(id, marital_1:student_4, -c(nkids_1, childlt_3)) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_3, everkid_4),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4)) %>%
+  #Roll-backward imputation
+  mutate(marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_4, everkid_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
+  
+  select(id, marital_1:student_4) %>% 
   mutate_all(as.character) %>% 
   pivot_longer(marital_1:student_4) %>%
   separate(name, into = c("measure", "wave")) %>% 
@@ -447,6 +647,8 @@ anes9_demog <- anes9 %>%
          #children
          V924136,
          V923079:V923082,
+         V924137:V924139,
+         V941429:V941431,
          V960048:V960051,
          V941428, 
          # Sex 
@@ -481,26 +683,43 @@ anes9_demog <- anes9 %>%
     marital_7 = marital_6,
     marital_8 = marital_7,
     #children
-    anychild_1 = case_when(
+    across(c(V923079:V923082),
+           ~ifelse(.x > 5, NA, .x)),
+    nkids_1 = V923079 + V923080 + V923081 + V923082,
+    kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+    everkid_1 = case_when(
       V924136 %in% c(1,2) ~ 1,
       V924136 == 5 ~ 0,
       V924136 %in% c(0,9) ~ NA_real_
     ),
-    anychild_2 = anychild_1,
-    anychild_3 = anychild_2,
+    everkid_2 = NA,
+    everkid_3 = NA,
+    everkid_5 = NA,
+    everkid_6 = NA,
+    everkid_7 = NA,
+    everkid_8 = NA,
+    across(c(V924137, V924139),
+           ~ifelse(.x >7, NA, .x)),
+    nkids_2 = V924137 + V924139,
+    kidinhouse_2 = ifelse(nkids_2 > 0, 1, 0),
+    kidinhouse_3 = kidinhouse_2,
     #any children?
-    anychild_4 = case_when(
+    everkid_4 = case_when(
       V941428 %in% c(8,9) ~ NA,
       V941428 %in% c(1,2) ~ 1,
       V941428 == 5 ~ 0
     ),
-    anychild_5 = anychild_4,
+    across(c(V941429, V941431),
+           ~ifelse(.x > 7, NA, .x)),
+    nkids_4 = V941429 + V941431,
+    kidinhouse_4 = ifelse(nkids_4 > 0, 1, 0),
+    kidinhouse_5 = kidinhouse_4,
     across(c(V960048, V960049, V960050, V960051),
            ~ifelse(.x > 5, 0, .x)),
     nkids_6 = V960048 + V960049 + V960050 + V960051,
-    anychild_6 = ifelse(nkids_6 > 0, 1, 0),
-    anychild_7 = anychild_6,
-    anychild_8 = anychild_7,
+    kidinhouse_6 = ifelse(nkids_6 > 0, 1, 0),
+    kidinhouse_7 = NA,
+    kidinhouse_8 = NA,
     #education,
     ed_1 = ifelse(V923908 %in% c(98,99,0), NA, V923908),
     ed_1 = ifelse(V923908 %in% c(1,2), "less than", ed_1),
@@ -577,6 +796,106 @@ anes9_demog <- anes9 %>%
     student_7 = student_6,
     student_8 = student_7
   ) %>%
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         marital_5 = ifelse(is.na(marital_5), marital_4, marital_5),
+         marital_6 = ifelse(is.na(marital_6), marital_5, marital_6),
+         marital_7 = ifelse(is.na(marital_7), marital_6, marital_7),
+         marital_8 = ifelse(is.na(marital_8), marital_7, marital_8),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         kidinhouse_5 = ifelse(is.na(kidinhouse_5), kidinhouse_4, kidinhouse_5),
+         kidinhouse_6 = ifelse(is.na(kidinhouse_6), kidinhouse_5, kidinhouse_6),
+         kidinhouse_7 = ifelse(is.na(kidinhouse_7), kidinhouse_6, kidinhouse_7),
+         kidinhouse_8 = ifelse(is.na(kidinhouse_8), kidinhouse_7, kidinhouse_8),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_3, everkid_4),
+         everkid_5 = ifelse(is.na(everkid_5), everkid_4, everkid_5),
+         everkid_6 = ifelse(is.na(everkid_6), everkid_5, everkid_6),
+         everkid_7 = ifelse(is.na(everkid_7), everkid_6, everkid_7),
+         everkid_8 = ifelse(is.na(everkid_8), everkid_7, everkid_8),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         ed_5 = ifelse(is.na(ed_5), ed_4, ed_5),
+         ed_6 = ifelse(is.na(ed_6), ed_5, ed_6),
+         ed_7 = ifelse(is.na(ed_7), ed_6, ed_7),
+         ed_8 = ifelse(is.na(ed_8), ed_7, ed_8),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         sex_5 = ifelse(is.na(sex_5), sex_4, sex_5),
+         sex_6 = ifelse(is.na(sex_6), sex_5, sex_6),
+         sex_7 = ifelse(is.na(sex_7), sex_6, sex_7),
+         sex_8 = ifelse(is.na(sex_8), sex_7, sex_8),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         race_5 = ifelse(is.na(race_5), race_4, race_5),
+         race_6 = ifelse(is.na(race_6), race_5, race_6),
+         race_7 = ifelse(is.na(race_7), race_6, race_7),
+         race_8 = ifelse(is.na(race_8), race_7, race_8),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4),
+         student_5 = ifelse(is.na(student_5), student_4, student_5),
+         student_6 = ifelse(is.na(student_6), student_5, student_6),
+         student_7 = ifelse(is.na(student_7), student_6, student_7),
+         student_8 = ifelse(is.na(student_8), student_7, student_8)) %>%
+  #Roll-backward imputation
+  mutate(marital_7 = ifelse(is.na(marital_7), marital_8, marital_7),
+         marital_6 = ifelse(is.na(marital_6), marital_7, marital_6),
+         marital_5 = ifelse(is.na(marital_5), marital_6, marital_5),
+         marital_4 = ifelse(is.na(marital_4), marital_5, marital_4),
+         marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_7 = ifelse(is.na(kidinhouse_7), kidinhouse_8, kidinhouse_7),
+         kidinhouse_6 = ifelse(is.na(kidinhouse_6), kidinhouse_7, kidinhouse_6),
+         kidinhouse_5 = ifelse(is.na(kidinhouse_5), kidinhouse_6, kidinhouse_5),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_5, kidinhouse_4),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_7 = ifelse(is.na(everkid_7), everkid_8, everkid_7),
+         everkid_6 = ifelse(is.na(everkid_6), everkid_7, everkid_6),
+         everkid_5 = ifelse(is.na(everkid_5), everkid_6, everkid_5),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_5, everkid_4),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_4, everkid_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_7 = ifelse(is.na(ed_7), ed_8, ed_7),
+         ed_6 = ifelse(is.na(ed_6), ed_7, ed_6),
+         ed_5 = ifelse(is.na(ed_5), ed_6, ed_5),
+         ed_4 = ifelse(is.na(ed_4), ed_5, ed_4),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_7 = ifelse(is.na(sex_7), sex_8, sex_7),
+         sex_6 = ifelse(is.na(sex_6), sex_7, sex_6),
+         sex_5 = ifelse(is.na(sex_5), sex_6, sex_5),
+         sex_4 = ifelse(is.na(sex_4), sex_5, sex_4),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_7 = ifelse(is.na(race_7), race_8, race_7),
+         race_6 = ifelse(is.na(race_6), race_7, race_6),
+         race_5 = ifelse(is.na(race_5), race_6, race_5),
+         race_4 = ifelse(is.na(race_4), race_5, race_4),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_7 = ifelse(is.na(student_7), student_8, student_7),
+         student_6 = ifelse(is.na(student_6), student_7, student_6),
+         student_5 = ifelse(is.na(student_5), student_6, student_5),
+         student_4 = ifelse(is.na(student_4), student_5, student_4),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(id, marital_1:student_8, -c(nkids_6)) %>% 
   mutate_all(as.character) %>% 
   pivot_longer(marital_1:student_8) %>%
@@ -614,19 +933,24 @@ anes0_demog <- anes0 %>%
       M045176 %in% c(8,9) ~ NA_character_
     ), 
     # Children 
-    anychild_1 = case_when(
+    everkid_1 = case_when(
       M001023 %in% c(1,3) ~ 1, 
       M001023 == 5 ~ 0, 
       M001023 %in% c(0,8,9) ~ NA_real_
     ), 
+    everkid_2 = NA,
+    everkid_3 = NA,
+    everkid_4 = NA,
+    everkid_5 = NA,
     nkids_1 = ifelse(
-      M001024 > 15, NA_real_, 
-      M001024
+      M001023 == 5, 0, ifelse(M001024 > 15, NA_real_, 
+      M001024)
     ), 
-    anychild_2 = anychild_1,
-    anychild_3 = anychild_2,
-    anychild_4 = anychild_3,
-    anychild_5 = anychild_4,
+    kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+    kidinhouse_2 = NA,
+    kidinhouse_3 = NA,
+    kidinhouse_4 = NA,
+    kidinhouse_5 = NA,
     # Education 
     ed_1 = case_when(
       M000913 %in% c(1,2) ~ "less than",
@@ -695,6 +1019,64 @@ anes0_demog <- anes0 %>%
       M045178x %in% c(7,17,67,167) ~ 1
     )
   ) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         marital_5 = ifelse(is.na(marital_5), marital_4, marital_5),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         kidinhouse_5 = ifelse(is.na(kidinhouse_5), kidinhouse_4, kidinhouse_5),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_3, everkid_4),
+         everkid_5 = ifelse(is.na(everkid_5), everkid_4, everkid_5),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         ed_5 = ifelse(is.na(ed_5), ed_4, ed_5),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         sex_5 = ifelse(is.na(sex_5), sex_4, sex_5),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         race_5 = ifelse(is.na(race_5), race_4, race_5),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4),
+         student_5 = ifelse(is.na(student_5), student_4, student_5)) %>%
+  #Roll-backward imputation
+  mutate(marital_4 = ifelse(is.na(marital_4), marital_5, marital_4),
+         marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_5, kidinhouse_4),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_4 = ifelse(is.na(everkid_4), everkid_5, everkid_4),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_4, everkid_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_4 = ifelse(is.na(ed_4), ed_5, ed_4),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_4 = ifelse(is.na(sex_4), sex_5, sex_4),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_4 = ifelse(is.na(race_4), race_5, race_4),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_4 = ifelse(is.na(student_4), student_5, student_4),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(id, marital_1:student_5, -c(nkids_1)) %>% 
   mutate_all(as.character) %>% 
   pivot_longer(marital_1:student_5) %>%
@@ -727,20 +1109,12 @@ anes16_demog <- anes16 %>%
     ),
     marital_4 = marital_3,
     # Children
-    childlt_1 = ifelse(V161324 < 0, NA_real_, V161324),
-    childlt_3 = ifelse(V201567 < 0, NA_real_, V201567),
-    anychild_1 = case_when(
-      V161324 < 0 ~ NA_real_,
-      V161324 == 0 ~ 0, 
-      V161324 > 0 ~ 1
-    ),
-    anychild_2 = anychild_1,
-    anychild_3 = case_when(
-      V201567 < 0 ~ NA_real_,
-      V201567 == 0 ~ 0,
-      V201567 > 0 ~ 1
-    ),
-    anychild_4 = anychild_3,
+    nkids_1 = ifelse(V161324 < 0, NA_real_, V161324),
+    kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+    kidinhouse_2 = NA,
+    nkids_3 = ifelse(V201567 < 0, NA_real_, V201567),
+    kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
+    kidinhouse_4 = NA,
     # Education 
     ed_1 = case_when(
       V161270 < 1 ~ NA_character_,
@@ -798,6 +1172,47 @@ anes16_demog <- anes16 %>%
     ),
     student_4 = student_3
   ) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         marital_4 = ifelse(is.na(marital_4), marital_3, marital_4),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         kidinhouse_4 = ifelse(is.na(kidinhouse_4), kidinhouse_3, kidinhouse_4),
+         # everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         # everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         # everkid_4 = ifelse(is.na(everkid_4), everkid_3, everkid_4),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         ed_4 = ifelse(is.na(ed_4), ed_3, ed_4),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         sex_4 = ifelse(is.na(sex_4), sex_3, sex_4),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         race_4 = ifelse(is.na(race_4), race_3, race_4),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3),
+         student_4 = ifelse(is.na(student_4), student_3, student_4)) %>%
+  #Roll-backward imputation
+  mutate(marital_3 = ifelse(is.na(marital_3), marital_4, marital_3),
+         marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_4, kidinhouse_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         ed_3 = ifelse(is.na(ed_3), ed_4, ed_3),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_3 = ifelse(is.na(sex_3), sex_4, sex_3),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_3 = ifelse(is.na(race_3), race_4, race_3),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_3 = ifelse(is.na(student_3), student_4, student_3),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(id, marital_1:student_4) %>% 
   mutate_all(as.character) %>% 
   pivot_longer(marital_1:student_4) %>%
@@ -828,10 +1243,11 @@ anes20_demog <- anes20 %>%
     marital_3 = marital_2,
     # It seems we don't have information about children
     #Series of "people in household aged X-y questions 
-    anychild_1 = ifelse(profile_hh01 + profile_hh25 + profile_hh612 + 
-                          profile_hh1317 > 0, 1, 0),
-    anychild_2 = anychild_1,
-    anychild_3 = anychild_2,
+    nkids_1 = profile_hh01 + profile_hh25 + profile_hh612 + 
+      profile_hh1317,
+    kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+    kidinhouse_2 = NA,
+    kidinhouse_3 = NA,
     # Education
     ed_1 = case_when(
       profile_educ5 == 1 ~ "less than", 
@@ -856,6 +1272,32 @@ anes20_demog <- anes20 %>%
     student_2 = student_1,
     student_3 = student_2
   ) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3)) %>%
+  #Roll-backward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
   select(id, marital_1:student_3) %>% 
   mutate_all(as.character) %>%
   pivot_longer(marital_1:student_3) %>%
@@ -875,6 +1317,9 @@ gss6_demog <- gss6 %>%
          age_1, age_2, age_3, 
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
+         babies_1, babies_2, babies_3,
+         preteen_1, preteen_2, preteen_3,
+         teens_1, teens_2, teens_3,
          degree_1, degree_2, degree_3, 
          sex_1, sex_2, sex_3, 
          race_1, race_2, race_3, 
@@ -888,9 +1333,15 @@ gss6_demog <- gss6 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         anychild_1 = ifelse(childs_1 > 0, 1, 0),
-         anychild_2 = ifelse(childs_2 > 0, 1, 0),
-         anychild_3 = ifelse(childs_3 > 0, 1, 0),
+         everkid_1 = ifelse(childs_1 > 0, 1, 0),
+         everkid_2 = ifelse(childs_2 > 0, 1, 0),
+         everkid_3 = ifelse(childs_3 > 0, 1, 0),
+         nkids_1 = babies_1 + preteen_1 + teens_1,
+         kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+         nkids_2 = babies_2 + preteen_2 + teens_2,
+         kidinhouse_2 = ifelse(nkids_2 > 0, 1, 0),
+         nkids_3 = babies_3 + preteen_3 + teens_3,
+         kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -901,15 +1352,44 @@ gss6_demog <- gss6 %>%
          student_2 = ifelse(wrkstat_2 == 6, 1, 0),
          student_3 = ifelse(wrkstat_3 == 6, 1, 0)
   ) %>% 
-  select(id, sex_1:race_3, marital_1:student_3) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3)) %>%
+  #Roll-backward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
+  select(id, marital_1:marital_3, sex_1:race_3, everkid_1:student_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_3) %>%
+  pivot_longer(marital_1:student_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
     values_from = value
   ) %>%
-  select(-c(childs, wrkstat, degree))%>%
   mutate(df = "2006-10 GSS")
 # I am worried that some of the education statuses seem to be changing quite wildly 
 
@@ -921,6 +1401,9 @@ gss8_demog <- gss8 %>%
          age_1, age_2, age_3, 
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
+         babies_1, babies_2, babies_3,
+         preteen_1, preteen_2, preteen_3,
+         teens_1, teens_2, teens_3,
          degree_1, degree_2, degree_3, 
          sex_1, sex_2, sex_3, 
          race_1, race_2, race_3, 
@@ -934,9 +1417,15 @@ gss8_demog <- gss8 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         anychild_1 = ifelse(childs_1 > 0, 1, 0),
-         anychild_2 = ifelse(childs_2 > 0, 1, 0),
-         anychild_3 = ifelse(childs_3 > 0, 1, 0),
+         everkid_1 = ifelse(childs_1 > 0, 1, 0),
+         everkid_2 = ifelse(childs_2 > 0, 1, 0),
+         everkid_3 = ifelse(childs_3 > 0, 1, 0),
+         nkids_1 = babies_1 + preteen_1 + teens_1,
+         kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+         nkids_2 = babies_2 + preteen_2 + teens_2,
+         kidinhouse_2 = ifelse(nkids_2 > 0, 1, 0),
+         nkids_3 = babies_3 + preteen_3 + teens_3,
+         kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -947,15 +1436,45 @@ gss8_demog <- gss8 %>%
          student_2 = ifelse(wrkstat_2 == 6, 1, 0),
          student_3 = ifelse(wrkstat_3 == 6, 1, 0)
   ) %>% 
-  select(id, sex_1:race_3, marital_1:student_3) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3)) %>%
+  #Roll-backward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
+  
+  select(id, marital_1:marital_3, sex_1:race_3, everkid_1:student_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_3) %>%
+  pivot_longer(marital_1:student_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )%>%
-  select(-c(childs, wrkstat, degree))%>%
+  ) %>%
   mutate(df = "2008-12 GSS")
 
 # Again some inconsistency with the education values here 
@@ -969,6 +1488,9 @@ gss10_demog <- gss10 %>%
          age_1, age_2, age_3, 
          marital_1, marital_2, marital_3,
          childs_1, childs_2, childs_3,
+         babies_1, babies_2, babies_3,
+         preteen_1, preteen_2, preteen_3,
+         teens_1, teens_2, teens_3,
          degree_1, degree_2, degree_3, 
          sex_1, sex_2, sex_3, 
          race_1, race_2, race_3, 
@@ -982,9 +1504,15 @@ gss10_demog <- gss10 %>%
                             "5"="single/nm"),
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
-         anychild_1 = ifelse(childs_1 > 0, 1, 0),
-         anychild_2 = ifelse(childs_2 > 0, 1, 0),
-         anychild_3 = ifelse(childs_3 > 0, 1, 0),
+         everkid_1 = ifelse(childs_1 > 0, 1, 0),
+         everkid_2 = ifelse(childs_2 > 0, 1, 0),
+         everkid_3 = ifelse(childs_3 > 0, 1, 0),
+         nkids_1 = babies_1 + preteen_1 + teens_1,
+         kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+         nkids_2 = babies_2 + preteen_2 + teens_2,
+         kidinhouse_2 = ifelse(nkids_2 > 0, 1, 0),
+         nkids_3 = babies_3 + preteen_3 + teens_3,
+         kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -995,15 +1523,45 @@ gss10_demog <- gss10 %>%
          student_2 = ifelse(wrkstat_2 == 6, 1, 0),
          student_3 = ifelse(wrkstat_3 == 6, 1, 0)
   ) %>% 
-  select(id, sex_1:race_3, marital_1:student_3) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3)) %>%
+  #Roll-backward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
+  
+  select(id, marital_1:marital_3, sex_1:race_3, everkid_1:student_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:student_3) %>%
+  pivot_longer(marital_1:student_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
     values_from = value
-  )%>%
-  select(-c(childs, wrkstat, degree))%>%
+  ) %>%
   mutate(df = "2010-14 GSS")
 
 # GSS 2016-2020 demographics ====
@@ -1014,6 +1572,9 @@ gss20_demog <- gss20 %>%
   select(id, age_1a, age_1b, age_2, 
          marital_1a, marital_1b, marital_2,
          childs_1a, childs_1b, childs_2,
+         babies_1a, babies_1b, babies_2,
+         preteen_1a, preteen_1b, preteen_2,
+         teens_1a, teens_1b, teens_2,
          degree_1a, degree_1b, degree_2, 
          sex_1a, sex_1b, sex_2, 
          race_1a, race_1b, race_2, 
@@ -1029,6 +1590,16 @@ gss20_demog <- gss20 %>%
          childs_3 = childs_2, 
          childs_2 = childs_1b, 
          childs_1 = childs_1a, 
+         
+         babies_3 = babies_2,
+         babies_2 = babies_1b, 
+         babies_1 = babies_1a,
+         preteen_3 = preteen_2,
+         preteen_2 = preteen_1b,
+         preteen_1 = preteen_1a,
+         teens_3 = teens_2,
+         teens_2 = teens_1b,
+         teens_1 = teens_1a,
          
          degree_3 = degree_2, 
          degree_2 = degree_1b, 
@@ -1054,9 +1625,16 @@ gss20_demog <- gss20 %>%
          marital_3 = recode(marital_3, "1"="married", "2"="other", "3"="other", "4"="other",
                             "5"="single/nm"),
          race_3 = ifelse(is.na(race_1), race_2, race_1),
-         anychild_1 = ifelse(childs_1 > 0, 1, 0),
-         anychild_2 = ifelse(childs_2 > 0, 1, 0),
-         anychild_3 = ifelse(childs_3 > 0, 1, 0),
+         everkid_1 = ifelse(childs_1 > 0, 1, 0),
+         everkid_2 = ifelse(childs_2 > 0, 1, 0),
+         everkid_3 = ifelse(childs_3 > 0, 1, 0),
+         nkids_1 = babies_1 + preteen_1 + teens_1,
+         kidinhouse_1 = ifelse(nkids_1 > 0, 1, 0),
+         nkids_2 = babies_2 + preteen_2 + teens_2,
+         kidinhouse_2 = ifelse(nkids_2 > 0, 1, 0),
+         nkids_3 = babies_3 + preteen_3 + teens_3,
+         kidinhouse_3 = ifelse(nkids_3 > 0, 1, 0),
+         
          ed_1 = recode(degree_1, "0"="less than", "1"="hs", "2"="hs",
                        "3"="ba", "4"="ba"),
          ed_2 = recode(degree_2, "0"="less than", "1"="hs", "2"="hs",
@@ -1066,9 +1644,39 @@ gss20_demog <- gss20 %>%
          student_1 = ifelse(student_1 == 6, 1, 0), 
          student_2 = ifelse(student_2 == 6, 1, 0), 
          student_3 = ifelse(student_3 == 6, 1, 0)) %>% 
-  select(id, sex_1:race_3, marital_1:marital_3, student_1:ed_3) %>% 
+  #Roll-forward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_1, marital_2),
+         marital_3 = ifelse(is.na(marital_3), marital_2, marital_3),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_1, kidinhouse_2),
+         kidinhouse_3 = ifelse(is.na(kidinhouse_3), kidinhouse_2, kidinhouse_3),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_1, everkid_2),
+         everkid_3 = ifelse(is.na(everkid_3), everkid_2, everkid_3),
+         ed_2 = ifelse(is.na(ed_2), ed_1, ed_2),
+         ed_3 = ifelse(is.na(ed_3), ed_2, ed_3),
+         sex_2 = ifelse(is.na(sex_2), sex_1, sex_2),
+         sex_3 = ifelse(is.na(sex_3), sex_2, sex_3),
+         race_2 = ifelse(is.na(race_2), race_1, race_2),
+         race_3 = ifelse(is.na(race_3), race_2, race_3),
+         student_2 = ifelse(is.na(student_2), student_1, student_2),
+         student_3 = ifelse(is.na(student_3), student_2, student_3)) %>%
+  #Roll-backward imputation
+  mutate(marital_2 = ifelse(is.na(marital_2), marital_3, marital_2),
+         marital_1 = ifelse(is.na(marital_1), marital_2, marital_1),
+         kidinhouse_2 = ifelse(is.na(kidinhouse_2), kidinhouse_3, kidinhouse_2),
+         kidinhouse_1 = ifelse(is.na(kidinhouse_1), kidinhouse_2, kidinhouse_1),
+         everkid_2 = ifelse(is.na(everkid_2), everkid_3, everkid_2),
+         everkid_1 = ifelse(is.na(everkid_1), everkid_2, everkid_1),
+         ed_2 = ifelse(is.na(ed_2), ed_3, ed_2),
+         ed_1 = ifelse(is.na(ed_1), ed_2, ed_1),
+         sex_2 = ifelse(is.na(sex_2), sex_3, sex_2),
+         sex_1 = ifelse(is.na(sex_1), sex_2, sex_1),
+         race_2 = ifelse(is.na(race_2), race_3, race_2),
+         race_1 = ifelse(is.na(race_1), race_2, race_1),
+         student_2 = ifelse(is.na(student_2), student_3, student_2),
+         student_1 = ifelse(is.na(student_1), student_2, student_1)) %>%
+  select(id, marital_1:marital_3, sex_1:ed_3) %>% 
   mutate_all(as.character) %>% 
-  pivot_longer(sex_1:ed_3) %>%
+  pivot_longer(marital_1:ed_3) %>%
   separate(name, into = c("measure", "wave")) %>% 
   pivot_wider(
     names_from = measure, 
