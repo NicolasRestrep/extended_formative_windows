@@ -1611,7 +1611,8 @@ long_demog <- bind_rows(anes5_demog,
          rac_black = ifelse(race == "2", 1, 0),
          rac_other = ifelse(race == "3", 1, 0)) %>%
   select(df, id, wave, evermarried, student, everkid, kidinhouse, ba, lt, rac_black,
-         rac_other, female) 
+         rac_other, female) %>%
+  mutate(dec_diff = (as.numeric(difftime(date, max(date), units = "days")))/3652.5)
 
 save(long_demog, file = "~/Dropbox/extended_formative_windows/clean_data/long_demog.Rdata")
 
