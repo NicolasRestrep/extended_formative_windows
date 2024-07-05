@@ -14,6 +14,9 @@ source("./code/get_dem_variables.R")
 
 long_diff_demo <- left_join(long_difference, long_demog, by = c("df"="df", "id"="id", "t1"="wave"))
 
+#########################################
+####      Analyses at Aggregate      ####
+#########################################
 
 #Panel summaries
 psummaries <- long_difference %>%
@@ -30,6 +33,7 @@ psummaries <- long_difference %>%
 # Summarize absolute difference at the wave-pair level for each age group
 # for each question. 
 summaries <- long_diff_demo %>%
+  left_join(ik, by = c("df"="df", "id"="id", "t1"="wave")) %>%
   filter(age <= 80, !is.na(ba), !is.na(evermarried), !is.na(student)) %>%
   mutate(wave_pair = paste(t1, t2, df, sep = "-")) %>%
   group_by(wave_pair, name, age_group) %>%
@@ -38,6 +42,8 @@ summaries <- long_diff_demo %>%
             pct_lt = weighted.mean(lt, weight = weight),
             pct_married = weighted.mean(evermarried, weight = weight),
             pct_student = weighted.mean(student, weight = weight),
+            pct_kid = weighted.mean(impute_kid, weight = weight),
+            pct_kih = weighted.mean(impute_kih, weight = weight),
             date = weighted.mean(date, weight = weight), n = n(), sd = sd(abs_diff),
             weighted_n = sum(weight)) %>%
   #Filtering out bad questions
@@ -103,7 +109,7 @@ m4.5 <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*dec_diff +
              data = summaries %>% filter(sd > 0), weights = 1/se)
 
 m4.5b <- lmer(a ~ d + dec_diff + age_group + dec_diff*age_group + d*dec_diff +
-                pct_ba + pct_married + pct_student + 
+                pct_ba + pct_lt + pct_married + pct_student + pct_kid + pct_kih +
                (1 + d + dec_diff + age_group|name),
              data = summaries %>% filter(sd > 0), weights = 1/se)
 
@@ -163,7 +169,7 @@ new.data %>%
   scale_color_brewer(type = "qual", palette = 2) 
 
 
-slopes <- as.data.frame(ranef(m4.5)$name) %>%
+slopes <- as.data.frame(ranef(m4.5b)$name) %>%
   rownames_to_column(var = "name") %>%
   mutate(slope = dec_diff) %>%
   select(name, slope) 
@@ -189,12 +195,12 @@ new.data %>%
 
 time_1 <- summaries %>% filter(wave_pair == "1-2-1956-60 ANES") %>%
   group_by(age_group) %>%
-  summarise(across(c(pct_ba, pct_married, pct_student),
+  summarise(across(c(pct_ba, pct_lt, pct_married, pct_student, pct_kid, pct_kih),
                    ~mean(.x))) %>%
   mutate(time = "1")
 time_t <- summaries %>% filter(wave_pair == "2-3-2020-22 ANES") %>%
   group_by(age_group) %>% 
-  summarise(across(c(pct_ba, pct_married, pct_student),
+  summarise(across(c(pct_ba, pct_lt, pct_married, pct_student, pct_kid, pct_kih),
                    ~mean(.x))) %>% 
   mutate(time = "t")
 times <- bind_rows(time_1, time_t)
@@ -209,7 +215,7 @@ new.data <- expand_grid(age_group = c(unique(summaries$age_group)),
   filter(dec_diff == 0 | time == 1)
 
 #Predict data
-new.data$yhat <- predict(m4.5c, newdata = new.data)
+new.data$yhat <- predict(m4.5b, newdata = new.data)
 
 #Graph predictions 
 new.data %>%
@@ -263,7 +269,84 @@ new.data %>%
 
 
 
+#########################################
+####      Analyses at Individual    ####
+#########################################
 
+#Multiple imputation of missing demographic information
+mi2 <- mice(long_diff_demo)
+
+#Testing models with just one of the imputations
+test_data <- complete(mi2, 1) %>%
+  mutate(t = (as.numeric(difftime(date, max(date), units = "days")))/3652.5) %>%
+  mutate(d = duration, a = abs_diff) %>%
+  filter(weight > 0) %>%
+  mutate(across(evermarried:lt, ~(.x-mean(.x))))
+
+# Basic model
+m0 <- lmer(a ~ d + t + age_group + t*age_group + 
+             (1 + t|name),
+           data = test_data, weights = weight)
+
+
+#Fully elaborated model
+m4 <- lmer(a ~ d + t + age_group + t*age_group + d*age_group + 
+             d*t + d*age_group*t +
+             (1 + d + t + age_group + t*age_group + d*age_group + 
+                d*t + d*age_group*t|name),
+           data = data = test_data, weights = weight)
+
+# Summary preferred model.. Still the case that this is preferred?
+m4.5t <- lmer(a ~ d + t + age_group + t*age_group + d*t +
+                (1 + d + t + age_group|name),
+              data = test_data, weights = weight)
+#Same general coefficient estimates
+# Intercept around 18 (higher here, 18.6) 
+# Duration effect of 1.1ish
+# Slightly positive, non-significant year effect
+# Older groups negative
+# No more negative slope for time*26-33
+# Older gorups negative slopes for time
+# Positive duration*time effect
+
+# Summary preferred model with demographic covariates
+m4.5tb <- lmer(a ~ d + t + age_group + t*age_group + d*t +
+                 ba + lt + evermarried + student + everkid + kidinhouse +
+                 (1 + d + t + age_group|name),
+               data = test_data, weights = weight)
+# Same general coefficient estimates
+# Ba negative effect
+# LT HS positive effect (significant here)
+# Married negative effect
+# Student small negative effect
+# Kid ever positive
+# Kid house positive
+
+
+new.data <- expand_grid(age_group = c(unique(test_data$age_group)),
+                        t = seq(-6.4, 0, by = .1),
+                        d = c(0,1,2), name = unique(test_data$name))
+
+new.data$yhat <- predict(m4.5t, newdata = new.data)
+
+#Graph predictions
+new.data %>%
+  filter(d == 2) %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  mutate(year = as.Date("2020-11-12") + t*3652.5) %>%
+  ggplot(aes(x = year, y = yhat, color = age_group)) + 
+  geom_hline(yintercept = 0, color = "black") + 
+  geom_line(alpha = .2, aes(group = group)) + 
+  geom_smooth(linewidth = 2) + 
+  theme_bw() + 
+  facet_wrap(~age_group) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group",
+       title = "Predicted wave-to-wave change by age group",
+       subtitle = "Individual question trajectories and overall trajectory") + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  theme(legend.position = "none")
+ranef(m4.5t)
 
 
 
