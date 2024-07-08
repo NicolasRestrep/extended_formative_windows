@@ -1,0 +1,415 @@
+---
+title: Extended Early Adulthood and Attitude Change
+author:
+  - Kevin Kiley, North Carolina State University
+  - Nicolas Restrepo, University of California, Davis
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  bookdown::word_document2: 
+    fig_caption: yes
+    reference_docx: word-styles-reference-02.docx
+  bookdown::pdf_document2:
+    keep_tex: true
+    latex_engine: xelatex
+    toc: false
+    number_sections: true
+bibliography: ["kileybib.bib"]
+header-includes:
+   - \usepackage{setspace}
+   - \setlength{\parindent}{4em}
+   - \setlength{\parskip}{0em}
+   - \usepackage[markers,nolists]{endfloat}
+   - \usepackage{graphicx}
+mainfont: Minion Pro
+fontsize: 12pt
+abstract: "Early adulthood is consistently identified as a “formative period” in the life course when people demonstrate a heightened probability of changing their opinions, beliefs, and political preferences. This heightened rate of change is often attributed to the social conditions of this life stage but could also reflect biological or cognitive differences between young adults and older adults. In this paper, we explore whether substantial changes in the timing and ubiquity of major life-course transitions over the the past 70 years have affected the rate at which early adults and the rest of the population change their opinions on political and social issues. Contrary to expectations, we find that early adults have not become more likely to change attitudes and opinions since the 1960s. Instead, we find that other age groups have become more stable opinion holders. These aggregate trends obscure two countervailing patterns: decreases in stability due to life-course changes among younger adults and increases in stability across all age groups due to increases in educational attainment, as well as a broader stability trend that remains unexplained. Our results suggest a braod role in social contexts in shaping attitude stability."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Adolescence and young adulthood are frequently identified in social science literature as "impressionable years" -- a stage of the life course in which people are more susceptible to broad social currents, when their opinions are more malleable, and when they form the core ideas and attitudes that shape subsequent decision making [@krosnick1989; @alwin1991]. In support of this idea, social science research regularly finds that people in these life stages are more likely to change their political preferences, social attitudes, and cultural tastes than people in other life stages [@sears2013; @kiley2020]. This pattern, in which young people show greater openness to cultural change but become more resistant over time, underpins the dynamics of cohortization that are frequently invoked in larger models of social and cultural change [@ryder1965; @mannheim1952].
+
+Why people in these life stages appear to show more frequent opinion change relative to older people, however, is unclear. Explanations in the social sciences tend to highlight the unique social features of these early life stages such as high rates of mobility between social contexts, participation in educational institutions, and cultural expectations about pursuing "new experiences," arguing that these conditions shape how people are exposed to new sources of information and their ability to update opinions in the face of new information [@alwin1991; @danigelis2007]. Related explanations conversely focus on the social-structural features of middle age that might stabilize attitudes [@eaton2009; @visser2004]. At the same time, work in biology, psychology, and cultural evolution finds that peoples' cognition changes in ways that might make them more resistant to new information as they age [CITATION], suggesting the differences between early adults and the rest of the population might be more rooted in biological and cognitive mechanisms than social mechanisms.
+
+It is likely true that both social and cognitive/biological mechanisms play a role in facilitating opinion change during adolescence and early adulthood, but the relative contributions of each are unclear, and clarifying their relative contributions is important for understanding the mutually reinforcing processes of social change and cultural evolution. If the mechanisms are principally cognitive and biological, rather than social, then broader changes in the structure of different life stages are unlikely to affect rates of social change in the same way. If, conversely, openness to cultural change in early adulthood is principally a function of the social structure of life during these ages, then delays in the timing and ubiquity of life course transitions like marriage and childbearing, and increases in college-going, could have significant effects on the broader process of macro-social change. Similarly, social changes such as the deinstitutionalization of marriage [@cherlin2004; @cherlin2021; @robbins2022] that decrease distinctions between life course stages might make older people more open to change in more recent eras than they were in earlier eras, diminishing the importance of "cohorts" for social change and increasing the importance of intrapersonal change over time [@kiley2020; @vaisey2016]. 
+
+Since the 1950s, the timing of life-course transitions such as completing schooling, entering the workforce, getting married, leaving one's parents' home, and having children have changed dramatically, with most of these events occurring at later ages for more recent cohorts [@buchmann1989; @bruckner2005]. Rates of high school and college completion have also increased significantly. As a result, the "early adulthood" stage of life has become more detached from family and other role obligations, giving people in this life stage more freedom to explore new ideas and lifestyle choices [@rosenfeld2009]. These broad social changes lengthen of and intensify this stage of the life course in ways that potentially have consequences for the rate at which people undergo cultural changes.
+
+In this paper, we test whether these broader shifts in social structure and the timing of life course transitions have affected the rate at which young people change their attitudes about political and social issues. Drawing on data for 77 questions asked multiple times across 12 panel surveys dating from the 1950s through the 2020s, we estimate the amount of change in opinions as a function of age and cohort. Consistent with the "impressionable years" hypothesis, we find that people in age ranges associated with this "early adulthood" life stage (18-25 and 26-33) have more variable opinions than older respondents. However, these differences are not constant over time. They emerged over the second half of 20th Century as more recent cohorts exhibited more stable opinions in middle and old age compared to their predecessors, while early adult respondents' reported opinions continued to change at roughly the same rate as in earlier cohorts.
+
+Furthermore, we show that the aggregate patterns in attitude change over time are principally due to forces other than changes in life-course structure. While decreased rates of marriage explain a small proportion of the aggregate pattern among early adults, the largest driver of change in attitude stability comes from increased rates of education across all age groups. Furthermore, much of the shift in aggregate attitude stability remains unexplained, suggesting broader social structural features such as increased access to information with which to form opinions, political and cultural polarization, and more are the key drivers of attitude stability. 
+
+# Impressionable Years
+
+The idea that the early stages of the life course are especially influential in the process of attitude formation is dominant across contemporary accounts of socialization [@dinas2014; @guhin2021]. The principal argument across a range of perspectives is that the circumstances in which people are brought up leave an enduring and traceable mark on what Lizardo [-@lizardo2017] calls "personal culture" -- worldviews, attitudes, dispositions, behaviors, and preferences that manifest at the individual level. In political socialization, "generational effects" are used to explain the development of political preferences, longitudinal shifts in attitudes, and differences across age-groups [@gerber1998; @mannheim1952; @bartels2014]. However, the notion of "impressionable years" is more general than just political preferences. The concept of cohort effects -- widespread in sociology -- rests on the assumption that peoples' early years play key role in shaping not just political opinions, but their cognition on many dimensions, shaping their choices and life outcomes well beyond the time when this period has passed [@ryder; @fosse2023a; @elder2016]. Similarly, practice theories associated with Bourdieu suggest that the "past conditions of production" durably shape peoples' cognition, reactions, and behavior well into adulthood [@bourdieu1990]. Thus, the notion of a formative period at the early stages of the life-course underpins diverse and longstanding theories of behavior.
+
+These aggregate models of cultural imprinting have implications for the kinds of patterns we should observe in within-person opinion change over time. At a basic level, the "impressionable years" hypothesis requires that people demonstrate more opinion change early in life followed by a period of relative stability, especially in middle age. The most common alternatives are an "aging stability" or "increasing persistence" hypothesis that argues that openness to change gradually declines over time and a "life stages" hypothesis, in which people are open to attitude change both early in life and later in life, with stability principally happening in middle ages [@visser2004a]. While different attitudes occasionally follow different patterns, the impressionable years hypothesis has generally been shown to be true for broad political attitudes including political ideology, partisan identification, interest in politics, and specific policy preferences [@krosnick1989; @alwin1991; @sears1999; @prior2010]; social attitudes around race, gender, and sexuality [@danigelis2007]; as well as things like personality traits [@wagner2019] and cultural tastes [\@]. These tests tend to find higher rates of attitude change among the youngest adults -- people ages 18-25 -- and little difference between adults of other age ranges. More generally, recent research has found that, with a few notable exceptions of high-salience events such as national shifts around gay rights, durable change of social opinion is quite rare among U.S. adults [@kiley2020], and Vaisey and Lizardo [-@vaisey2016] find that cohort, the year of a person's birth, explains more variance than period, the year of observation, for most items in the General Social Survey, suggesting an impressionable-years pattern.
+
+In recent years, researchers have also developed new approaches to quantify "openness" to social influence across the life course, especially around politics [@bartels2014; @ghitza2022]. This work has produced remarkably similar patterns to previous work with openness peaking from a person's mid-teens through age 25 and declining quickly after that, lending more credence to the "impressionable years" hypothesis [a pattern that seems to hold for music tastes as well @way2019]. However, this work tends to assume a constant age-based rate of openness across cohorts -- that 20-year-olds in 1955 are open to influence at the same rate as 20-year-olds in 2015 -- which has not been tested.
+
+# Theoretical Models
+
+While the empirical pattern of early openness followed by relative stability appears quite robust, its cause is not clear. At the outset, it is important to note that changing cultural dispositions like attitudes involves at least two distinct processes that can be difficult to disentangle: exposure to new information and openness to change conditional on exposure to new information. For example, it could be the case that people of all ages are exposed to new ideas at similar rates, with acceptance of a new idea being a function of age, which would account for the observed age-based patterns in opinion change. Conversely, it could be the case that rates of exposure to new ideas changes over the life course, while openness to changing one's mind as a function of exposure does not, producing the same pattern. It could also be the case that both these processes change as a function of age. Because these mechanisms have not been disentangled and because there are reasons to assume that both processes are operative, in this section we outline theoretical mechanisms that have been suggested to contribute to one or both of these processes.
+
+## Biological and Cognitive Mechanisms
+
+The first potential mechanism for changes in attitude stability over time is rooted in the biology of the human brain and theories about how people process information. This approach tends to suggest that human cognition works similar to Bayesian updating, in which humans weight all information they are exposed to equally, whether they encounter it during adolescence or middle age, and are exposed to information at a (more or less) constant rate [@bartels2014; @gopnik2020; @sherratt2018]. However, because people have already encountered a lot of information by the time they reach adulthood, each new piece of information encountered later has less of an impact on their overall dispositions [@bartels2014]. From this perspective, the distinctive thing about our early years is simply that they happen early, and they prove so influential because the incremental effect of new information diminishes as we age.
+
+It is also possible that there is something unique about human cognition during these periods that makes people ascribe more weight to the information acquired within them than to information acquired at other points. Maturational arguments about the increased plasticity of human brains during our early years are consistent with this position, as our brains appear to exhibit more malleability during childhood and adolescence than later in life [@mata2015]. Supporting this model is evidence that early formative periods have been observed not just in people, but across species. For example, in a study of social learning among birds, Aplin and colleagues [-@aplin2017] show that younger birds -- unlike their older counterparts -- were consistently able to retool their habits in light of new information.
+
+In light of empirical evidence about these sensitive windows across species, there has been modeling work about why periods of heightened sensitivity would emerge and what contexts would facilitate their emergence (Fawcett and Frankenhuis 2015). The central argument from this work is that that the emergence and timing of these sensitive windows depends on the interaction between the access to information, the reliability of information, and the stability of the environment, and that early formative periods are likely to evolve when environments are unstable and information is plentiful yet unreliable (Frankenhuis and Walasek 2020). In these circumstances, it makes sense for agents to explore early on, to find something that works, and then to stick to strategies that have worked well in the past. Access to different types of information might vary across time and this might explain the emergence of sensitive periods at later stages of the life-course (Walasek, Frankenhuis, and Panchanathan 2021). For example, the importance of musical tastes and fashion choices becomes important around adolescence, and, at this stage, we are awash with at best contradictory information about what one should or should not like, or should or should not wear. Sensitive periods around the development of these tastes might peak around this period, when there are more signals and when the payoffs are more salient.
+
+The thrust of the biological and cognitive arguments is that, irrespective of the contemporaneous social conditions humans inhabit, millennia of evolution have led to the development of a cognitive architecture that makes them relatively open to changing dispositions at younger ages and relatively resistant at older ages, regardless of their social environments. However, while biological mechanisms can shape how people respond to new information when they encounter it, these processes cannot dictate the rate at which individuals are exposed to new information, which might also matter for rates of opinion change. For that, we must turn attention to the structuring of the social world.
+
+## Life Course and Social Roles
+
+Humans' early years might be distinct in terms of cognitive plasticity, but they are also socially distinct, characterized by sustained social learning and constant changes of social contexts. Here we briefly consider some of the ways that the "impressionable years" differ from other life stages that might expose people to new information at higher rates and also affect their willingness to update beliefs, beyond what cognition might allow.
+
+First, people in this age group tend to move across social contexts at a much higher rates than people in other age groups. In the 11-year window from ages 14 to 25, in which people tend to show the highest rates of opinion updating, young people move from middle school to high school to either higher education or the workforce or both, with each year potentially exposing people to new classmates, teachers and other role models, and sources of information. People in this age window also show the highest rates of residential mobility, moving for educational and occupational reasons. Assuming that new social contexts shape exposure to new information, this heightened contextual mobility during this stage might explain part of the difference between age groups [NEED CITES HERE].
+
+Second, people in the "impressionable years" window spend their time in different social contexts than people in middle age. Data from the American Time Use Study shows that people under age 25 spend a larger portion of the day on leisure time and educational activities and a smaller part of the day doing work and work-related activities than people between the ages of 25 and 55. These contexts, especially education, are designed to expose people to new information in ways that can lead to new opinions. For example, there is some evidence that college attendance leads to changes in opinions about civil liberties, political views, gender egalitarianism, racial inequality, and morality [@campbell2016; @wodtke2018; @edelmann2023; @brocic2021]. Personal social networks also differ in this time period. Young peoples' networks tend to be larger and include more friends than kin [@marsden1987]. It could be the case that these larger "weak tie" networks expose younger people to more new information that drives opinion change [@granovetter1973; @burt2005].
+
+Third, these are periods are also culturally distinct, with exploration and self-discovery expected and encouraged. People in this "early adulthood" phase are not expected to be stable adults, something should not be taken for granted given social variation in norms around when maturity is reached [@cunningham2007; @elder1994]. Cultural expectations to engage in new experiences, meet new people, and adopt new personalities could motivate the pursuit of new information during this life stage apart from social structural opportunities.
+
+## Updating Conditional on Exposure
+
+While the distinct social and cultural conditions of adolescence and early adulthood might expose young people to new information at higher rates than older people, the impact of this information on people's attitudes is contingent on their ability to incorporate it into their cultural repertoire. The social conditions of different life stages might make it easier or more difficult for people to act on these new sources of information in ways that facilitate opinion change.
+
+Social networks not only shape peoples' exposure to new information, but they can also affect the degree to which people adopt new beliefs and attitudes. People are much less likely to defect from their traditional beliefs and adopt new beliefs if they are embedded in dense networks that reinforce the holding of existing beliefs, even when they are exposed to new ideas [@stark1980]. Consistent with this, mid-life is associated with denser, more homogenous networks that include larger numbers of family [@marsden1987; @diprete2011], which experimental research suggests reduces the propensity to adopt new beliefs [@visser2004]. If young people exist in less dense, more heterogeneous social networks, it might be easier for them to update their networks to reflect new beliefs rather than constrain their beliefs to their social networks. Similarly, if information flows less freely through weak-tie networks, these structures might allow respondents to limit their exposure to or close off parts of their lives to people who might not be supportive of new attitudes.
+
+Previous work on opinion stability over the life course suggests that people tend to value stability in figures holding social power, which tend to occur more frequently during middle age. As people move into roles with more social power in mid-life, both in family and occupational contexts, they potentially feel this expectation from others and act accordingly, closing themselves off to updating beliefs even as they are exposed to new information or forcing them to develop stable opinions on issues where previously they felt capable of ambivalence [@eaton2009]. This potentially explains another phenomenon: that people appear to open up to changing their minds on some issues as they enter later life and retirement, when these social expectations of stability presumably diminish [@danigelis2007].
+
+Existing research suggests that the structure of social life during adolesence, early adulthood, and later life stages shape both exposure to new information and a person's ability to update attitudes, opinions, and beliefs in the face of that information. This further suggests that changes in these life course stages should matter for the amount of opinion change we observe. 
+
+# Changing Life Course
+
+In the United States, the last seven decades have seen considerable social and cultural changes around adolescence and young adulthood [@buchmann1989; @rosenfeld2007; @rosenfeld2005]. The expansion of higher education and increased possibilities for mobility are among the many social processes that have led to changing expectations for the trajectories that young adults should follow [@rosenfeld2007]. These changes have made life course trajectories less predictable, and the "script" of young adulthood has become less rigid: it might involve prolonged higher education, moving to a different city, or dating without a stable romantic partner [@buchmann1989]. For the purposes of this paper, there are two related trends that are particularly important: the elongation of young adulthood and the intensification of this life stage.
+
+## Timing
+
+First, the period between adolescence and "settling down" has been getting longer over time, and this might affect the patterns of attitudinal updating we expect to see for successive cohorts as they pass through the same ages. Buchmann [-@buchmann1989] finds that the diversification of life-trajectories has been accompanied by the postponement of the rituals associated with adulthood, including marriage, childbirth, and entry into the workforce. In the United States, both the median age at first marriage and median age of first childbirth has consistently risen since the mid-20th Century [@rosenfeld2009]. We also see higher rates of non-marital childbearing across all demographic groups [@cherlin2021]. Thus, the markers of the transition into adulthood seem to be occurring at later ages and potentially in different orders for more recent cohorts.
+
+Similarly, the duration of education has extended, with more people completing high school, college, and, increasingly, graduate degrees before entering the workforce or movement back into education after several years in the workforce. These transitions are also accompanied by heightened rates of geographic mobility, as well as movement between the workforce and education.
+
+If the distinctive nature of "impressionable years" is principally driven by their distinct social circumstances, then these shifts have the potential to extend these social circumstances into later ages. This, in turn, could have an effect on how long exploration, and therefore openness to change, lasts throughout the life-course. If this is the case, we should expect to see heightened levels of attitude change among age groups that, for earlier cohorts, displayed mainly stability. In other words, people who were born in the mid-20th century would have displayed mainly attitudinal stability by the time they reached their mid-twenties while more contemporary counterparts might still show cultural change when they reach that age. Specifically, we expect cohorts who entered adulthood in the late 1950s to be fairly comparable to older adults in their rates attitude change but that subsequent cohorts will diverge from older adults, making more change over time.
+
+*Hypothesis 1: More recent cohorts will show higher rates of attitude change in the age range of 18 to 25 than cohorts born in earlier years.*
+
+We expect a similar but more muted trajectory for the attitude behavior of people aged 25-33. Again, we expect the oldest cohorts to resemble middle-aged respondents when they enter this age range, as has been shown in previous research [@krosnic1991; @alwin1991], but that more recent cohorts will come to more closely resemble the 18-25 age group, diverging from middle aged respondents. 
+
+*Hypothesis 2: More recent cohorts will show higher rates of attitude change in the age range of 26 to 33 than cohorts born in earlier years.*
+
+Consistent with life-course structuring theories, we expect these divergences will principally be explained by changes in the timing of life course transitions such as marriage and childbirth. Controlling for these life-course transitions should eliminate the gap between the youngest adults and later adults. 
+
+*Hypothesis 3: Controlling for rates of marriage and childbirth, more recent cohorts' rates of attitude change in early adulthood (18-33) will not be different from the rates of attitude change among contemporaneous middle aged adults.*
+
+## Intensifying Impressionable Years
+
+A second trend in early adulthood relates to just how much exploration young adults can engage in during these "impressionable years." In his work, Rosenfeld [-@rosenfeld2007] argues that one of the processes underlying the rapid rise in same-sex and interracial marriages in the United States is that young adults are increasingly escaping the controlling gaze of their parents. When a young person lives with, or is financially dependent on, his or her parents, the latter have more say about their child's choice of partner. Social and cultural changes that have increased geographic mobility and independence from parental authority mean people in this life stage have been able to engage in courtship outside the gaze of their parents, making choices that would not have been sanctioned by them.
+
+Rosenfeld's work suggests that the social conditions that shape where people spend their impressionable years might also shape how much cultural exploration they can engage in. An increase in independence might entail more exploration and greater ability to update attitudes as a result of this exploration. This assertion in turn engenders a second prediction: we should see more attitudinal updating among young adults in recent years than among young adults in earlier eras, even if they have met similar life-course milestones.
+
+This approach suggests that it is not the timing of life events that is important for rates of change, but the broader social conditions of early adulthood that might make people more malleable in recent cohorts. In other words, unmarried, childless 25-year-old men and women in 1956 might have experienced a set of social constraints that unmarried, childless 25-year-old men and women in 2008 do not experience, leaving the latter much more open to developing new opinions than their predecessors. The "intensification" of impressionable years suggests two hypotheses.
+
+*Hypothesis 4: Controlling for life course transitions, more recent cohorts of early adults (18-33) will make higher rates of attitude change than contemporaneous middle-aged adults.*
+
+## Biological and Cognitive Factors
+
+We have framed our hypotheses as expectations derived from the framework suggesting that social conditions play a large role in explaining the uniquely high rates of attitude change among early adults and adolescents. However, to the extent that we observe significant changes in the social context of early adulthood but no corresponding changes in rates of attitude change or response stability across cohorts, we take this as evidence that social circumstances play a relatively small role in explaining change in favor of biological and cognitive factors.
+
+## Broader Social Factors
+
+Finally, while we have primarily focused on changes in the timing and structure of life course stages over the past 70 years, that time frame has also seen significant shifts in the broader social structure and cultural environment that might affect attitude stability independent of changes in life course structure. We briefly consider three broader changes here.
+
+First, the number of people completing high school and pursuing and completing higher levels of education has increased significantly over the window studied here [@schofer2005; @hout2012]. Existing work suggests that people with higher levels of education are more likely to express the same opinion over time in survey contexts [@alwin1991a; @alwin2007]. The specific mechanism that links educational attainment and attitude stability is unclear, with some perspectives suggesting educational attainment improves cognitive function and memory while other perspectives suggest that educational attainment makes people pay more attention to current events. It could also be the case that education cultivates in people a normative expectation that they should hold opinions. Regardless of the specific mechanism, a population with higher levels of education, on average, might be more likely to hold stable opinions regardless of transformations in life course stages.
+
+Second, technological changes have dramatically lowered barriers to accessing information, including information about social and political affairs that might facilitate stable opinion holding. Broadcast and cable television, followed by the internet and social media, have provided new channels for elites to communicate messages to the public and for people to acquire information that makes opinion-holding easier. To the extent that stable opinions are in part a reflection of signals from elites [@converse1965; @zaller1992], then we should expect these shifts to stabilize opinions across all age ranges.
+
+Third, the past 70 years have seen extensive elite polarization around political and social affairs, as well broader public partisan alignment [@fiorina2008; @baldassarri2008]. People now receive clearer signals from cultural elites, including politicians, the news media, and others, about which beliefs and identities "go together" in the population, resulting in what DellaPosta [-@dellaposta2020] calls an "oil spill" of polarization. While clarity around political issue positions is most commonly studied, the same forces can also align other social beliefs and identities. This issue and identity alignment might make it easier for the public to identify what beliefs people like them "should" hold and hold them consistently [@zaller1992]. Geographic and social sorting into lifestyle "enclaves" also reinforce these processes, continually providing clearer signals about which opinions people should hold [@dellaposta2015].
+
+Broadly speaking, these three forces suggest that opinions should broadly become more stable over time, regardless of life-course stages. If this is the case, we might not observe an absolute decrease in stability for early adults, but rather a relative decrease, as extension of the life course works to decrease stability for members of these age groups while broader social forces stabilize opinions for all groups.
+
+# Analytical Strategy
+
+## Data 
+
+Testing our hypotheses requires data on opinion and attitude reports over time for members of different cohorts in the same age ranges, with respondents coming from the same general population. We also require information about life-course transitions standardized across these panels. To construct such a data source, we combine several panel surveys conducted by the American National Election Studies and the General Social Survey spanning about 60 years. Both the ANES and GSS are designed to generalize to the non-institutionalized U.S. adult (18+) population, and therefore can be thought of as tapping the same general population. We included a total of 12 panels in our search: ANES panels from 1956-60, 1972-76, 1980, 1990-92, 1992-97, 2000-04, 2016-20, and 2020-22; and GSS panels from 2006-10, 2008-12, 2010-14, and 2016-20. We evaluated an additional panel conducted by the ANES in 2008-10, but no questions overlapped this panel and any other panel.
+
+For reasons explained below, we identified social and political attitude questions that were asked in at least three different panels with at least one of those panels asking respondents to answer the question at three or more time points. We sought questions that tapped a respondent's report of their own belief, avoiding questions that asked respondents to report how others, including politicians and political parties, would respond. Because three of the GSS panels overlap considerably (2006-10, 2008-12, and 2010-14) and contain the exact same set of questions, we did not treat these as separate panels for the purposes of identifying three distinct time points. In other words, questions needed to appear in these panels and an ANES panel to be included in our analysis. We allowed for question wording to vary slightly across panels (e.g., feeling thermometers about the "women's liberation movement" were combined with questions about the "women's movement"). When the same or similar questions had slightly different response scales, we harmonized response options to the question structure with the fewest response options. This was most common when one panel asked whether people agreed or disagreed while another included options for "strong" agreement and disagreement. We broadly followed the ANES time series' lead in which questions to harmonize.
+
+Our search produced a total of 77 questions tapping a broad range of topics including political and ideological identification, general government policy preferences, preferences for federal spending on different priorities, views on government efficacy, views on social issues and social change, and sentiment toward various political and social groups. For reasons elaborated below, we scaled all items to have a minimum of 0 and a maximum of 100.
+
+Table A1 in Appendix A outlines the questions included in our analysis, including their full question wording and response scale. 
+
+### Demographic Measures
+
+The central question of our analysis pertains to age and cohort, and as such we classify respondents into a set of age brackets depending on their age when they answered survey questions. Age was reported at least once in all panels. If respondents' were not asked their age or birth date in a specific wave, we calculated it based on other age reports. Given our theoretical questions, we classify people into four age categories: 18-25, 26-33, 34-64, and 64-80. Because of differences in both question structure and age structure across panels, we dropped respondents who are over 80. 
+
+Our theoretical questions also focus on the effect of having undergone a set of life-course transitions on attitude stability. To this end, we include a set of indicator variables capturing whether the respondent had undergone certain demographic transitions. These include 1) whether a respondent is currently enrolled in school; 2) whether a respondent has ever been married; and 3) whether a respondent has ever had a child. We also include an indicator for whether a respondent reported completing college to separately explore whether higher rates of college completion explain changes over time across age groups.
+
+Broadly speaking, questions tapping marital status, student status, and degree attainment were asked in the same way with the same response options in each panel or could be easily harmonized. It was quite common for respondents to have missing data on one or more of these demographic variables for a particular wave of any panel, even if they participated in the panel. This was most common when a question occurred in the post-election wave of the ANES, but demographic variables were captured in the pre-election wave. If this occurred, we carried over the pre-election response, as these waves tended to be separated by only a few weeks. 
+
+In contrast to the other demographic variables, generating an indicator variable for whether a respondent ever had a child was more challenging, as question wording and structure varied significantly across panels. Specifically, survey administrators occasionally asked respondents how many children were currently living with them, while at other times asked whether the respondent had any children and how many. While these items are highly correlated for respondents with young children, these different approaches to the question produce significant differences in rates among parents whose children have left home. To account for this, we generated two variables. First, we created an indicator variable for whether they reported having at least one child in the house under 18 ("kidinhouse"). Respondents who were not asked the question in a particular wave (or temporally proximate wave) were coded as missing. Second, we gave respondents an indicator for whether they had ever had a child. We coded this as 1 if respondents were asked if they ever had a child and reported that they did or if they were asked if they had a child living with them and reported that they did. We coded this as 0 if respondents were asked whether they ever had a child and said no. Respondents were coded as missing if they were asked how many children under 18 they had living with them and said none, or if they were not asked either relevant question in a particular wave or temporally proximate wave.
+
+## Methods
+
+Our outcome of interest is the absolute change in responses a respondent makes across a pair of observations which, due to scaling, can be between 0 and 100.
+
+When questions are observed in multiple panels, differences in the amount of change we observe could be attributable to either changes in the population's capacity to report stable attitudes over time (our main theoretical interest) or to the structural features of the survey administration. Specifically, variation in the amount of change people makes in their responses observed over time might be due to variation in the duration between waves, with longer duration between observations leading to more wave-to-wave change as people experience more shocks that should shift their opinions. In our data, panel duration varied from less than one year (the 1980 ANES Major Panel Study) to about five years (the 1992-97 ANES), and duration between questions ranged from a few days (for questions asked in both pre- and post-election surveys in the ANES panels) to about five years (questions asked in 1992 and 1997), with peaks around 2 years and 4 years.
+
+To illustrate our approach, consider a one-item, one-panel case (e.g., partisan identification in the 1972-76 panel). We model the absolute change from wave-to-wave as a function of an intercept, the duration between observations in years, age categories, and the interaction between duration and age categories.
+
+$$ |y_{2i}-y_{1i} | = \beta_0 + \beta_1*d_i + \epsilon_i $$
+
+In this equation, $d_{i}$ captures the duration of time between $t_1$ and $t_2$ in years for each pair of observations by the same respondent. Importantly, respondents might have multiple observation pairs for each panel depending on the number of times a question was asked. In the 1972-76 ANES panel, for example, respondents were asked their partisan identification on three occasions: in the 1972 pre-election survey, in the 1974 pre-election survey, and the 1976 pre-election survey, each about two years apart. If a person participates in all three waves, they have three observations of $|y_{2i}-y_{1i} |$ and $d_i$: 1972 and 1974 (about 2 years), 1974 and 1976 (about 2 years), and 1972 and 1976 (about 4 years).
+
+Variation in duration between observations within panels lets us separate two kinds of change: 1) change attributable to durable shifts of opinions over time that can be associated with duration between observations and 2) change that is principally random, or unrelated to the duration between observations. If respondents have a stable underlying partisan identification they report with random error, and no real change occurs between waves beyond that, then in expectation, duration should be unrelated to absolute change in responses over time, and $E(\beta_1) = 0$. In this formulation, $\beta_0$ captures the expected absolute change in responses over time when the duration between waves is 0, or, more intuitively, the random deviation between waves that is unrelated to durable change. Conversely, $\beta_1$ captures the expected change in absolute difference between waves for a one-unit (year) change in duration of observation, or the amount of absolute change we would expect over-and-above the change driven by random noise ($\beta_1$). For example, if a respondent shifts from "strong Democrat" (point 0 on the scale) to "Independent" (point 3 on the scale) between 1972 and 1974, and stays at "Independent" for the 1976 wave, they will have differences of 3 and 0 for the two-year duration (an average of 1.5) and 3 for the four-year duration, generating a positive coefficient for $\beta_1$ if this kind of switching behavior is common in the populations.
+
+Given our focus on age-based differences, we can extend equations to incorporate age groups as indicator variables:
+
+$$ |y_{2i}-y_{1i} | = \beta_0 + \beta_1*d_i + \beta_2(a_{26-33}) + \beta_3(a_{34-64}) + \beta_4(a_{65+}) + \beta_5(d*a_{26-33}) + \beta_6(d*a_{34-64}) + \beta_7(d*a_{65+}) + \epsilon_i $$
+
+In this framework, $\beta_0$ and $beta_1$ now capture the expected change in responses over time for no time between waves and each additional year, respectively, for respondents ages 18-25 (the reference category). $\beta_2$ through $\beta_4$ capture the difference in baseline change between observations for the older groups, and $\beta_5$ through $\beta_7$ capture differences in the effect of an additional year duration for the older age groups.
+
+Our theoretical question deals primarily with whether these short-term rates of change over time themselves change across the broader time span captured across panels. To explore that, we can add an additional term for time and interact all previous coefficients outlined above with time.
+
+$$ |y_{2i}-y_{1i} | = \beta_0 + \beta_1(d) + \beta_2(a_{26-33}) + \beta_3(a_{34-64}) + \beta_4(a_{65+}) + \beta_5(d*a_{26-33}) + \beta_6(d*a_{34-64}) + \beta_7(d*a_{65+}) + \beta_8(t) + \beta_9(d*t) + \beta_{10}(a_{26-33}*t) + \beta_{11}(a_{34-64}*t) + \beta_{12}(a_{65+}*t) + \beta_{13}(d*a_{26-33}*t) + \beta_{14}(d*a_{34-64}*t) + \beta_{15}(d*a_{65+}*t) + \epsilon_i $$
+
+In this formulation, $\beta_0$ through $\beta_7$ retain their general meaning as outlined above, but apply to $t = 0$, which we set to be the most recent observation date (2016). $\beta_8$ estimates the change in the baseline rate of change for the reference group. $\beta_9$ captures change in the effect of duration of observation over time for people in the reference group (ages 18-25). Coefficients $\beta_{10}$ through $\beta_{12}$ and $beta_{13}$ capture how differences in the baseline rate of change and duration effects between the reference group and older age categories change over time.
+
+To this point, we have developed our model for the case of a single question. However, because different panels tend to ask different questions, we lack a large number of observations for any particular item, meaning separate estimates of the time trends for all these items are likely to be inconclusive. One solution is to pool questions and estimate a single time trend for stability in attitudes over time, but that is potentially problematic if the kinds of questions asked in later panels are systematically different from the kinds of questions asked in earlier panels. It could also obscure the fact that some items might be becoming more stable over time while others are becoming less stable.
+
+Multilevel models provide an alternative solution to estimate variation in trends in the presence of uncertainty. We follow this approach, using the model:
+
+$$ |y_{2i}-y_{1i} | = \beta_{0j} + \beta_{1j}(d) + \beta_{2j}(a_{26-33}) + \beta_{3j}(a_{34-64}) + \beta_{4j}(a_{65+}) + \beta_{5j}(d*a_{26-33}) + \beta_{6j}(d*a_{34-64}) + \beta_{7j}(d*a_{65+}) + \beta_{8j}(t) + \beta_{9j}(d*t) + \beta_{10j}(a_{26-33}*t) + \beta_{11j}(a_{34-64}*t) + \beta_{12j}(a_{65+}*t) + \beta_{13j}(d*a_{26-33}*t) + \beta_{14j}(d*a_{34-64}*t) + \beta_{15j}(d*a_{65+}*t) + \epsilon_i $$
+
+Where:
+
+$$ \beta_{kj} = \gamma_k + \upsilon_{kj} $$ 
+
+In this framework, the first-level equation models the absolute difference in a pair of responses to the same question given by the same respondent, similar to what was presented above. These equations are nested at the level of the survey item. This model allows for each survey question to have its own set of coefficient estimates weighted by the amount of information we have about the particular question. Questions asked in many panels, including partisan identification (seven point scale from "Strong Democrat" to "Strong Republican", asked in a total of 32 waves across all panels) and ideological identification (seven-point scale from "Extremely Liberal" to "Extremely Conservative", asked in a total of 28 waves across all but one panel), will contribute more to the overall calculation of the aggregate trend in opinion stability than questions asked in only three panels. Given the lack of confidence in each individual question trend, we focus the majority of our attention on $\gamma_k$ estimates. 
+
+In practice, the model presented in Eq \### is likely too complicated given our data limitations, and might not be necessary. As part of our analysis, we compare the fully elaborated model to more parsimonious models using model-selection criteria, specifically the Bayesian information criterion (BIC) and Akaike information criterion [@raftery1995]. For example, it could be the case that little predictive information is gained by allowing questions to have separate slopes for the relationship between age categories and duration over time.
+
+### Demographic Transitions
+
+Once we select the most parsimonious model to capture attitude stability over time, we then include variables capturing demographic transitions to evaluate their relationship to attitude stability over time. For each wave pair, we include measures of demographic status at the first observation. For example, if a respondent is unmarried at the first wave and gets married by the second, they are counted as "never married" for the purposes of our analysis. If they are observed a third time, they would be counted as "married" for that pair of waves.
+
+Finally, to distinguish between the influence of life-course structure and other factors that might affect attitude stability, such as broader social forces, we calculate a counter-factual expectation of the rate of attitude change in later panels if the proportion of respondents in each group who made certain demographic transitions was constant over time at 1956 levels.
+
+### Weights
+
+Finally, a key issue in drawing valid inferences about the U.S. population over time is to ensure that samples generalize to the same theoretical population -- the U.S. adult non-institutionalized population. However, none of the panels used in our analysis were simple random samples of the adult population. All employ different complex sampling strategies. 
+
+To account for this, we attempt to use weights that account for these sampling strategies as well as, when available, non-response. 
+
+# Results
+
+## Life Course Changes
+
+While not the central question of our analysis, we first highlight changes in four life-course transitions: proportion of respondents who are married, proportion of respondents who reported having a child, the proportion of respondents with a child at home, and proportion of respondents who are currently students. We also plot the proportion of respondents at three different education levels: less than high school, high school degree but no college degree, and college degree. 
+
+In the early panel (1956-60), respondents in the youngest age groups look very similar to respondents in the older groups on major measures. They are equally likely to be married, to have had children, and to be students. However, people in the 18-25 age group quickly diverge from the others by the 1970s, displaying the lowest probability of being married and the lowest probability of having children by quite a larger margin. Over time, the next youngest age group (26-33) starts to diverge toward the youngest age group, especially in terms of marriage.
+
+Conversely, the middle age and older age groups see a significant increase in the proportion who hold high school and then college degrees. By the mid-1990s, the proportion of middle aged and older respondents who had college degrees significantly exceeded the proportion of youngest age group who has college degrees, likely because many people aged 18-25 were still completing education. 
+
+These trends set the stage for what to expect in terms of attitude change for different age groups. To the extent that transitions such as marriage and having children themselves stabilize attitudes or serve as proxies for broader life course factors that influence attitude stability, then we should see the youngest age group look similar to the older age groups in the 1950s, and diverge by the 1970s, continuing to diverge over time. Respondents in the 26-33 age group should remain similar to older respondents for most panels, but begin to diverge by the 1990s and especially by the 2000s.
+
+## Opinion Changes
+
+Table XXX presents a comparison of the Akaike Information Criteria (AIC) and Bayesian Information Criteria (BIC) for the full model elaborated above (M1) and a series of more simplified model. The best-fitting model, according to the BIC, allows random effects for duration, time, and age group, but does not allow them for any of the higher-order interactions. The best-fitting model (M5) omits the third-order interaction between time, age group, and duration of observation and an the interaction between age group and duration. Further attempts to simplify the model, including dropping random effects for age categories and duration, resulted in increases in the BIC.
+
+| Variables                      | M1       | M2       | M3       | M4       | M5       |
+|------------|------------|------------|------------|------------|------------|
+| Intercept                      | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Time                           | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Age Groups                     | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Duration                       | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Time \* Age Group              | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | N        | N        |
+| Time \* Duration               | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | N        | N        | N        |
+| Age Groups \* Duration         | Y        | Y        | Y        | Y        | N        |
+| RE                             | Y        | Y        | N        | N        | N        |
+| Age Groups \* Duration \* Time | Y        | N        | N        | N        | N        |
+| RE                             | Y        | N        | N        | N        | N        |
+|                                |          |          |          |          |          |
+| BIC                            | 20714.39 | 20250.97 | 19996.61 | 19862.23 | 19845.22 |
+| AIC                            | 19757.88 | 19675.82 | 19627.76 | 19643.42 | 19645.17 |
+
+: Model fit comparison
+
+Model 1 in Table XXX presents the main effects and variance components of the best-fitting multilevel model presented above. In all models, the 18-25 age group serves as the reference category, and the time variable is centered on the most recent panel (2016-2020), so coefficients reflect expectations for the amount of change observed in the most recent years, rather than at earlier time points.
+
+| Col1             | Col2  | Col3 | Col4 |
+|------------------|-------|------|------|
+| Fixed Effects    |       |      |      |
+| Intercept        | 17.45 |      |      |
+| Time (decade)    | -0.26 |      |      |
+| Age(26-33)       | -1.60 |      |      |
+| Age(34-64)       | -3.17 |      |      |
+| Age(65+)         | -4.10 |      |      |
+| Duration (year)  | 1.13  |      |      |
+| Time\*Age(26-33) | -0.09 |      |      |
+| Time\*Age(34-64) | -0.54 |      |      |
+| Time\*Age(65+)   | -1.33 |      |      |
+|                  |       |      |      |
+| Random Effects   | S.D.  |      |      |
+| Intercept        | 5.35  |      |      |
+| Time             | 1.14  |      |      |
+| Duration         | 0.37  |      |      |
+| Age(26-33)       | 0.89  |      |      |
+| Age(34-64)       | 1.81  |      |      |
+| Age(64+)         | 2.92  |      |      |
+
+: Coefficient Estimates
+
+The intercept term in Model 1 suggests that, on average, survey respondents in the 18-25 age group are expected to vary by almost a fifth of the response scale on average (about 18 points) in the most recent years of the survey, controlling for duration between observations, on any particular question. This is a rather high level of variance, but it is consistent with previous studies that find that on any particular question survey respondents tend to make large wave-to-wave changes, or that survey questions about political attitudes have high levels of measurement error [@ansolabehere2009; @converse1965]. At the same time, random-effect variance around this main intercept term is quite large ($\sigma_{\beta_0} = 5.9220$). On several questions, respondents are expected to change their responses by about 40 percent of the scale between observations, while on others almost no wave-to-wave change is expected, meaning people tend to respond with the same answer over time with low levels of measurement error or random change.
+
+Duration between observations is positively associated with wave-to-wave absolute change. For every additional year between responses, the expected absolute change for respondents increases 1.1 points. As suggested above by the model comparison, there is no evidence to suggest that respondents in different age groups vary systematically in this kind of change. Random effect variance around this main effect is relatively small (s.d. = 0.36), meaning each one-year duration only increases the amount changed by between .5 and 1.5 for most questions. Given the comparatively high level of wave-to-wave change independent of duration (18 points), our results broadly suggest that most wave-to-wave change is non-persisting, consistent with findings from other recent work [@kiley2020; @lersch2023]. 
+
+Coefficients in Model 1 allow us to test several of the hypotheses outlined above. First, the coefficients for age groups other than the reference category suggest that, on average, other age groups are more stable than people in the 18-25 age range in the most recent panels. Respondents in the 26-33 age group are about 1.1 points more stable on average, respondents in the 34-65 age group are about 2.2 points more stable on average, and respondents in the 65 and over age group are about 3.5 points more stable on average, than respondents in the 18-25 age group. This provides broad evidence for the "impressionable years" and "increasing persistence" hypotheses, as the youngest age groups are less stable than others, followed by the 26-33 age group.
+
+Turning now to how these groups have changed over time, the effect of year of observation in decades for people in the 18-25 age group ($\beta = 0.14345$, $t = 0.754$) is substantively small and not statistically significantly different from 0. To clarify, the lack of statistical significance for the time effect not because there is a large standard error on the term. It is estimated with a high degree of precision and is very close to 0. On average, recent cohorts in this age group make approximately the same amount of wave-to-wave change in recent years as earlier cohorts did, accounting for the kinds of questions they were asked and time between responses. However, question-level random effects vary considerably around this main effect, with a standard deviation of about 1.43. This suggests that the overall flat trend obscures quite large question-level differences, with some questions becoming more stable and others becoming less stable. We return to consider these question-specific trends later.
+
+Next, the extended early adulthood framework (H2) suggests that we should see a closing of the gap between people in the 18-25 and 26-33 age groups over time. The interaction between year of observation and the 26-33 age category is small and not statistically significant ($\beta = -0.03560$, $p=-0.361$), suggesting that while people in this age group are more stable, on average, than then youngest respondents, more recent cohorts are not any more or less likely to make changes of opinion in this age range than earlier cohorts, and more recent cohorts are not any more or less similar to younger adults than earlier cohorts. 
+
+However, before drawing broader conclusions about the lack of importance of life course shifts, it is important to understand the full picture of change over time. Table XXX shows that, in contrast to people in the 18-25 and 26-33 age range whose rate of opinion change remains flat across cohorts, respondents in older age groups (34-64 and 65+) do show a notable time trend -- more recent cohorts are more stable opinion reports in these age ranges than earlier cohorts. Both time trends are negative, substantively large, and statistically significant. To more clearly illustrate these trends, Figure XXX plots the predicted time level of change for respondents in each age category over time.
+
+```{r}
+new.data %>%
+  filter(d == 2) %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  mutate(year = as.Date("2020-11-12") + dec_diff*3652.5) %>%
+  ggplot(aes(x = year, y = yhat, color = age_group)) + 
+  geom_hline(yintercept = 0, color = "black") + 
+  geom_line(alpha = .2, aes(group = group)) + 
+  geom_smooth(linewidth = 2) + 
+  theme_bw() + 
+  facet_wrap(~age_group) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group",
+       title = "Predicted wave-to-wave change by age group",
+       subtitle = "Individual question trajectories and overall trajectory") + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  theme(legend.position = "none")
+```
+
+In the earliest panels, the oldest respondents (65 and over) are substantially less stable opinion holders than younger respondents, changing by about 5 points more than members of the other groups, while the remaining three age groups (18-25, 26-33, and 34-64) appear to change at approximately equal rates. Over time, middle aged respondents (34-64) and the oldest respondents (65+) become more stable, with the latter becoming almost 10 points more stable on average from the 1950s to the 2020s. Because, as noted previously, respondents in the 18-25 and 26-33 age ranges demonstrate similar levels of opinion change over time, they become the least stable respondents by the end of the panel.
+
+## Life Course Shifts
+
+While coefficient estimates for the early adult age groups do not suggest that these respondents have become more variable opinion holders over time, the increase in stability for middle-aged and older respondents suggests that broad social forces could be counteracting life-course transitions for members of these age groups. 
+
+To evaluate the specific effect of life-course changes, we attempt to control for these transitions. We re-estimate Model \### above, this time incorporating a series of indicator variables for whether respondents were students, whether they had children, and whether they were married. We also include an indicator variable for two levels of education -- whether respondents have less than a high school degree and whether respondents completed college -- to evaluate whether broader shifts in attitude stability in the population might be due to shifts in educational attainment. These results are presented at Model 2 in Table XXX above. 
+
+These results provide mixed evidence of life-course shifts having a meaningful effect on attitude stability. Respondents who have been married are slightly more stable than unmarried respondent who were never married, but respondents who have had children are less stable than respondents who never had children. Having children at home increases change even more. Taken together, these coefficients suggest that changes in the timing of life course transitions are insufficient to explain the divergence between young adults and older adults in terms of stability.
+
+On the other hand, coefficients related to education show a clearer picture. Higher levels of education are uniformly associated with increased attitude stability (positive coefficient on having less than a high school degree and a negative coefficient on having a college degree), suggesting that changing levels of education in the population -- and the increase in education level of middle-aged respondents relative to younger respondents -- likely accounts for a larger share of the divergence in stability. 
+
+Using these estimates, we calculate the expected value of change had life-course transitions occurred at roughly the same rates that they did in the late 1950s. These estimated counter-factual values are plotted in figure XXX. 
+
+```{r}
+new.data %>%
+  filter(d == 2) %>%
+  mutate(time = recode(time, "1"="Counterfactual", "t"="Observed")) %>%
+  mutate(time = ifelse(dec_diff == -6.4, "Start", time)) %>%
+  group_by(age_group, dec_diff, time) %>%
+  summarise(yhat = mean(yhat)) %>%
+  ungroup() %>%
+  select(-dec_diff) %>%
+  spread(time, yhat) %>%
+  pivot_longer(Counterfactual:Observed) %>%
+  mutate(Start.Time = -6.4, Finish.Time = 0) %>%
+  ggplot(aes(x = Start.Time, xend = Finish.Time, y = Start, yend = value,
+             linetype = name, color = age_group)) +
+  geom_segment() + 
+  geom_line(aes(color = age_group)) + 
+  #geom_point(size = 3) +
+  theme_bw() + 
+  scale_shape_manual(values = c(21,22)) + 
+  scale_fill_brewer(type = "qual", palette = 2,
+                     guide = "none") + 
+  scale_color_brewer(type = "qual", palette = 2,
+                    guide = "none") + 
+  labs(x = "Age Group", y = "Expected change for 2-year duration",
+       shape = "Estimate",
+       title = "Counterfactual expectation of change",
+       subtitle = "Holding demographic variables constant at 1956 levels") + 
+  facet_wrap(~age_group)
+
+```
+
+
+Assuming that rates of marriage, student status, and degree attainment remained constant at their 1956 level over time for each age group, age groups would be expected to display more similar rates of change in the most recent panels than they actually do. In particular, the youngest respondents would display lower rates of change over time and other age groups would display higher rates of change over time. In fact, consistent with the extended early adulthood framework, the youngest respondents would be slightly less consistent opinion holders in more recent years than they actually were.
+
+This divergence between observed and counterfactual trajectories is principally driven by changes in college-going, rather than delays in marriage. The dramatic increase in college-going for all age groups produces more stable attitudes over time. However, because young people have completed college at lower rates than older respondents in the most recent panels (likely because many of them are still enrolled), they do not benefit as much from this shift (though being currently enrolled as a student also increases attitude stability). Young respondents' dramatically lower rates of marriage in the most recent panels counteracts the increased stability that comes from higher levels of educational attainment. 
+
+## Question Differences
+
+As noted above, the overall trajectory of increasing attitude stability masks significant heterogeneity across questions. To more clearly illustrate these differences in trends, Figure XXX plots the estimated trajectories for each item for respondents in the youngest (18-25) and middle-aged (34-64) age categories. Items are ordered by their predicted time trends.
+
+```{r}
+slopes <- as.data.frame(ranef(m4.5)$name) %>%
+  rownames_to_column(var = "name") %>%
+  mutate(slope = dec_diff) %>%
+  select(name, slope) 
+
+#Look at questions instead
+new.data %>%
+  filter(d == 1, age_group %in% c("18-25", "34-65")) %>%
+  group_by(name) %>%
+  left_join(slopes) %>% 
+  #left_join(test, by = c("name"="name")) %>%
+  mutate(group = paste(age_group, name, sep = "-")) %>%
+  ggplot(aes(x = dec_diff, y = yhat, color = age_group)) + 
+  #geom_point(data = summaries, aes(y = a)) + 
+  geom_line(alpha = .7, aes(group = group)) + 
+  theme_bw() + 
+  facet_wrap(~reorder(name, slope), nrow = 11, ncol = 7) + 
+  labs(x = "Year", y = "Predicted wave-to-wave change",
+       color = "Age Group") + 
+  theme()
+
+```
+
+First, at a high level, there are very few questions where the directional trend diverges for age groups -- where young people become more stable opinion holders while old people become less stable opinion holders, or vice-versa. In general, both groups either become more stable or less stable, just at different rates over time.
+
+It is hard to draw broad conclusions about which items become more stable and which become more variable over time. Some questions dealing with social issues have become much more stable, including whether homosexuals should be protected from discrimination, whether men and women should have equal roles in society, and whether the enduring effects of slavery and discrimination continue to hinder Black Americans' social and economic progress. A broad set of questions about equality in American have also decreased in within-person change over time. Many general political views, such as support for capital punishment, whether the government should help people cover medical costs, and spending on the environment, have also decreased in change over time. Some of these shifts reflect the emergence of social consensus, while others reflect clear partisan polarization.
+
+A set of items tapping political efficacy (ppllikeme; manyvote; complicated) show increased change over time. Feeling thermometers about social groups, including racial groups, the poor, homosexuals, liberals and conservatives, have either also remained at similar levels of change or seen an increase in variance. Policy issues that see increased variance include spending on crime and whether organizations should preferentially hire Black Americans to account for past discrimination.
+
+# Discussion
+
+Theoretical models that explain the heightened malleability of attitudes during early adulthood by referencing the unique social conditions of that life phase suggest that significant changes in the timing of life course events should produce heightened rates of attitude change during early adulthood (18-25) or should extend rates of attitude updating later into life (ages 26-33). Given that Americans, on average, pushed back marriage, childbirth, and entering the workforce over the course of the second half of the 20th Century and the early 21st Century, we posited that these shifts should, through various pathways, increase over-time variance in survey responses among the youngest members of the population. We tested a series of hypotheses related to this theory by looking at the stability of political and social attitudes among different cohorts as they moved through the same age ranges.
+
+The results presented above suggest a more complicated picture than anticipated. Consistent with expectations, the youngest adults look similar to older adults in the earliest panels in terms of both demographics and attitude stability. While members of the youngest age categories (18-25 and 26-33) diverged over time from older members of the population in the rate at which they changed their opinions, with younger respondents showing more change than older respondents in the most recent panels, this shift was principally driven by an increase in stability among people in middle age and over 65, rather than increased opinion change among the youngest adults. We suggested that this aggregate divergence was driven by countervailing trends. On one hand, delays in life course transitions push the youngest members of the population to make more attitude change over time. Second, broader social forces worked to stabilize opinions for all members of the population, leading to divergence between the youngest adults and the rest of the population.
+
+We tested this proposition using data on life-course transitions and measures of educational attainment. We found that, consistent with our revised perspective of countervailing forces, age groups' rates of attitude change over time would have been more similar if these social changes did not happen. Specifically, delayed rates of marriage decreased attitude stability among the youngest members of the population while increased rates of educational attainment account for much of the stabilizing shifts among older Americans.  
+
+In contrast to purely biological or cognitive explanations for differing rates of attitude stability among adolescents and early adults, our results suggest that broad social conditions play a substantial role in shaping the rate at which people change their attitudes. When early adults' lives resembled those of middle-aged respondents in the 1950s, their rates of attitude change were also similar. As social lives began to diverge, younger adults began to change their opinions at higher rates than older adults. At a broader level, since 1950s, Americans have become meaningfully more stable opinion holders, in part because they have attained higher levels of education. Our approach likely under-estimates the importance of this shift, as we collapse education into only three categories -- ignoring differences among people with less-than a high school degree in early panels and dramatic expansions of post-graduate degree attainment in recent decades. 
+
+At the same time, it is important not to overstate the importance of these broader social transitions. The average expected attitude change in 2020 is within a few points of the average expected attitude change. Despite dramatic shifts in educational attainment, access to information, and political organization, not to mention changes in survey administration, people make changes in many social and political attitudes at the same rates they did 70 years ago. 
+
+## Limitations
+
+One limitation of our design is that we focus on questions that are asked repeatedly. By focusing only on the same questions over time, we control for question content and structure and ensure that the trend we identify over time is due to something other than changes in survey administration or question quality. However, by only focusing on the same questions, we limit the kinds of issues about which we can make claims to issues that receive significant public attention for a long period of time, including general ideological positions and positions on long-standing issues, such as the government's role in the health care sector. We ignore large swaths of issues that emerge and disappear before the next panel but were very important in political debates, such as approaches to fight "stagflation." It could be the case that such issues have a different relationship between age and stability than issues that dominate political debates for decades. It could also be the case that stability of attitudes is principally a function of how long they have been in the public sphere ().
+
+Second, because most questions are asked in a small number of panels, our actual number of data points for key questions is much smaller than the total number of wave-pair observations we have. The modal number of panels for individual questions is 3, meaning our ability to estimate temporal trajectories is highly constrained, and our estimates of question-specific trajectories is imprecise. This also makes it difficult to get efficient estimates of higher-order interactions or estimate time trajectories as anything other than linear trends. Relatedly, because many questions are only asked more than twice in one panel, it is difficult to get efficient estimates of whether we see changes in the "duration" effect for specific questions. 
+
+
+# Conclusion
+
+This paper set out to test whether the unique rates of attitude change found among young adults are due to the social features of this life stage or due to features of how human brains develop and process information over time. We leverage delays in the timing of life course transitions and the emergence of an "age of independence" over the past 70 years to explore whether attitude behavior shifted in response to these changes. We expected that we should see more durable attitude change in early adulthood and an extension of the "impressionable years" pattern up the age ladder.
+
+We found no evidence of either process, broadly suggesting that changes in the timing of life course transitions, as well as broader social and cultural changes around early adulthood have not broadly affected attitude behavior among young adults. The pattern of results generally suggests that what makes early adulthood unique when it comes to attitude development is not its social conditions, but how humans process information as they age. These years are not formative because they are unfettered, they are formative because they are early.
+
+# References
