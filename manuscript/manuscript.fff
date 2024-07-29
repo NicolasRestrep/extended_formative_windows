@@ -1,0 +1,42 @@
+\begin{figure}[]
+\begin{center}
+\caption{Proportion of respondents in different age categories reporting life course milestones or levels of educational attainment, by panel wave.}
+
+\includegraphics[width=1\linewidth]{../figures/demo_variables}
+
+\end{center}
+\footnotesize{\textit{Notes: Proportions calculated using imputed data.} }
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[]
+\begin{center}
+\caption{Predicted absolute wave-to-wave change over time for respondents in different age categories.}
+
+\includegraphics[width=1\linewidth]{../figures/trajectory_plot}
+
+\end{center}
+\footnotesize{\textit{Notes: Bold line plots average trajectory across all questions. Thin lines plot individual question trajectories. Expected values predicted with duration = 2, the modal duration between repeated observations across all panels.}}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[]
+\begin{center}
+\caption{Observed trajectories of wave-to-wave response change over time (solid lines) compared to counterfactual trajectories assuming no change in rates of marriage, childbearing, student status, and educational attainment from 1956-60 panel (dashed lines), for each age group.}
+
+\includegraphics[width=1\linewidth]{../figures/counterfactual_plot}
+
+\end{center}
+\footnotesize{\textit{Notes: Predictions generated using Model 2 coefficients. Covariate values set to average proportions from 1956-60 ANES panel and 2016-20 GSS panel. Expected values predicted with duration = 2, the modal duration between repeated observations across all panels.}}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[]
+\begin{center}
+\caption{Expected rate of change for two-year duration, by year, for ages 18-25 (pink lines) and 34-64 (blue lines).  }
+
+\includegraphics[width=1\linewidth]{../figures/question_plot}
+
+\end{center}
+\footnotesize{\textit{Notes: Predicted values generated using coefficients in Model 1. Expected values predicted with duration = 2, the modal duration between repeated observations across all panels.}}
+\end{figure}
