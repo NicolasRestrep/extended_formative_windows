@@ -30,6 +30,8 @@ clean_gss_06_10 <- function(path) {
            cappun_1, cappun_2, cappun_3, 
            letin1a_1, letin1a_2, letin1a_3,
            tax_1, tax_2, tax_3,
+           workblks_1, workblks_2, workblks_3,
+           workwhts_1, workwhts_2, workwhts_3,
            wrkwayup_1, wrkwayup_2, wrkwayup_3) %>%
     mutate(weight_2 = as.character(wtpannr12),
            weight_3 = as.character(wtpannr123),
@@ -51,6 +53,9 @@ clean_gss_06_10 <- function(path) {
                     fair_1, fair_2, fair_3,
                     helpful_1, helpful_2, helpful_3), 
                   ~ifelse(.x == 3, 1.5, .x)),
+           across(c(workblks_1, workblks_2, workblks_3,
+                    workwhts_1, workwhts_2, workwhts_3),
+                  ~ifelse(.x %in% c(8,9), NA, .x)),
            across(partyid_1:wrkwayup_3,
                   ~as.character(.x))) %>%
     select(-c(wtpannr12, wtpannr123, dateintv_1, dateintv_2, dateintv_3)) %>%
@@ -70,9 +75,10 @@ clean_gss_06_10 <- function(path) {
                   ~(.x-1)/2*100), 
            across(c(cappun), 
                   ~(.x)/2*100),
+           across(c(workblks, workwhts), ~(.x - 1)/6*100),
            across(c(letin1a, wrkwayup), 
                   ~(.x - 1)/4*100)) %>%
-    pivot_longer(c(cappun, fair:trust, wrkwayup)) %>%
+    pivot_longer(c(cappun, fair:trust, workblks:wrkwayup)) %>%
     filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%
     mutate(df = "2006-10 GSS")
   

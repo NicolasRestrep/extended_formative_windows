@@ -458,10 +458,10 @@ clean_anes_92_97 <- function(path) {
            tradfamily_2 = as.character(V926117), 
            tradfamily_4 = as.character(V941031), 
            tradfamily_7 = as.character(V961249), 
-           hrdwrklazywhite_2 = as.character(V926221), 
-           hrdwrklazywhite_7 = as.character(V961311), 
-           hrdwrklazyblack_2 = as.character(V926222), 
-           hrdwrklazyblack_7 = as.character(V961312), 
+           workwhts_2 = as.character(V926221), 
+           workwhts_7 = as.character(V961311), 
+           workblks_2 = as.character(V926222), 
+           workblks_7 = as.character(V961312), 
            slavediff_2 = as.character(V926129), 
            slavediff_4 = as.character(V941051),
            wrkwayup_2 = as.character(V926126), 
@@ -499,8 +499,8 @@ clean_anes_92_97 <- function(path) {
                   ~as.numeric(.x)),
            partyid = (partyid/6)*100,
            across(c(polviews, jobguar, govins, helpblk,
-                    spendserv, defscale, eqrole, hrdwrklazywhite, 
-                    hrdwrklazyblack),
+                    spendserv, defscale, eqrole, workwhts, 
+                    workblks),
                   ~(.x - 1)/6*100),
            across(c(trust, fair),
                   ~(.x-1)*100),
@@ -517,7 +517,7 @@ clean_anes_92_97 <- function(path) {
                     nathome, natchld, natfare, natcrime, natpoor, 
                     lessgvt),
                   ~(.x - 1)/2*100)) %>% 
-    pivot_longer(c(abortion, attentioncpg:crooked, defscale:wastetax, worrylesseq:wrkwayup)) %>%
+    pivot_longer(c(abortion, attentioncpg:crooked, defscale:wastetax, workblks:wrkwayup)) %>%
     filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%
     mutate(df = "1992-97 ANES")
   

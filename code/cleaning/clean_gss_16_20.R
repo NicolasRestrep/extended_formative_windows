@@ -30,6 +30,8 @@ clean_gss_16_20 <- function(path) {
            cappun_1a, cappun_1b, cappun_2, 
            letin1a_1a, letin1a_1b, letin1a_2,
            tax_1a, tax_1b, tax_2,
+           workblks_1a, workblks_1b, workblks_2,
+           workwhts_1a, workwhts_1b, workwhts_2,
            wrkwayup_1a, wrkwayup_1b, wrkwayup_2) %>%
     mutate(weight_2 = as.character(wtssnr_2)) %>%
     mutate(age_1a = ifelse(is.na(age_1a) & !is.na(age_2), age_2 - 4, age_1a),
@@ -67,6 +69,7 @@ clean_gss_16_20 <- function(path) {
                   ~as.numeric(.x)),
            partyid = (partyid/6)*100,
            polviews = (polviews-1)/6*100,
+           across(c(workblks, workwhts), ~(.x-1)/6*100),
            across(c(trust, fair, helpful),
                   ~(.x-1)*100),
            across(c(natenvir, nataid,
@@ -79,7 +82,7 @@ clean_gss_16_20 <- function(path) {
                   ~(.x)/2*100), 
            across(c(letin1a, wrkwayup), 
                   ~(.x - 1)/4*100)) %>%
-    pivot_longer(c(cappun, fair:trust, wrkwayup)) %>%
+    pivot_longer(c(cappun, fair:trust, workblks:wrkwayup)) %>%
     filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%
     mutate(df = "2016-20 GSS")
   

@@ -270,10 +270,10 @@ clean_anes_16_20 <- function(path) {
            moralrel_4 = as.character(V202264),
            tradfamily_2 = as.character(V162210),
            tradfamily_4 = as.character(V202265),
-           hrdwrklazywhite_2 = as.character(V162345),
-           hrdwrklazywhite_4 = as.character(V202515),
-           hrdwrklazyblack_2 = as.character(V162346),
-           hrdwrklazyblack_4 = as.character(V202516),
+           workwhts_2 = as.character(V162345),
+           workwhts_4 = as.character(V202515),
+           workblks_2 = as.character(V162346),
+           workblks_4 = as.character(V202516),
            slavediff_2 = as.character(V162212),
            slavediff_4 = as.character(V202301),
            wrkwayup_2 = as.character(V162211),
@@ -299,7 +299,7 @@ clean_anes_16_20 <- function(path) {
                   ~as.numeric(.x)),
            across(c(partyid, polviews, jobguar,
                     govins, helpblk, spendserv,
-                    defscale, hrdwrklazywhite, hrdwrklazyblack),
+                    defscale, workwhts, workblks),
                   ~(.x-1)/6*100),
            across(c(stayhome, runfew,
                     natenvir, natsoc, natschools, natfare,
@@ -319,7 +319,7 @@ clean_anes_16_20 <- function(path) {
                     matterhrdwrk, 
                     dontcare), 
                   ~(.x-1)/4*100)) %>%
-    pivot_longer(c(abortion, attentioncpg:cappun, defscale:wastetax, worrylesseq:wrkwayup)) %>%
+    pivot_longer(c(abortion, attentioncpg:cappun, defscale:wastetax, workblks:wrkwayup)) %>%
     filter(!is.na(age), !is.na(value), !is.na(date)) %>% arrange(id, name, date) %>%
     mutate(df = "2016-20 ANES")
   
