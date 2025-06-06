@@ -1,0 +1,38 @@
+---
+title: "Untitled"
+author: "Kevin Kiley"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+\pagebreak 
+
+| Variables                      | M1       | M2       | M3       | M4       | M5       |
+|--------------------|-----------|-----------|-----------|-----------|-----------|
+| Intercept                      | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Time                           | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Age Groups                     | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Duration                       | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | Y        | Y        |
+| Time \* Age Group              | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | Y        | N        | N        |
+| Time \* Duration               | Y        | Y        | Y        | Y        | Y        |
+| RE                             | Y        | Y        | N        | N        | N        |
+| Age Groups \* Duration         | Y        | Y        | Y        | Y        | N        |
+| RE                             | Y        | Y        | N        | N        | N        |
+| Age Groups \* Duration \* Time | Y        | N        | N        | N        | N        |
+| RE                             | Y        | N        | N        | N        | N        |
+|                                |          |          |          |          |          |
+| BIC                            | 20714.39 | 20250.97 | 19996.61 | 19862.23 | 19845.22 |
+| AIC                            | 19757.88 | 19675.82 | 19627.76 | 19643.42 | 19645.17 |
+
+: Model fit comparison
