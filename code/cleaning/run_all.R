@@ -130,6 +130,7 @@ long_difference <- all_panels %>%
   select(-c(abs_diff, duration, age)) %>%
   filter(ag <= 80) %>%
   mutate(birth_year = year(date) - ag,
+         a30 = ifelse(ag < 30, 1, 0),
          ag = (ag - 44)/10,
          co = (birth_year - 1950)/10,
          dfid = paste(df, id, sep = "-")) %>%
