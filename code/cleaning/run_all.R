@@ -27,11 +27,11 @@ path_1990 <- "~/Dropbox/data/anes/anes9092/anes_mergedfile_1990to1992.dta"
 path_1992 <- "~/Dropbox/data/anes/anes9092/anes_mergedfile_1990to1992.dta"
 path_1992 <- "~/Dropbox/data/anes/anes9297/anes_mergedfile_1992to1997.dta"
 path_2000 <- "~/Dropbox/data/anes/anes0004/anes_mergedfile_2000to2004.dta"
-path_2006 <- "~/Dropbox/data/gss_data/gsspanels/gsspanel06.dta"
-path_2008 <- "~/Dropbox/data/gss_data/gsspanels/gsspanel08.dta"
-path_2010 <- "~/Dropbox/data/gss_data/gsspanels/gsspanel10.dta"
+path_2006 <- "~/Dropbox/data/gss/gsspanels/gsspanel06.dta"
+path_2008 <- "~/Dropbox/data/gss/gsspanels/gsspanel08.dta"
+path_2010 <- "~/Dropbox/data/gss/gsspanels/gsspanel10.dta"
 path_2016g <- "~/Dropbox/data/gss2020panel/gss2020panel.dta"
-path_2016a <- "~/Dropbox/data/anes/anes1620.sav"
+path_2016a <- "~/Dropbox/data/anes/anes1624/anes1624.csv"
 path_2020 <- "~/Dropbox/data/anes/anes2022/anes2022"
 
 # Run cleaning
@@ -99,13 +99,19 @@ long_difference <- all_panels %>%
     d4_value = lead(date,4) - date,
     d5_value = lead(date,5) - date,
     d6_value = lead(date,6) - date,
-    #Calculate absolute difference between waves
-    a1_value = abs(value - lead(value)),
-    a2_value = abs(value - lead(value,2)),
-    a3_value = abs(value - lead(value,3)),
-    a4_value = abs(value - lead(value,4)),
-    a5_value = abs(value - lead(value,5)),
-    a6_value = abs(value - lead(value,6))) %>% 
+    #Calculate squared difference between waves
+    a1_value = ifelse((dplyr::lead(value) > 50 & value <= 50) | 
+                        (dplyr::lead(value) < 50 & value >= 50), 1, 0),
+    a2_value = ifelse((dplyr::lead(value,2) > 50 & value <= 50) | 
+                        (dplyr::lead(value,2) < 50 & value >= 50), 1, 0),
+    a3_value = ifelse((dplyr::lead(value,3) > 50 & value <= 50) | 
+                        (dplyr::lead(value,3) < 50 & value >= 50), 1, 0),
+    a4_value = ifelse((dplyr::lead(value,4) > 50 & value <= 50) | 
+                        (dplyr::lead(value,4) < 50 & value >= 50), 1, 0),
+    a5_value = ifelse((dplyr::lead(value,5) > 50 & value <= 50) | 
+                        (dplyr::lead(value,5) < 50 & value >= 50), 1, 0),
+    a6_value = ifelse((dplyr::lead(value,6) > 50 & value <= 50) | 
+                        (dplyr::lead(value,6) < 50 & value >= 50), 1, 0)) %>% 
   pivot_longer(
     cols = c(i1_value, i2_value, i3_value, i4_value, i5_value, i6_value,
              n1_value, n2_value, n3_value, n4_value, n5_value, n6_value,
@@ -128,11 +134,8 @@ long_difference <- all_panels %>%
   mutate(weight = ifelse(weight == 0, 1, weight)) %>%
   mutate(name = ifelse(name == "nateduc", "natschools", name)) %>%
   select(-c(abs_diff, duration, age)) %>%
-  filter(ag <= 80) %>%
+  filter(ag <= 80, ag > 17) %>%
   mutate(birth_year = year(date) - ag,
-         a30 = ifelse(ag < 30, 1, 0),
-         ag = (ag - 44)/10,
-         co = (birth_year - 1950)/10,
          dfid = paste(df, id, sep = "-")) %>%
   filter(name != "eqrightstoofar",
          name != "ftcath",
@@ -143,11 +146,12 @@ long_difference <- all_panels %>%
          name != "polattn",
          name != "slavediff",
          name != "natfood") %>%
-  select(dfid, df:co) %>%
+  select(dfid, df:birth_year) %>%
   group_by(dfid) %>%
   mutate(N = n()) %>%
   filter (N != 1) %>%
-  ungroup() 
+  ungroup() |> 
+  mutate(weight = ifelse(is.na(weight), 1, weight))
 
 #Save the file
 save(long_difference, file = "data/long_difference.Rdata")
